@@ -14,22 +14,26 @@ def user_directory_path(instance,filename):
 class CustomerUser(AbstractUser):
     name= models.CharField(max_length=200 , null = True, blank = True )
     lastname= models.CharField(max_length=200,null = True, blank = True )
-    username = models.CharField(max_length=200 , null=True)
+    username = models.CharField(max_length=200 , null = True, blank = True , unique=True)
     email = models.EmailField(max_length = 250, null = True, blank = True , unique=True)
     phone = models.CharField(max_length=13, null = True, blank = True , unique=True)
-    image = models.ImageField(upload_to='customer_profile/', height_field='100px', width_field='100px')
+    image = models.ImageField(upload_to='customer_profile/', height_field='100px', width_field='100px', null = True, blank = True)
     is_stylist = models.BooleanField(default=False)
     updated_at = models.DateTimeField(auto_now=True)
 
     otp = models.CharField(max_length=100 , null=True , blank=True)
 
-    USERNAME_FIELD = 'phone'
-    REQUIRED_FIELD = ['phone']
+    USERNAME_FIELD = 'username'
+    REQUIRED_FIELD = ['phone','username','email']
     def __str__(self):
-        return self.name
+        if self.name :
+            return self.name +" "+ self.lastname
+        else :
+            return self.username
+        
 
     def get_absolute_url(self):
-        return reverse('customer:customer-dashboard', kwargs={'slug': slugify(self.username)})
+        return reverse('customer:customer-dashboard', kwargs={'slug': slugify(self.email)})
 
 class Profile(models.Model):
     pid = ShortUUIDField(max_length=25,blank=True, editable=False)
@@ -54,7 +58,7 @@ class Profile(models.Model):
         if self.name:
             return f"(self.name)"
         else:
-            return f"(self.user.username)"
+            return f"(self.user.email)"
 def create_user_profile(sender, instance, created, **kewargs):
     if created :
         Profile.objects.create(user=instance)

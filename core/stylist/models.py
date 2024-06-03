@@ -15,7 +15,7 @@ class Address(models.Model):
 
 class Skills (models.Model):
     title = models.CharField( max_length=250)
-    image = models.ImageField(upload_to='skills/', height_field=None, width_field=None)
+    image = models.ImageField(upload_to='skills/', null = True, blank = True)
 
     def __str__(self):
         return self.title
@@ -25,16 +25,8 @@ class Services(models.Model):
     slug = models.SlugField(max_length = 250, null = True, blank = True , unique=True)
     cost = models.IntegerField(null=True , blank=True)
     description = models.TextField(null = True, blank = True)
-    image = models.ImageField(upload_to='services/', height_field='100px', width_field='100px')
-    parent = models.ForeignKey('self' , on_delete=models.CASCADE, blank=True, null=True, related_name='children')
-
-    class Meta:
-        unique_together = ('slug', 'parent',)  # ensures unique slugs in the same parent category
-
-    def save(self, *args, **kwargs):
-        if not self.slug:
-            self.slug = slugify(self.name)
-        super().save(*args, **kwargs)
+    image = models.ImageField(upload_to='services/', null = True, blank = True)
+    stylist = models.ManyToManyField('Stylist',blank = True,related_name='stylist')
 
     def __str__(self):
         return self.name
@@ -45,12 +37,17 @@ class Services(models.Model):
 
 class Stylist(models.Model):
     user = models.OneToOneField(CustomerUser, on_delete=models.CASCADE, related_name='stylist_profile')
-    services = models.ForeignKey(Services,on_delete=models.DO_NOTHING,blank = True, null = True)
-    skills = models.ManyToManyField(Skills,blank = True)
+    services = models.ManyToManyField(Services,blank = True,related_name='services')
+    skills = models.ManyToManyField(Skills,blank = True,related_name='skills')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     instagram = models.CharField(max_length=255,blank=True, null=True)
 
+    def __str__(self):
+        if self.user.name:
+            return self.user.name
+        else :
+            return self.user.username
 
 class PortfolioImage(models.Model):
     stylist = models.ForeignKey(Stylist, on_delete=models.CASCADE, related_name='portfolio_images')
@@ -71,25 +68,24 @@ class WorkDay(models.Model):
         ('Saturday', 'Saturday'),
         ('Sunday', 'Sunday'),
     ]
-    stylist = models.ForeignKey(Stylist, on_delete=models.CASCADE, related_name='work_time')
+    stylist = models.ForeignKey(Stylist, on_delete=models.SET_NULL, related_name='work_time',null=True,blank=True)
     day = models.CharField(max_length=10, choices=DAY_CHOICES)
+    hour = models.ManyToManyField('WorkHour', related_name='work_hours')
 
     def __str__(self):
-        return f'{self.stylist.user.name} - {self.day}: {self.start_time} - {self.end_time}'
+        return self.day
 
 class WorkHour(models.Model):
     DAY_CHOICES = [
-        ('9:30 to 10:30', '1'),
-        ('10:30 to 11:30', '2'),
-        ('11:30 to 12:30', '3'),
-        ('12:30 to 13:30', '4'),
-        ('13:30 to 14:30', '5'),
-        ('14:30 to 15:30', '6'),
-        ('15:30 to 16:30', '7'),
+        ('9:30 to 10:30', '9:30 to 10:30'),
+        ('10:30 to 11:30', '10:30 to 11:30'),
+        ('11:30 to 12:30', '11:30 to 12:30'),
+        ('12:30 to 13:30', '12:30 to 13:30'),
+        ('13:30 to 14:30', '13:30 to 14:30'),
+        ('14:30 to 15:30', '14:30 to 15:30'),
+        ('15:30 to 16:30', '15:30 to 16:30'),
     ]
-    stylist = models.ForeignKey(Stylist, on_delete=models.CASCADE, related_name='work_hour')
-    day = models.ForeignKey(WorkDay, on_delete=models.CASCADE, related_name='work_hours', null=True , blank=True)
     hour = models.CharField(max_length=150,choices=DAY_CHOICES, null=True , blank=True)
 
     def __str__(self):
-        return f'{self.stylist.user.name} - {self.day}: {self.start_time} - {self.end_time}'
+        return self.hour

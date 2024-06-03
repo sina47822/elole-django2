@@ -4,16 +4,16 @@ from stylist.models import  Address, Services, Skills, WorkDay,WorkHour, Portfol
 admin.site.register(Address)
 admin.site.register(Services)
 admin.site.register(Skills)
+admin.site.register(WorkDay)
+admin.site.register(WorkHour)
+
 
 class WorkDayTimeInline(admin.TabularInline):
     model = WorkDay
     extra = 1
-class WorkHourTimeInline(admin.TabularInline):
-    model = WorkHour
-    extra = 1
 
 class StylistAdmin(admin.ModelAdmin):
-    inlines = [WorkHourTimeInline,WorkDayTimeInline]
+    inlines = [WorkDayTimeInline]
     
 admin.site.register(PortfolioImage)
 admin.site.register(Stylist, StylistAdmin)
