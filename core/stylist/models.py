@@ -1,39 +1,9 @@
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import BaseUserManager , AbstracBasetUser, PermissionsMixin
 from django.utils.text import slugify
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 
-class StylistUserMAnager(BaseUserManager):
-    def createstylist(self,phone,password, **extra_field):
-        if not phone :
-            raise ValueError(_("phone must be set"))
-        pass
-    def createsuperstylis(self,phone,password):
-        pass
-        
-
-class CustomUser(AbstracBasetUser,PermissionsMixin):
-    # name= models.CharField(max_length=200 , null = True, blank = True )
-    # lastname= models.CharField(max_length=200,null = True, blank = True )
-    username = models.CharField(max_length=200 , null=True , unique=True)
-    is_staff = models.BooleanField(default=False)
-    last_login = models.DateTimeField(null = True, blank = True )
-    email = models.SlugField(max_length = 250, null = True, blank = True , unique=True)
-    phone = models.CharField(max_length=15)
-    image = models.ImageField(upload_to='stylist_profile/', height_field='100px', width_field='100px')
-    social_networks = models.JSONField(blank=True, null=True)  # Assuming social networks are stored as JSON
-    created_at =  models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
-
-    objects = StylistUserMAnager()
-
-    REQUIRED_FIELD =[]
-    def __str__(self):
-        return self.name
-
-    def get_absolute_url(self):
-        return reverse('stylist:stylist-account', kwargs={'slug': slugify(self.username)})
+from customer.models import CustomerUser
 
 class Address(models.Model):
     city = models.CharField(max_length=100)
@@ -53,7 +23,7 @@ class Skills (models.Model):
 class Services(models.Model):
     name= models.CharField(max_length=200)
     slug = models.SlugField(max_length = 250, null = True, blank = True , unique=True)
-    cost = models.IntegerField(max_length=15 , null=True , blank=True)
+    cost = models.IntegerField(null=True , blank=True)
     description = models.TextField(null = True, blank = True)
     image = models.ImageField(upload_to='services/', height_field='100px', width_field='100px')
     parent = models.ForeignKey('self' , on_delete=models.CASCADE, blank=True, null=True, related_name='children')
@@ -74,10 +44,13 @@ class Services(models.Model):
 
 
 class Stylist(models.Model):
-    user = models.OneToOneField(CustomUser, on_delete=models.CASCADE, related_name='stylist_profile')
+    user = models.OneToOneField(CustomerUser, on_delete=models.CASCADE, related_name='stylist_profile')
     services = models.ForeignKey(Services,on_delete=models.DO_NOTHING,blank = True, null = True)
-    skills = models.ManyToManyField(Skills,blank = True, null = True)
+    skills = models.ManyToManyField(Skills,blank = True)
     is_active = models.BooleanField(default=True)
+    is_staff = models.BooleanField(default=False)
+    instagram = models.CharField(max_length=255,blank=True, null=True)
+
 
 class PortfolioImage(models.Model):
     stylist = models.ForeignKey(Stylist, on_delete=models.CASCADE, related_name='portfolio_images')
@@ -116,7 +89,7 @@ class WorkHour(models.Model):
     ]
     stylist = models.ForeignKey(Stylist, on_delete=models.CASCADE, related_name='work_hour')
     day = models.ForeignKey(WorkDay, on_delete=models.CASCADE, related_name='work_hours', null=True , blank=True)
-    hour = models.CharField(choices=DAY_CHOICES, null=True , blank=True)
+    hour = models.CharField(max_length=150,choices=DAY_CHOICES, null=True , blank=True)
 
     def __str__(self):
         return f'{self.stylist.user.name} - {self.day}: {self.start_time} - {self.end_time}'

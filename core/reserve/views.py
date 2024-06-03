@@ -8,3 +8,4 @@ class ReservationCreateView(View):
     def get(self, request):
         form = ReservationForm()
         return render(request, 'reservation-form.html', {'form': form})
+    

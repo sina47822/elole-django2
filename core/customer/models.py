@@ -14,10 +14,12 @@ def user_directory_path(instance,filename):
 class CustomerUser(AbstractUser):
     name= models.CharField(max_length=200 , null = True, blank = True )
     lastname= models.CharField(max_length=200,null = True, blank = True )
-    username = models.CharField(max_length=200 , null=True , unique=True)
-    email = models.SlugField(max_length = 250, null = True, blank = True , unique=True)
+    username = models.CharField(max_length=200 , null=True)
+    email = models.EmailField(max_length = 250, null = True, blank = True , unique=True)
     phone = models.CharField(max_length=13, null = True, blank = True , unique=True)
     image = models.ImageField(upload_to='customer_profile/', height_field='100px', width_field='100px')
+    is_stylist = models.BooleanField(default=False)
+    updated_at = models.DateTimeField(auto_now=True)
 
     otp = models.CharField(max_length=100 , null=True , blank=True)
 
@@ -29,9 +31,9 @@ class CustomerUser(AbstractUser):
     def get_absolute_url(self):
         return reverse('customer:customer-dashboard', kwargs={'slug': slugify(self.username)})
 
-class Profile(models.model):
-    pid =  ShortUUIDField(lenght=7 , max_lenght=25,alphebet="ascdefghijklmnopqrstuywxyz12345")
-    image = models.FileField(blank=True,null=True,upload_to="customer_profile/user_directory_path", default='default.jpg',null=True , blank=True)
+class Profile(models.Model):
+    pid = ShortUUIDField(max_length=25,blank=True, editable=False)
+    image = models.FileField(upload_to="customer_profile/user_directory_path", default='default.jpg',null=True , blank=True)
     user = models.OneToOneField(CustomerUser, on_delete=models.CASCADE)
     name= models.CharField(max_length=200 , null = True, blank = True )
     lastname= models.CharField(max_length=200,null = True, blank = True )

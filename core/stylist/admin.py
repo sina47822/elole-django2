@@ -1,7 +1,6 @@
 from django.contrib import admin
-from stylist.models import CustomUser, Address, Services, Skills, WorkDay,WorkHour, PortfolioImage, Stylist
+from stylist.models import  Address, Services, Skills, WorkDay,WorkHour, PortfolioImage, Stylist
 
-admin.site.register(CustomUser)
 admin.site.register(Address)
 admin.site.register(Services)
 admin.site.register(Skills)

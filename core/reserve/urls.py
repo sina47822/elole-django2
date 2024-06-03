@@ -5,5 +5,5 @@ from reserve.views import ReservationCreateView
 app_name = 'reserve'
 
 urlpatterns = [
-    path('', ReservationCreateView , name='reservation-form'),
+    path('', ReservationCreateView.as_view() , name='reservation-form'),
 ]
