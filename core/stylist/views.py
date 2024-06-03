@@ -3,8 +3,8 @@ from stylist.models import Stylist,Services,WorkHour,WorkDay,Skills
 from django.core.paginator import Paginator
 
 def StylistListView(request):
-    stylists = Stylist.objects.all().order_by('publish_date')
-    services = Services.objects.all().order_by('publish_date')[:5]
+    stylists = Stylist.objects.all().order_by('-id')
+    services = Services.objects.all().order_by('-id')[:5]
 
     paginator = Paginator(stylists, 8)  # Show 10 posts per page
     page_number = request.GET.get('page')
@@ -37,8 +37,8 @@ def StylistView(request, slug):
     return render(request, 'stylist/stylist-detail.html', context) 
 
 def ServicesListView(request):
-    stylists = Stylist.objects.all().order_by('publish_date')[:5]
-    services = Services.objects.all().order_by('publish_date')
+    stylists = Stylist.objects.all()[:5]
+    services = Services.objects.all()
 
     paginator = Paginator(services, 4)  # Show 10 posts per page
     page_number = request.GET.get('page')

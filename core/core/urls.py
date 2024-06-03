@@ -31,10 +31,16 @@ sitemaps = {
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', include('website.urls')),
+    path('dashboard/', include('dashboard.urls')),
+    path('customer/', include('customer.urls')),
     path('reserve/', include('reserve.urls')),
     path('stylist/', include('stylist.urls')),
+    path('cart/', include('cart.urls')),
+    path('order/', include('order.urls')),
+    path('payment/', include('payment.urls')),
+    path('review/', include('review.urls')),
 
+    path('', include('website.urls')),
 
     path('tinymce/', include('tinymce.urls')),
 

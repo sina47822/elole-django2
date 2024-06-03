@@ -1,9 +1,9 @@
 from django.db import models
 from django.urls import reverse
 from stylist.models import Services,Stylist,WorkDay,WorkHour
-from customer.models import CustomerUser
+from django.contrib.auth.models import User
 class Reservation(models.Model):
-    customer = models.ForeignKey(CustomerUser, on_delete=models.CASCADE, related_name='reservations')
+    customer = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reservations')
     stylist = models.ForeignKey(Stylist, on_delete=models.CASCADE, related_name='reservations')
     service = models.ForeignKey(Services, on_delete=models.CASCADE)
     status = models.ForeignKey( 'Reservation_status' , on_delete=models.CASCADE , null=True)

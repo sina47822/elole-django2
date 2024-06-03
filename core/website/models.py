@@ -1,12 +1,10 @@
 from django.db import models
-from django.contrib.auth.models import User
+from accounts.models import User
 from django.urls import reverse
 from tinymce.models import HTMLField
 from django.utils.text import slugify
 
-from customer.models import CustomerUser
-# Create your models here.
-User = CustomerUser
+
 class Category(models.Model):
     name= models.CharField(max_length=200)
     slug = models.SlugField(max_length = 250, null = True, blank = True , unique=True)

@@ -5,8 +5,8 @@ app_name = 'stylist'
 urlpatterns = [
     path('services/', ServicesListView , name='services-list'),
     path('services/<slug:slug>', ServicesView , name='services'),
-    path('stylist/', StylistListView , name='stylist-list'),
-    path('stylist/<int:pk>/', StylistView , name='stylist-account'),
+    path('', StylistListView , name='stylist-list'),
+    path('<int:pk>', StylistView , name='stylist-account'),
 
 
 ]

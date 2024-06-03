@@ -2,8 +2,14 @@
 {% load static %}
 
 {% block content %}
+<h1>stylists List</h1>
 
-<h1>Stylist List</h1>
+{% for stylist in stylists %}
+    <p>{{stylist}} </p>
+   {%for i in stylist.services.all%}
+        <p>{{i}}</p>
+    {% endfor%}
 
+{% endfor %}
 
 {% endblock content%}

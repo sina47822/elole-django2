@@ -3,6 +3,13 @@
 
 {% block content %}
 
+{% for stylist in stylists %}
+    <p>{{stylist}} </p>
+{% endfor %}
+{% services %}
+{% for service in services %}
+    <p>{{service}} </p>
+{% endfor %}
 <h1>Service List</h1>
 
 {% endblock content%}

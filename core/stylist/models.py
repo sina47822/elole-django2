@@ -3,7 +3,7 @@ from django.urls import reverse
 from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 
-from customer.models import CustomerUser
+from accounts.models import User
 
 class Address(models.Model):
     city = models.CharField(max_length=100)
@@ -36,7 +36,7 @@ class Services(models.Model):
 
 
 class Stylist(models.Model):
-    user = models.OneToOneField(CustomerUser, on_delete=models.CASCADE, related_name='stylist_profile')
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='stylist_profile')
     services = models.ManyToManyField(Services,blank = True,related_name='services')
     skills = models.ManyToManyField(Skills,blank = True,related_name='skills')
     is_active = models.BooleanField(default=True)
