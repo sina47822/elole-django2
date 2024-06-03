@@ -32,7 +32,10 @@ sitemaps = {
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('website.urls')),
-    path('product/', include('product.urls')),
+    path('reserve/', include('reserve.urls')),
+    path('stylist/', include('stylist.urls')),
+
+
     path('tinymce/', include('tinymce.urls')),
 
     path('sitemap.xml', sitemap, {'sitemaps':sitemaps},

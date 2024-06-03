@@ -43,8 +43,9 @@ INSTALLED_APPS = [
     
     
     # myapp
-    'stylist.apps.ProductConfig',
-    'reserve.apps.ProductConfig',
+    'stylist.apps.StylistConfig',
+    'customer.apps.CustomerConfig',
+    'reserve.apps.ReserveConfig',
     'website.apps.WebsiteConfig',
 
     #other app
@@ -131,16 +132,18 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "/static/"
-STATIC_ROOT = BASE_DIR / 'static'
+STATIC_URL = "/statics/" #root folder name
+STATIC_ROOT = BASE_DIR / 'static' #what is show
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / 'media'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "static",
+    BASE_DIR / "statics", #different from static root
 ]
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = "userauths.CustomerUser"
