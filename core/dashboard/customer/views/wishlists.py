@@ -10,7 +10,7 @@ from django.urls import reverse_lazy
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.core.exceptions import FieldError
-from shop.models import WishlistProductModel
+from stylist.models import WishlistServicesModel
 
 
 class CustomerWishlistListView(LoginRequiredMixin, HasCustomerAccessPermission, ListView):
@@ -21,7 +21,7 @@ class CustomerWishlistListView(LoginRequiredMixin, HasCustomerAccessPermission, 
         return self.request.GET.get('page_size', self.paginate_by)
 
     def get_queryset(self):
-        queryset = WishlistProductModel.objects.filter(user=self.request.user)
+        queryset = WishlistServicesModel.objects.filter(user=self.request.user)
         if search_q := self.request.GET.get("q"):
             queryset = queryset.filter(product__title__icontains=search_q)
         if order_by := self.request.GET.get("order_by"):
@@ -43,4 +43,4 @@ class CustomerWishlistDeleteView(LoginRequiredMixin, HasCustomerAccessPermission
     success_message = "محصول با موفقیت از لیست حذف شد"
 
     def get_queryset(self):
-        return WishlistProductModel.objects.filter(user=self.request.user)
+        return WishlistServicesModel.objects.filter(user=self.request.user)

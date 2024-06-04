@@ -1,13 +1,86 @@
-<nav class="center-nav">
-    <ul class="d-flex align-items-center justify-content-between">
-        <li class="#"><a href="">
-            آزمایشگاه خاک
-        </a></li>
-        <li class="#"><a href="">آزمایشگاه بتن</a></li>
-        <li class="#"><a href="">آزمایشگاه آسفالت</a></li>
-        <li class="#"><a href="">آزمایشگاه سنگ</a></li>
-        <li class="#"><a href="">آزمایشگاه عمومی</a></li>
+{% load static %}
+
+<nav class="js-mega-menu navbar-nav-wrap">
+    <!-- Default Logo -->
+    <a class="navbar-brand" href="{% url 'website:home' %}" aria-label="Front">
+        <img class="navbar-brand-logo" src="{% static 'svg/logos/logo.svg' %}" alt="Logo">
+    </a>
+    <!-- End Default Logo -->
+
+    <!-- Toggler -->
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+        data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false"
+        aria-label="Toggle navigation">
+        <span class="navbar-toggler-default">
+            <i class="bi-list"></i>
+        </span>
+        <span class="navbar-toggler-toggled">
+            <i class="bi-x"></i>
+        </span>
+    </button>
+    <!-- End Toggler -->
+
+    <!-- Collapse -->
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link  {% if request.resolver_match.view_name  == 'website:home' %} active {% endif %}" href="{% url 'website:home' %}">صفحه اصلی</a>
+            </li>
 
 
-    </ul>
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.view_name  == 'stylist:service-grid' %} active {% endif %}" href="{% url 'stylist:service-grid' %}">لیست محصولات</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.view_name  == 'website:about' %} active {% endif %}" href="{% url 'website:about' %}">درباره ما</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.view_name  == 'website:contact' %} active {% endif %}" href="{% url 'website:contact' %}">ارتباط با ما</a>
+            </li>
+
+
+
+            <li class="nav-item">
+                <!-- Search -->
+                <button class="btn btn-ghost-secondary btn-icon" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasNavbarSearch" aria-controls="offcanvasNavbarSearch">
+                    <i class="bi-search"></i>
+                </button>
+
+                <!-- End Search -->
+
+                <!-- Shopping Cart -->
+                <!-- <button type="button" class="btn btn-ghost-secondary btn-icon" type="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarShoppingCart"
+                    aria-controls="offcanvasNavbarShoppingCart">
+                    <i class="bi-basket"></i>
+                    <span class="cart-item-count ">3</span>
+                </button> -->
+                <a href="{% url 'cart:cart-summary' %}" class="btn btn-ghost-secondary btn-icon">
+                    <i class="bi-basket"></i>
+                    <span class="cart-item-count" id="total-cart-item-count">{{cart.get_total_quantity}}</span>
+                </a>
+                <!-- End Shopping Cart -->
+                {% if request.user.is_authenticated %}
+
+                <button class="btn btn-ghost-secondary btn-icon" id="dropdownMenuLink"
+                    data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="avatar avatar-sm avatar-circle">
+                        <img class="avatar-img" src="{{request.user.user_profile.image.url}}"
+                            alt="Image Description">
+                    </span>
+                </button>
+
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                    <a class="dropdown-item" href="{% url 'dashboard:home' %}">پروفایل</a>
+                    <a class="dropdown-item" href="{% url 'accounts:logout' %}">خروج</a>
+                </div>
+
+                {% else %}
+                <a class="btn btn-primary btn-transition" href="{% url 'accounts:login' %}">ورود</a>
+                {% endif %}
+            </li>
+        </ul>
+    </div>
+    <!-- End Collapse -->
 </nav>

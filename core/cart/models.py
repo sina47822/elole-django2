@@ -11,7 +11,7 @@ class CartModel(models.Model):
         return self.user.email
     
     def calculate_total_price(self):
-        return sum(item.product.get_price() * item.quantity for item in self.cart_items.all())
+        return sum(item.service.get_price() * item.quantity for item in self.cart_items.all())
         
     
 class CartItemModel(models.Model):
@@ -23,5 +23,5 @@ class CartItemModel(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"{self.product.title} - {self.cart.id}"
+        return f"{self.service.title} - {self.cart.id}"
     

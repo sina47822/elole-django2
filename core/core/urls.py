@@ -32,7 +32,7 @@ sitemaps = {
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('dashboard/', include('dashboard.urls')),
-    path('customer/', include('customer.urls')),
+    path('accounts/', include('accounts.urls')),
     path('reserve/', include('reserve.urls')),
     path('stylist/', include('stylist.urls')),
     path('cart/', include('cart.urls')),

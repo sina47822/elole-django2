@@ -1,5 +1,5 @@
 from django.db import models
-from shop.models import ProductModel
+from stylist.models import Services
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.dispatch import receiver
 from django.db.models.signals import post_save
@@ -15,7 +15,7 @@ class ReviewStatusType(models.IntegerChoices):
 
 class ReviewModel(models.Model):
     user = models.ForeignKey('accounts.User', on_delete=models.CASCADE)
-    product = models.ForeignKey('shop.ProductModel',on_delete=models.CASCADE)
+    service = models.ForeignKey('stylist.Services',on_delete=models.CASCADE)
     description = models.TextField()
     rate = models.IntegerField(default=5, validators=[
                                MinValueValidator(0), MaxValueValidator(5)])
@@ -28,7 +28,7 @@ class ReviewModel(models.Model):
         ordering = ["-created_date"]
     
     def __str__(self):
-        return f"{self.user} - {self.product.id}"
+        return f"{self.user} - {self.service.id}"
     
     
     def get_status(self):
@@ -42,7 +42,7 @@ class ReviewModel(models.Model):
 @receiver(post_save,sender=ReviewModel)
 def calculate_avg_review(sender,instance,created,**kwargs):
     if instance.status == ReviewStatusType.accepted.value:
-        product = instance.product
-        average_rating = ReviewModel.objects.filter(product=product, status=ReviewStatusType.accepted).aggregate(Avg('rate'))['rate__avg']
-        product.avg_rate = round(average_rating,1)
-        product.save()
+        service = instance.service
+        average_rating = ReviewModel.objects.filter(service=service, status=ReviewStatusType.accepted).aggregate(Avg('rate'))['rate__avg']
+        service.avg_rate = round(average_rating,1)
+        service.save()

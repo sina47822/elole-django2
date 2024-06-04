@@ -1,6 +1,6 @@
 {% load static %}
 
-    
+{% comment %}     
 <!-- css reset -->
 <link rel="stylesheet" href="{% static 'css/css-reset.css' %}">
 <!-- font awsome -->
@@ -15,7 +15,19 @@
 <!-- owl carousel -->
 <link rel="stylesheet" href="{% static 'css/owl-carousel.css' %}">
 <link rel="stylesheet" href="{% static 'css/owl.carousel.default.min.css' %}">
-<link rel="stylesheet" href="{% static 'css/jquery.fancy.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/jquery.fancy.min.css' %}"> {% endcomment %}
 
+
+    <!-- CSS Implementing Plugins -->
+    <link rel="stylesheet" href="{% static 'css/vendor.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/bootstrap-icons/font/bootstrap-icons.css' %}">
+
+    <!-- CSS Front Template -->
+    <link rel="stylesheet" href="{% static 'css/theme.min.css' %}">
+    <link rel="stylesheet" href="{% static 'vendor/toastify/toastify.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    {% block extra_css %} {% endblock extra_css %}
+
+    {% block extra_css_no_compress %} {% endblock extra_css_no_compress %}
 <!-- main css -->
-<link rel="stylesheet" href="{% static 'css/main.css' %}">
+{% comment %} <link rel="stylesheet" href="{% static 'css/main.css' %}"> {% endcomment %}

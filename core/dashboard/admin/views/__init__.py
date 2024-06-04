@@ -1,6 +1,6 @@
 from .generals import *
 from .profiles import *
-from .products import *
+from .services import *
 from .orders import *
 from .reviews import *
 from .contacts import *

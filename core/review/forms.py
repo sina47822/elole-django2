@@ -1,11 +1,11 @@
 from django import forms
 from .models import ReviewModel
-from shop.models import ProductModel,ProductStatusType
+from stylist.models import Services,ServiceStatusType
 
 class SubmitReviewForm(forms.ModelForm):
     class Meta:
         model = ReviewModel
-        fields = ['product','rate', 'description']
+        fields = ['service','rate', 'description']
         error_messages = {
             'description': {
                 'required': 'فیلد توضیحات اجباری است',
@@ -13,12 +13,12 @@ class SubmitReviewForm(forms.ModelForm):
         }
     def clean(self):
         cleaned_data = super().clean()
-        product = cleaned_data.get('product')
+        service = cleaned_data.get('service')
 
-        # Check if the product exists and is published
+        # Check if the service exists and is published
         try:
-            ProductModel.objects.get(id=product.id,status=ProductStatusType.publish.value)
-        except ProductModel.DoesNotExist:
+            Services.objects.get(id=service.id,status=ServiceStatusType.publish.value)
+        except Services.DoesNotExist:
             raise forms.ValidationError("این محصول وجود ندارد")
 
         return cleaned_data

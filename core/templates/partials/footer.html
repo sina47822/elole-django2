@@ -1,83 +1,154 @@
 {% load static %}
 
-<footer>
-    <div class="container">
-        <div class="footer-top-section row">
-            <div class="col-lg-4 col-xs-12">
-                <a href="#" class="">            
-                    <div class="footer-section footer-cataloge">
-                        <div class="">
-                            <div><p>کاتالوگ</p></div>
-                            <div class="line"></div>
-                            <button value="button">دانلود کاتالوگ</button>
-                        </div>
-                    </div>
-                </a>
-            </div>
-            <div class="col-lg-4 col-xs-12">
-                <a href="#" class="">            
-                    <div class="footer-section footer-contact">
-                        <div class="">
-                            <div><p>ارتباط با ما</p></div>
-                            <div class="line"></div>
-                            <div>
-                                <h3>آدرس :</h3>
-                                <p>خیابان پیروزی خیابان اباذر کوچه پنجم شرقی پلاک 9</p>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            </div>
+    <!-- ========== FOOTER ========== -->
+    <footer class="border-top">
+        <div class="container">
+            <div class="row justify-content-lg-between content-space-t-2 content-space-b-lg-2">
+                <div class="col-lg-3 mb-5">
+                    <div class="d-flex align-items-start flex-column h-100">
+                        <!-- Logo -->
+                        <a class="w-100 mb-3 mb-lg-auto" href="{% url 'website:home' %}" aria-label="Front">
+                            <img class="brand" src="{% static 'svg/logos/logo.svg' %}" alt="Logo">
+                        </a>
+                        <!-- End Logo -->
 
-            <div class="col-lg-4 col-xs-12">
-                <a href="#" class="">            
-                    <div class="footer-section footer-cert">
-                        <div class="">
-                            <div><p>کاتالوگ</p></div>
-                            <div class="line"></div>
-                            <button value="button">دانلود کاتالوگ</button>
+                        <p class="text-muted small mb-0">&copy; Maryam Farajian 2023 Front RTL</p>
+                    </div>
+                </div>
+
+                <div class="col-6 col-md-4 col-lg-3 ms-lg-auto mb-5 mb-lg-0">
+                    <h5>حساب</h5>
+
+                    <!-- List -->
+                    <ul class="list-unstyled list-py-1">
+                        <li><a class="link-sm text-secondary" href="#">سفارش دادن</a></li>
+                        <li><a class="link-sm text-secondary" href="#">گزینه های حمل و نقل</a></li>
+                        <li><a class="link-sm text-secondary" href="#">پیگیری یک بسته</a></li>
+                        <li><a class="link-sm text-secondary" href="#">در دسترس بودن کشور</a></li>
+                    </ul>
+                    <!-- End List -->
+                </div>
+                <!-- End Col -->
+
+                <div class="col-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
+                    <h5>شرکت</h5>
+
+                    <!-- List -->
+                    <ul class="list-unstyled list-py-1">
+                        <li><a class="link-sm text-secondary" href="#">تامین مالی</a></li>
+                        <li><a class="link-sm text-secondary" href="#">بازیافت</a></li>
+                        <li><a class="link-sm text-secondary" href="#">سیاست بازگشت</a></li>
+                    </ul>
+                    <!-- End List -->
+                </div>
+                <!-- End Col -->
+
+                <div class="col-md-4 col-lg-2 mb-5 mb-lg-0">
+                    <h5 class="mb-3">منابع</h5>
+
+                    <!-- List -->
+                    <ul class="list-unstyled list-py-1">
+                        <li><a class="link-sm link-secondary" href="#"><i class="bi-question-circle-fill me-1"></i>
+                                کمک</a></li>
+                        <li><a class="link-sm link-secondary" href="#"><i class="bi-person-circle me-1"></i> حساب
+                                شما</a></li>
+                    </ul>
+                    <!-- End List -->
+
+                    <!-- Button Group -->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-white btn-sm dropdown-toggle" id="footerSelectLanguage"
+                            data-bs-toggle="dropdown" aria-expanded="false" data-bs-dropdown-animation>
+                            <span class="d-flex align-items-center">
+                                <img class="avatar avatar-xss avatar-circle ms-2"
+                                    src="{% static 'vendor/flag-icon-css/flags/1x1/us.svg' %}" alt="Image description"
+                                    width="16" />
+                                <span>انگلیسی (US)</span>
+                            </span>
+                        </button>
+
+                        <div class="dropdown-menu" aria-labelledby="footerSelectLanguage">
+                            <a class="dropdown-item d-flex align-items-center active" href="#">
+                                <img class="avatar avatar-xss avatar-circle ms-2"
+                                    src="{% static 'vendor/flag-icon-css/flags/1x1/us.svg' %}" alt="Image description"
+                                    width="16" />
+                                <span>انگلیسی</span>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <img class="avatar avatar-xss avatar-circle ms-2"
+                                    src="{% static 'vendor/flag-icon-css/flags/1x1/de.svg' %}" alt="Image description"
+                                    width="16" />
+                                <span>آلمانی</span>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <img class="avatar avatar-xss avatar-circle ms-2"
+                                    src="{% static 'vendor/flag-icon-css/flags/1x1/es.svg' %}" alt="Image description"
+                                    width="16" />
+                                <span>اسپانیایی</span>
+                            </a>
+                            <a class="dropdown-item d-flex align-items-center" href="#">
+                                <img class="avatar avatar-xss avatar-circle ms-2"
+                                    src="{% static 'vendor/flag-icon-css/flags/1x1/cn.svg' %}" alt="Image description"
+                                    width="16" />
+                                <span>چینی</span>
+                            </a>
                         </div>
                     </div>
-                </a>
+                    <!-- End Button Group -->
+                </div>
+                <!-- End Col -->
             </div>
-        </div>
-        <div class="footer-line"></div>
-        <div class="footer-social row d-flex align-items-center justify-content-between">
-            <div class="col-lg-4 col-xs-12">
-                <div class="d-flex">
-                    <a href=""><i class="fal fa-thumbs-up"></i></a>
-                    <a href=""><i class="fal fa-hashtag"></i></a>
-                    <a href=""><i class="fa-brands fa-facebook"></i></a>
-                    <a href=""><i class="fa-brands fa-youtube"></i></a>
+            <!-- End Row -->
 
+            <hr class="my-0">
+
+            <div class="row align-items-sm-center content-space-1">
+                <div class="col-sm mb-4 mb-sm-0">
+                    <!-- Socials -->
+                    <ul class="list-inline mb-0">
+                        <li class="list-inline-item">
+                            <a class="btn btn-soft-secondary btn-xs btn-icon" href="#">
+                                <i class="bi-facebook"></i>
+                            </a>
+                        </li>
+
+                        <li class="list-inline-item">
+                            <a class="btn btn-soft-secondary btn-xs btn-icon" href="#">
+                                <i class="bi-google"></i>
+                            </a>
+                        </li>
+
+                        <li class="list-inline-item">
+                            <a class="btn btn-soft-secondary btn-xs btn-icon" href="#">
+                                <i class="bi-twitter"></i>
+                            </a>
+                        </li>
+
+                        <li class="list-inline-item">
+                            <a class="btn btn-soft-secondary btn-xs btn-icon" href="#">
+                                <i class="bi-github"></i>
+                            </a>
+                        </li>
+                    </ul>
+                    <!-- End Socials -->
+                </div>
+
+                <div class="col-sm-auto">
+                    <!-- List -->
+                    <ul class="list-inline list-separator">
+                        <li class="list-inline-item">
+                            <a class="link-sm link-secondary" href="/page-privacy.html">حریم خصوصی و خط مشی</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="link-sm link-secondary" href="/page-terms.html">مقررات و شرایط</a>
+                        </li>
+                        <li class="list-inline-item">
+                            <a class="link-sm link-secondary" href="/#">مشاغل</a>
+                        </li>
+                    </ul>
+                    <!-- End List -->
                 </div>
             </div>
-            <div class="col-lg-4 col-xs-12">
-                <a href="#">aparat</a>
-            </div>
-            <div class="footer-site-part col-lg-4 col-xs-12">
-                <a href="#">شرایط فروش</a>
-                <a href="#">شرایط و مقررات سایت</a>
-
-            </div>
         </div>
-        <div class="footer-line"></div>
-        <div class="footer-copyright d-flex pb-5">
-            <div class="col-lg-4 col-xs-12">
-                <p>کلیه حقوق این وبسایت به گروه صنعتی پی خاک سنگ تعلق دارد Copyright © 2024</p>
-                <div>
-                    <a href="#"><p class="deodar">طراح سایت : گروه طراحی وبسایت دئودار</p></a>
-                </div>
-            </div>
-            <div class="col-lg-4 col-xs-12">
-            </div>
-            <div class="col-lg-4 col-xs-12">
-                <a href="/">
-                    <img src="{% static 'logo/logo.svg' %}" alt="peykhaksang logo" width="110px" height="auto">
-                </a>
-            
-            </div>
-            <div class="back-to-top"><a href="#"><i class="fal fa-arrow-up"></i></a></div>
-    </div>
-    </div>
-</footer>
+    </footer>
+    <!-- ========== END FOOTER ========== -->
