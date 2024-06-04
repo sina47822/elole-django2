@@ -163,3 +163,18 @@ LOGOUT_REDIRECT_URL= '/'
 MERCHANT_ID = config("MERCHANT_ID",default="4ced0a1e-4ad8-4309-9668-3ea3ae8e8897")
 SANDBOX_MODE = config("SANDBOX_MODE", cast=bool, default=True)
 
+TINYMCE_DEFAULT_CONFIG = {
+    "height": "320px",
+    "width": "960px",
+    "menubar": "file edit view insert format tools table help",
+    "plugins": "advlist autolink lists link image charmap preview anchor searchreplace visualblocks code "
+    "fullscreen insertdatetime media table code help wordcount",
+    "toolbar": "undo redo | bold italic underline strikethrough | fontselect fontsizeselect formatselect | alignleft "
+    "aligncenter alignright alignjustify | outdent indent |  numlist bullist checklist | forecolor "
+    "backcolor casechange permanentpen formatpainter removeformat | pagebreak | charmap emoticons | "
+    "fullscreen  preview save print | insertfile image media pageembed template link anchor codesample | "
+    "a11ycheck ltr rtl | showcomments addcomment code",
+    "custom_undo_redo_levels": 10,
+    "language": "fa",  # To force a specific language instead of the Django current language.
+    "browser_spellcheck": True,
+}

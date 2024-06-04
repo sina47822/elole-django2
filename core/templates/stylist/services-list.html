@@ -176,7 +176,11 @@
                     <!-- Card -->
                     <div class="card card-bordered shadow-none text-center h-100">
                         <div class="card-pinned">
+                            {% if object.image.url %}
                             <img class="card-img-top" src="{{object.image.url}}" alt="Image Description">
+                            {% else %}
+                            <img class="card-img-top" src="{% static 'media/services/service.jpg'%}" alt="Image Description">
+                            {% endif %}
 
                             <div class="card-pinned-top-end">
                                 {% if request.user.is_authenticated %}
