@@ -73,9 +73,9 @@ class OrderCheckOutView(LoginRequiredMixin, HasCustomerAccessPermission, FormVie
         for item in cart.cart_items.all():
             OrderItemModel.objects.create(
                 order=order,
-                product=item.product,
+                service=item.service,
                 quantity=item.quantity,
-                price=item.product.get_price(),
+                price=item.service.get_price(),
             )
 
     def clear_cart(self, cart):

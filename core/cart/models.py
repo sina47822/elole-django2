@@ -23,5 +23,5 @@ class CartItemModel(models.Model):
     updated_date = models.DateTimeField(auto_now=True)
     
     def __str__(self):
-        return f"{self.service.title} - {self.cart.id}"
+        return f"{self.service.name} - {self.cart.id}"
     

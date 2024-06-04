@@ -34,7 +34,7 @@ class AdminServiceListView(LoginRequiredMixin, HasAdminAccessPermission, ListVie
     def get_queryset(self):
         queryset = Services.objects.all()
         if search_q := self.request.GET.get("q"):
-            queryset = queryset.filter(title__icontains=search_q)
+            queryset = queryset.filter(name__icontains=search_q)
         if category_id := self.request.GET.get("category_id"):
             queryset = queryset.filter(category__id=category_id)
         if min_price := self.request.GET.get("min_price"):

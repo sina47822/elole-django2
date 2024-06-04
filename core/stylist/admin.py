@@ -16,7 +16,7 @@ admin.site.register(Stylist, StylistAdmin)
 
 @admin.register(Services)
 class ServiceModelAdmin(admin.ModelAdmin):
-    list_display = ("id", "name", "status","price","discount_percent", "created_date")
+    list_display = ("id", "name", "status","stock","price","discount_percent", "created_date")
 
 @admin.register(ServiceCategoryModel)
 class ServiceCategoryModelAdmin(admin.ModelAdmin):

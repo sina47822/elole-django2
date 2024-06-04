@@ -21,7 +21,7 @@ class OrderItemModelAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "order",
-        "product",
+        "service",
         "quantity",
         "price",
         "created_date"

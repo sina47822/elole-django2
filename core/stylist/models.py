@@ -48,6 +48,7 @@ class Services(models.Model):
     description = models.TextField(null = True, blank = True)
     image = models.ImageField(upload_to='services/', null = True, blank = True)
     brief_description = models.TextField(null=True,blank=True)
+    stock = models.PositiveIntegerField(default=0)
 
     stylist = models.ManyToManyField('Stylist',blank = True,related_name='stylist')
     discount_percent = models.IntegerField(default=0,validators = [MinValueValidator(0),MaxValueValidator(100)])

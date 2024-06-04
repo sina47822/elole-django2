@@ -1,5 +1,5 @@
 from django.urls import path
-from website.views import NewsletterView,aboutus,contactus,index,blog,blogposts,TermsAndCondition, postcategory,posttags
+from website.views import NewsletterView,aboutus,contactus,index,blog,blogposts,TermsAndCondition, postcategory,posttags,SendContactView
 
 
 app_name = 'website'
@@ -11,6 +11,7 @@ urlpatterns = [
     path('blog/', blog , name='blog-list'),
     path('terms-and-conditions/', TermsAndCondition, name='Terms-and-conditions'),
     path("newsletter/", NewsletterView.as_view(), name="newsletter"),
+    path("submit/ticket/",SendContactView.as_view(), name="submit-ticket"),
 
     path('category/<slug:slug>/',postcategory , name='blog-category'),
     path('tags/<slug:slug>/',posttags , name='blog-tags'),

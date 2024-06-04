@@ -13,6 +13,7 @@ class ServiceForm(forms.ModelForm):
             "description",
             "brief_description",
             "status",
+            "stock",
             "price",
             "discount_percent",
         ]
@@ -24,6 +25,7 @@ class ServiceForm(forms.ModelForm):
         self.fields['image'].widget.attrs['class'] = 'form-control'
         self.fields['brief_description'].widget.attrs['class'] = 'form-control'
         self.fields['description'].widget.attrs['id'] = 'ckeditor'
+        self.fields['stock'].widget.attrs['class'] = 'form-control'
         self.fields['stock'].widget.attrs['type'] = 'number'
         self.fields['status'].widget.attrs['class'] = 'form-select'
         self.fields['price'].widget.attrs['class'] = 'form-control'

@@ -8,7 +8,7 @@
     <div class="container content-space-t-2 content-space-t-lg-3">
         <div class="row">
             <div class="col-sm">
-                <h4 class="mb-0">شبکه محصولات</h4>
+                <h4 class="mb-0">شبکه خدمات</h4>
             </div>
             <!-- End Col -->
 
@@ -17,12 +17,12 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb mb-0 ">
                         <li class="breadcrumb-item ps-2">
-                            <a href="{% url 'website:home' %}">خانه</a>
+                            <a href="{% url 'website:home' %}">صفحه اصلی</a>
                         </li>
                         <li class="breadcrumb-item">
-                            <a href="{% url 'stylist:service-grid' %}">فروشگاه</a>
+                            <a href="{% url 'stylist:service-grid' %}">لیست خدمات</a>
                         </li>
-                        <li class="breadcrumb-item active" aria-current="page">محصولات</li>
+                        <li class="breadcrumb-item active" aria-current="page">خدمات</li>
                     </ol>
                 </nav>
                 <!-- End Breadcrumb -->
@@ -122,7 +122,7 @@
         <div class="col-lg-9">
             <div class="row align-items-center mb-5">
                 <div class="col-sm mb-3 mb-sm-0">
-                    <h6 class="mb-0">{{total_items}} محصول</h6>
+                    <h6 class="mb-0">{{total_items}} خدمت</h6>
                 </div>
 
                 <div class="col-sm-auto">
@@ -231,8 +231,8 @@
                             <!-- End Rating -->
 
                             <button type="button" class="btn btn-outline-primary btn-sm btn-transition rounded-pill"
-                                onclick="addToCart('{{object.id}}')">افزودن به سبد
-                                خرید</button>
+                                onclick="addToCart('{{object.id}}')">رزرو نوبت
+                                </button>
                         </div>
                     </div>
                     <!-- End Card -->

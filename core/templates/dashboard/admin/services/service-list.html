@@ -20,7 +20,7 @@
     <div class="card-header border-bottom">
         <div class="d-flex justify-content-between align-items-center">
             <h5 class="">لیست محصولات</h5>
-            <a class="btn btn-primary" href="{% url 'dashboard:admin:product-create' %}">ایجاد محصول</a>
+            <a class="btn btn-primary" href="{% url 'dashboard:admin:service-create' %}">ایجاد محصول</a>
         </div>
     </div>
     <!-- End Header -->
@@ -107,11 +107,11 @@
                             <td>%{{ object.discount_percent}}</td>
                             <td class="d-flex">
                                 <a class="btn btn-sm btn-icon btn-ghost-secondary"
-                                    href="{% url 'dashboard:admin:product-edit' pk=object.pk %}"><i class="bi-pencil-square"></i></a>
+                                    href="{% url 'dashboard:admin:service-edit' pk=object.pk %}"><i class="bi-pencil-square"></i></a>
 
                                 {% if object.is_published %}
                                 <a class="btn btn-sm btn-icon btn-ghost-primary" target="_blank"
-                                    href="{% url 'shop:product-detail' slug=object.slug %}"><i class="bi-eye"></i></a>
+                                    href="{% url 'stylist:service-detail' slug=object.slug %}"><i class="bi-eye"></i></a>
                                 {% endif %}
                             </td>
                         </tr>
