@@ -28,10 +28,10 @@
     </button>
   </div> -->
     {% include "partials/slider.html"%}
-    <h2>مشاهده مقالات</h2>
+    {% comment %} <h2>مشاهده مقالات</h2> {% endcomment %}
 
     {% include 'partials/blog-carousel.html' %}
-    <h2>مشاهده محصولات</h2>
+    {% comment %} <h2>مشاهده محصولات</h2> {% endcomment %}
     {% include 'partials/product-carousel.html' %}
 
     {% comment %} <section>
@@ -91,8 +91,6 @@
     </section> {% endcomment %}
 
     <article></article>
-
-    {% include 'partials/price-list.html' %}
 
     
 {% endblock content%}

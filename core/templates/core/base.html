@@ -6,14 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Elole | {% block title %}{% endblock title%}</title>
-    {% include "./css-files.html" %}
-    {% block extra_css %} {% endblock extra_css %}
 
-    {% block extra_css_no_compress %} {% endblock extra_css_no_compress %}
-    <meta name="description" content="{% block seodescription %}{% endblock seodescription%}">
-    {% if seo.image %}
-        <meta property="og:image" content="{% block seoimage %}{% endblock seoimage%}">
-    {% endif %}
 
     <!-- Additional SEO tags -->
     <link rel="canonical" href="{{ request.build_absolute_uri }}">
@@ -22,6 +15,13 @@
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png'%}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png'%}">
     <link rel="manifest" href="{% static 'favicon/site.webmanifest'%}"></head>
+    {% include "./css-files.html" %}
+
+    {% block extra_css_no_compress %} {% endblock extra_css_no_compress %}
+    <meta name="description" content="{% block seodescription %}{% endblock seodescription%}">
+    {% if seo.image %}
+        <meta property="og:image" content="{% block seoimage %}{% endblock seoimage%}">
+    {% endif %}
 <body>
     {% include "../partials/header.html"%}
 

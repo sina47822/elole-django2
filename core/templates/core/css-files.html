@@ -1,22 +1,7 @@
 {% load static %}
 
-{% comment %}     
-<!-- css reset -->
-<link rel="stylesheet" href="{% static 'css/css-reset.css' %}">
-<!-- font awsome -->
-<link rel="stylesheet" href="{% static 'fontawsome/all.min.css' %}">
-<link rel="stylesheet" href="{% static 'fontawsome/fontawesome.min.css' %}">
-<link rel="stylesheet" href="{% static 'fontawsome/brands.min.css' %}">
-<link rel="stylesheet" href="{% static 'fontawsome/light.min.css' %}">
-<!-- animate -->
-<link rel="stylesheet" href="{% static 'css/animate.min.css' %}">
-<!-- bootstrap -->
-<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-<!-- owl carousel -->
-<link rel="stylesheet" href="{% static 'css/owl-carousel.css' %}">
-<link rel="stylesheet" href="{% static 'css/owl.carousel.default.min.css' %}">
-<link rel="stylesheet" href="{% static 'css/jquery.fancy.min.css' %}"> {% endcomment %}
-
+    <!-- Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
 
     <!-- CSS Implementing Plugins -->
     <link rel="stylesheet" href="{% static 'css/vendor.min.css' %}">
@@ -29,5 +14,3 @@
     {% block extra_css %} {% endblock extra_css %}
 
     {% block extra_css_no_compress %} {% endblock extra_css_no_compress %}
-<!-- main css -->
-{% comment %} <link rel="stylesheet" href="{% static 'css/main.css' %}"> {% endcomment %}

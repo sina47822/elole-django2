@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends '../core/base.html' %}
 {% load static %}
 
 
@@ -40,7 +40,7 @@
 
                     <div class="col-sm text-center text-sm-start">
                         <a class="link" href="{% url 'cart:cart-summary' %}">
-                            بازگشت به سبد خرید<i class="bi-chevron-left small me-1"></i>
+                            بازگشت به ثبت رزرو خدمات<i class="bi-chevron-left small me-1"></i>
                         </a>
                     </div>
                     <!-- End Col -->
@@ -65,20 +65,6 @@
                             <input type="text" class="form-control text-center" name="coupon" placeholder="کد تخفیف"
                                 aria-label="کد تخفیف" form="checkout-form" id="coupon-input">
                             <button class="btn btn-primary" type="button" onclick="validateCoupon()"> بررسی</button>
-                        </div>
-
-                        <div class="border-bottom pb-4 mb-4">
-                            <div class="d-grid gap-3">
-
-                                <!-- End Row -->
-
-                                <dl class="row">
-                                    <dt class="col-sm-6">هزینه ارسال</dt>
-                                    <dd class="col-sm-12 text-sm-end mb-0">برای تهران و حومه 35000 تومان</dd>
-                                    <dd class="col-sm-12 text-sm-end mb-0">برای شهرستان ها 50000 تومان</dd>
-                                </dl>
-                                <!-- End Row -->
-                            </div>
                         </div>
 
                         <div class="d-grid gap-3 mb-4">
