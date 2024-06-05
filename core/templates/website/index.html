@@ -87,6 +87,11 @@
 
     <article></article>
 <!-- Hero -->
+
+<div class="row mb-2">
+    {% include 'partials/slider.html' %}
+</div>
+
 <div class="position-relative content-space-t-2 content-space-t-lg-3">
     <!-- Swiper Main Slider -->
     <div class="js-swiper-shop-classic-hero swiper bg-light">
@@ -98,14 +103,14 @@
                     <div class="row align-items-lg-center">
                         <div class="col-lg-5 order-lg-2 mb-7 mb-lg-0">
                             <div class="mb-6">
-                                <h1 class="display-4 mb-4">درپوش طرح اصلی جلو</h1>
-                                <p>فرانت علاوه بر اینکه در نوآوری‌های فنی بازی را تغییر می‌دهد، برخی از پرفروش‌ترین
-                                    کلاه‌ها را در
-                                    قفسه خود دارد.</p>
+                                <h1 class="display-4 mb-4">تبدیل مو به تاج زیبایی شما</h1>
+                                <p>
+                                    اکر یک بار تجربه رزرو نوبت با ما را داشته باشید از دقت نظر و همراهی کارشناسان ما لذت خواهید برد و از زیبایی خود در انتهای کار که با توجه به شخصیت و فرم صورت شماست بهره مند خواهید شد. ما در این مجموعه قصد داریم که مو سر شما را به تاج زیبایی تان تبدیل کنیم
+                                </p>
                             </div>
 
                             <div class="d-flex gap-2">
-                                <a class="btn btn-primary rounded-pill" href="#">نمایش جزئیات محصول</a>
+                                <a class="btn btn-primary rounded-pill" href="{% url 'stylist:service-grid' %}">صفحه خدمات ما</a>
                             </div>
                         </div>
                         <!-- End Col -->
@@ -123,7 +128,7 @@
             </div>
             <!-- End Slide -->
 
-            <!-- Slide -->
+            {% comment %} <!-- Slide -->
             <div class="swiper-slide">
                 <!-- Container -->
                 <div class="container content-space-t-2 content-space-b-3">
@@ -179,19 +184,9 @@
                         </div>
                         <!-- End Col -->
 
-                        <div class="col-lg-6 order-lg-1">
-                            <div class="w-75 mx-auto">
-                                <img class="img-fluid" src="{% static '/img/mockups/img1.png' %}" alt="Image Description">
-                            </div>
-                        </div>
-                        <!-- End Col -->
-                    </div>
-                    <!-- End Row -->
-                </div>
-                <!-- End Container -->
-            </div>
-            <!-- End Slide -->
-        </div>
+        
+        
+            </div> {% endcomment %}
 
         <!-- Arrows -->
         <div class="js-swiper-shop-classic-hero-button-prev swiper-button-prev"></div>
@@ -206,13 +201,13 @@
                 <!-- Slide -->
                 <div class="swiper-slide">
                     <a class="js-swiper-thumb-progress swiper-thumb-progress-avatar" href="javascript:;" tabindex="0">
-                        <img class="swiper-thumb-progress-avatar-img" src="{% static '/img/160x160/img11.jpg' %}"
+                        <img class="swiper-thumb-progress-avatar-img" src="{% static 'img/mockups/img5.png' %}"
                             alt="Image Description">
                     </a>
                 </div>
                 <!-- End Slide -->
 
-                <!-- Slide -->
+                {% comment %} <!-- Slide -->
                 <div class="swiper-slide">
                     <a class="js-swiper-thumb-progress swiper-thumb-progress-avatar" href="javascript:;" tabindex="0">
                         <img class="swiper-thumb-progress-avatar-img" src="{% static '/img/160x160/img14.jpg' %}"
@@ -228,7 +223,7 @@
                             alt="Image Description">
                     </a>
                 </div>
-                <!-- End Slide -->
+                <!-- End Slide --> {% endcomment %}
             </div>
         </div>
     </div>
@@ -237,7 +232,7 @@
 <!-- End Hero -->
 
 <!-- Icon Blocks -->
-<div class="border-bottom">
+{% comment %} <div class="border-bottom">
     <div class="container content-space-2">
         <div class="row">
             <div class="col-md-4 mb-7 mb-md-0">
@@ -291,11 +286,11 @@
         </div>
         <!-- End Row -->
     </div>
-</div>
+</div> {% endcomment %}
 <!-- End Icon Blocks -->
 
 <!-- Card Grid -->
-<div class="container content-space-2 content-space-lg-3">
+{% comment %} <div class="container content-space-2 content-space-lg-3">
     <!-- Heading -->
     <div class="w-md-75 w-lg-50 text-center mx-md-auto mb-5 mb-md-9">
         <h2>رزرو بهترین خدمات</h2>
@@ -386,7 +381,7 @@
     <div class="text-center">
         <p class="small">ارائه خدمات با تخفیف ویژه برای مدت زمانی محدود</p>
     </div>
-</div>
+</div> {% endcomment %}
 <!-- End Card Grid -->
 
 <!-- Card Grid -->
@@ -418,10 +413,10 @@
             <div class="card card-lg bg-img-start"
                 style="background-image: url({% static '/img/900x900/img3.jpg' %}); min-height: 30rem;">
                 <div class="card-body">
-                    <span class="card-subtitle text-danger">فقط برای زمانی محدود</span>
-                    <h2 class="card-title display-4">70% تخفیف</h2>
+                    <span class="card-subtitle text-danger">ما را بهتر بشناسید</span>
+                    <h2 class="card-title display-4">درباره ما چه می دانید؟</h2>
 
-                    <div class="w-md-65">
+                    {% comment %} <div class="w-md-65">
                         <!-- Countdown -->
                         <div class="js-countdown row mb-5">
                             <div class="col-4 text-center">
@@ -461,9 +456,9 @@
                             <!-- End Col -->
                         </div>
                         <!-- End Row -->
-                    </div>
+                    </div> {% endcomment %}
 
-                    <a class="btn btn-light btn-sm btn-transition rounded-pill px-6" href="#">خرید کنید</a>
+                    <a class="btn btn-light btn-sm btn-transition rounded-pill px-6" href="{% url 'website:about'%}">صفحه درباره ما</a>
                 </div>
             </div>
             <!-- End Card -->
@@ -475,14 +470,15 @@
                 style="background-image: url({% static '/img/900x900/img4.jpg' %}); min-height: 30rem;">
                 <div class="card-body">
                     <div class="mb-4">
-                        <h2 class="card-title text-white">$109.99</h2>
-                        <h3 class="card-title text-white">دوچرخه Nakto 26</h3>
-                        <p class="card-text text-white">دوچرخه های NAKTO برای نجات محیط زیست و به ارمغان آوردن
-                            سرگرمی برای
-                            دوستانمان!</p>
+                        <h2 class="card-title text-white">مشاوره و راه ارتباطی با ما</h2>
+                        <h3 class="card-title text-white"></h3>
+                        <p class="card-text text-white">
+
+                            اگر تمایل دارید که مستقیما با ما در ارتباط باشید و مشاوره برای کوتاهی مو یا استایل مو داشته باشید یا صفحات اجتماعی ما را ببینید از این طرثق می توانید
+                        </p>
                     </div>
 
-                    <a class="btn btn-light btn-sm btn-transition rounded-pill px-6" href="#">خرید کنید</a>
+                    <a class="btn btn-light btn-sm btn-transition rounded-pill px-6" href="{% url 'website:contact'%}">صفحه ارتباط با ما</a>
                 </div>
             </div>
             <!-- End Card -->
@@ -531,7 +527,7 @@
 <!-- End Subscribe -->
 
 <!-- Clients -->
-<div class="container content-space-2">
+{% comment %} <div class="container content-space-2">
     <div class="row">
         <div class="col text-center py-3">
             <img class="avatar avatar-lg avatar-4x3" src="{% static 'svg/brands/hollister-dark.svg' %}" alt="Logo">
@@ -564,6 +560,6 @@
         <!-- End Col -->
     </div>
     <!-- End Row -->
-</div>
+</div> {% endcomment %}
     
 {% endblock content%}
