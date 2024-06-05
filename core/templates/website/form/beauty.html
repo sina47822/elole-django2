@@ -1,0 +1,416 @@
+{% extends '../../core/base.html' %}
+{% load static %}
+
+
+
+{% block title %}Beauty Form{% endblock title%}
+
+
+{% block content %}
+
+<main id="content" role="main">
+    <div class="titlebar-inner text-inherit pt-55 pb-100 content-space-t-3 content-space-t-lg-5" style="background-color: #efd1c2" id="titlebar">
+        <div class="container titlebar-container">
+            <div class="row titlebar-container flex flex-wrap items-center justify-center">
+                <div class="titlebar-col col-12 col-lg-8 col-xl-6 px-15">
+                    <h1 class="pt-50">فرم زیبایی الوله</h1>
+                    <p class="mb-1/5em">
+    
+                    </p>
+                    <a class="titlebar-scroll-link" href="#lqd-site-content" data-localscroll="true">
+                        <i class="lqd-icn-ess icon-ion-ios-arrow-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container ">
+        <form action="/beautyform/" method="post" class="d-flex flex-col mt-5"> {% csrf_token %}
+            {{form.non_field_errors}}
+            <div class="d-flex flex-column">
+                <div class="beauty-form-holder d-flex flex-column">
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">آیا در دوران بارداری یا شیردهی هستید؟</p>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question1" id="inlineRadio1" value="True">
+                            <label class="form-check-label" for="inlineRadio1">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question1" id="inlineRadio2" value="False">
+                            <label class="form-check-label" for="inlineRadio2">خیر</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا در خانواده خود به صورت ارثی دچار ریزش مو هستید؟ 
+                        </p>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question2" id="inlineRadio3" value="True">
+                            <label class="form-check-label" for="inlineRadio3">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question2" id="inlineRadio4" value="False">
+                            <label class="form-check-label" for="inlineRadio4">خیر</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا به صورت ارثی کف سرتان چرب است؟ 
+                        </p>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question3" id="inlineRadio5" value="True">
+                            <label class="form-check-label" for="inlineRadio5">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question3" id="inlineRadio6" value="False">
+                            <label class="form-check-label" for="inlineRadio6">خیر</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا درگیر تنبلی تخمدان هستید؟ 
+                        </p>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question4" id="inlineRadio7" value="True">
+                            <label class="form-check-label" for="inlineRadio7">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question4" id="inlineRadio8" value="False">
+                            <label class="form-check-label" for="inlineRadio8">خیر</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا دچار اختلال هورمونی هستید؟  
+                        </p>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question5" id="inlineRadio9" value="True">
+                            <label class="form-check-label" for="inlineRadio9">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question5" id="inlineRadio10" value="False">
+                            <label class="form-check-label" for="inlineRadio10">خیر</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            در معرض استرس زیاد هستید؟  
+                        </p>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question6" id="inlineRadio11" value="True">
+                            <label class="form-check-label" for="inlineRadio11">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question6" id="inlineRadio12" value="False">
+                            <label class="form-check-label" for="inlineRadio12">خیر</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا درگیر کم خونی هستید؟   
+                        </p>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question7" id="inlineRadio13" value="True">
+                            <label class="form-check-label" for="inlineRadio13">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question7" id="inlineRadio14" value="False">
+                            <label class="form-check-label" for="inlineRadio14">خیر</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا درگیر کم کاری یا پرکاری تیروئید هستید؟  
+                        </p>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question8" id="inlineRadio15" value="True">
+                            <label class="form-check-label" for="inlineRadio15">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question8" id="inlineRadio16" value="False">
+                            <label class="form-check-label" for="inlineRadio16">خیر</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا به تازگی جراحی داشته اید؟  
+                        </p>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question9" id="inlineRadio17" value="True">
+                            <label class="form-check-label" for="inlineRadio17">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question9" id="inlineRadio18" value="False">
+                            <label class="form-check-label" for="inlineRadio18">خیر</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا اطلاعی از درگیری خود به انگل دمودکس دارید؟  
+                        </p>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question10" id="inlineRadio19" value="True">
+                            <label class="form-check-label" for="inlineRadio19">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question10" id="inlineRadio20" value="False">
+                            <label class="form-check-label" for="inlineRadio20">خیر</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا درگیر پسورریازیس هستید؟  
+                        </p>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question11" id="inlineRadio21" value="True">
+                            <label class="form-check-label" for="inlineRadio21">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question11" id="inlineRadio22" value="False">
+                            <label class="form-check-label" for="inlineRadio22">خیر</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا دچار کمبود ویتامین خاصی هستید؟ 
+                        </p>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question12" id="inlineRadio23" value="True">
+                            <label class="form-check-label" for="inlineRadio23">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question12" id="inlineRadio24" value="False">
+                            <label class="form-check-label" for="inlineRadio24">خیر</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا درگیر التهاب کف سر به همراه جوش و موخوره هستید؟ 
+                        </p>
+                        <div class="form-check form-check-inline col">
+
+                            <input class="form-check-input" type="radio" name="question13" id="inlineRadio25" value="True">
+                            <label class="form-check-label" for="inlineRadio25">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question13" id="inlineRadio26" value="False">
+                            <label class="form-check-label" for="inlineRadio26">خیر</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا درگیر شوره سر هستید؟ 
+                        </p>
+                        <div class="form-check form-check-inline col">
+
+                            <input class="form-check-input" type="radio" name="question14" id="inlineRadio27" value="True">
+                            <label class="form-check-label" for="inlineRadio27">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question14" id="inlineRadio28" value="False">
+                            <label class="form-check-label" for="inlineRadio28">خیر</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا درگیر شوره های زرد چسبیده به کف سر و تار مو هستید؟
+                        </p>
+                        <div class="form-check form-check-inline col">
+
+                            <input class="form-check-input" type="radio" name="question15" id="inlineRadio29" value="True">
+                            <label class="form-check-label" for="inlineRadio29">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question15" id="inlineRadio30" value="False">
+                            <label class="form-check-label" for="inlineRadio30">خیر</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا درگیر شوره های ریز سفید مانند برف هستید؟
+                        </p>
+                        <div class="form-check form-check-inline col">
+
+                            <input class="form-check-input" type="radio" name="question16" id="inlineRadio31" value="True">
+                            <label class="form-check-label" for="inlineRadio31">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question16" id="inlineRadio32" value="False">
+                            <label class="form-check-label" for="inlineRadio32">خیر</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا مدام در حال خاراندن کف سر خود هستید؟ 
+                        </p>
+                        <div class="form-check form-check-inline col">
+
+                            <input class="form-check-input" type="radio" name="question17" id="inlineRadio33" value="True">
+                            <label class="form-check-label" for="inlineRadio33">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question17" id="inlineRadio34" value="False">
+                            <label class="form-check-label" for="inlineRadio34">خیر</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا از فست فودها و روغنهای مایع استفاده میکنید؟ 
+                        </p>
+                        <div class="form-check form-check-inline col">
+
+                            <input class="form-check-input" type="radio" name="question18" id="inlineRadio35" value="True">
+                            <label class="form-check-label" for="inlineRadio35">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question18" id="inlineRadio36" value="False">
+                            <label class="form-check-label" for="inlineRadio36">خیر</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا از مواد غذایی شیرین زیاد استفاده میکنید؟ 
+                        </p>
+                        <div class="form-check form-check-inline col">
+
+                            <input class="form-check-input" type="radio" name="question19" id="inlineRadio37" value="True">
+                            <label class="form-check-label" for="inlineRadio37">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question19" id="inlineRadio38" value="False">
+                            <label class="form-check-label" for="inlineRadio38">خیر</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا از لبنیات زیاد استفاده میکنید؟ 
+                        </p>
+                        <div class="form-check form-check-inline col">
+
+                            <input class="form-check-input" type="radio" name="question20" id="inlineRadio39" value="True">
+                            <label class="form-check-label" for="inlineRadio39">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question20" id="inlineRadio40" value="False">
+                            <label class="form-check-label" for="inlineRadio40">خیر</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا خواب کافی دارید؟ 
+                        </p>
+                        <div class="form-check form-check-inline col">
+
+                            <input class="form-check-input" type="radio" name="question21" id="inlineRadio41" value="True">
+                            <label class="form-check-label" for="inlineRadio41">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question21" id="inlineRadio42" value="False">
+                            <label class="form-check-label" for="inlineRadio42">خیر</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            چند ساعت در روز در معرض نور خورشید هستید؟
+                        </p>
+                        <div class="form-check form-check-inline col">
+
+                            <input class="form-check-input" type="radio" name="question22" id="inlineRadio43" value="True">
+                            <label class="form-check-label" for="inlineRadio43">زیاد</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question22" id="inlineRadio44" value="False">
+                            <label class="form-check-label" for="inlineRadio44">کم</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            در روز چند لیوان آب می نوشید؟
+                        </p>
+                        <div class="form-check form-check-inline col">
+
+                            <input class="form-check-input" type="radio" name="question23" id="inlineRadio45" value="True">
+                            <label class="form-check-label" for="inlineRadio45">زیاد</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question23" id="inlineRadio46" value="False">
+                            <label class="form-check-label" for="inlineRadio46">کم</label>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا سیگار، الکل، قلیون ... مصرف می کنید؟ 
+                        </p>
+                        <div class="form-check form-check-inline col">
+
+                            <input class="form-check-input" type="radio" name="question24" id="inlineRadio47" value="True">
+                            <label class="form-check-label" for="inlineRadio47">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question24" id="inlineRadio48" value="False">
+                            <label class="form-check-label" for="inlineRadio48">خیر</label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <p class="row" style="font-weight: 700;">
+                            آیا تا بحال دچار کاهش وزن شدید شده اید؟ 
+                        </p>
+                    
+                        <div class="form-check form-check-inline col">
+
+                            <input class="form-check-input" type="radio" name="question25" id="inlineRadio49" value="True">
+                            <label class="form-check-label" for="inlineRadio49">بله</label>
+                        </div>
+                        <div class="form-check form-check-inline col">
+                            <input class="form-check-input" type="radio" name="question25" id="inlineRadio50" value="False">
+                            <label class="form-check-label" for="inlineRadio50">خیر</label>
+                        </div>
+                    </div>   
+                </div>
+                <div class="d-flex flex-column">
+                    <h3 class="my-3" style="font-weight:900;"> اطلاعات ارسال فرم</h3>
+                    <div class="row">
+                        <div class="col">
+                        <input type="text" class="form-control" placeholder="نام شما" aria-label="First name" name="first_name">
+                        </div>
+                        <div class="col">
+                        <input type="text" class="form-control" placeholder="نام خانوادگی" aria-label="Last name" name="last_name">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                        <input type="text" class="form-control" placeholder="شماره موبایل" aria-label="phone number" name="number">
+                        </div>
+                        <div class="col">
+                        <input type="text" class="form-control" placeholder="آدرس ایمیل" aria-label="email address" name="email">
+                        </div>
+                    </div>
+                    <div class="mb-3" style="width: 50%;">
+                        <label for="description" class="form-label">توضیحات</label>
+                        <textarea class="form-control" id="اگر توضیحات بیشتری لازم است در این قسمت بنویسید..." rows="3" name="desc"></textarea>
+                    </div>
+                    <div >
+                        <button type="submit" value="submit" class="btn btn-primary mb-3">ارسال فرم</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+</main>
+{% endblock content%}

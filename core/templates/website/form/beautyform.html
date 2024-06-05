@@ -1,0 +1,52 @@
+{% extends '../../core/base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+
+<h2 style="margin: 100px 0 20px 0">فرم زیبایی الوله</h2>
+
+<h2>All User Details</h2>
+<table>
+    {% for item in users %}
+    <tr>
+        <td><b>Name:</b>{{ item.first_name }}</td>
+        <td><b>Family Name:</b> {{ item.last_name}}</td>
+        <td><b>number:</b> {{ item.number }}</td>
+        <td><b>Contact Email:</b>{{item.email|default:"hidden" }}</td>
+        <td><b>:q1</b>{{item.question1 }}</td>
+        <td><b>q2:</b>{{item.question2 }}</td>
+        <td><b>q3:</b>{{item.question3 }}</td>
+        <td><b>q4:</b>{{item.question4 }}</td>
+        <td><b>q5:</b>{{item.question5 }}</td>
+        <td><b>q6:</b>{{item.question6 }}</td>
+        <td><b>q7:</b>{{item.question7 }}</td>
+        <td><b>q8:</b>{{item.question8 }}</td>
+        <td><b>q9:</b>{{item.question9 }}</td>
+        <td><b>q10:</b>{{item.question10 }}</td>
+        <td><b>q11:</b>{{item.question11 }}</td>
+        <td><b>q12:</b>{{item.question12 }}</td>
+        <td><b>q13:</b>{{item.question13 }}</td>
+        <td><b>q14:</b>{{item.question14 }}</td>
+        <td><b>q15:</b>{{item.question15 }}</td>
+        <td><b>q6:</b>{{item.question16 }}</td>
+        <td><b>q7:</b>{{item.question17 }}</td>
+        <td><b>q8:</b>{{item.question18 }}</td>
+        <td><b>q9:</b>{{item.question19 }}</td>
+        <td><b>q10:</b>{{item.question20 }}</td>
+        <td><b>q11:</b>{{item.question21 }}</td>
+        <td><b>q12:</b>{{item.question22 }}</td>
+        <td><b>q13:</b>{{item.question23 }}</td>
+        <td><b>q14:</b>{{item.question24 }}</td>
+        <td><b>q15:</b>{{item.question25 }}</td>
+
+
+    </tr>
+    <tr>
+    <td colspan="2" class="divider"><hr/></td>
+</tr>
+    {% endfor %}
+</table>
+
+{% endblock content%}

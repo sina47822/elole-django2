@@ -12,89 +12,76 @@
                         </a>
                         <!-- End Logo -->
 
-                        <p class="text-muted small mb-0">&copy; Maryam Farajian 2023 Front RTL</p>
+                        <p class="text-muted small mb-0">
+                            <p>ما اعتقاد داریم که
+                                همیشه چیزی برای کشف و یادگیری وجود دارد، زیرا تنها با داشتن درک صحیح و دانستن اصول و تکنیک های اساسی است که می توانیم خلاقیت خود را فعال و تغذیه کنیم.
+                            </p>
+                        </p>
+
                     </div>
                 </div>
 
                 <div class="col-6 col-md-4 col-lg-3 ms-lg-auto mb-5 mb-lg-0">
-                    <h5>حساب</h5>
+                    <h5>ساعت کاری</h5>
 
-                    <!-- List -->
-                    <ul class="list-unstyled list-py-1">
-                        <li><a class="link-sm text-secondary" href="#">سفارش دادن</a></li>
-                        <li><a class="link-sm text-secondary" href="#">گزینه های حمل و نقل</a></li>
-                        <li><a class="link-sm text-secondary" href="#">پیگیری یک بسته</a></li>
-                        <li><a class="link-sm text-secondary" href="#">در دسترس بودن کشور</a></li>
-                    </ul>
-                    <!-- End List -->
+                    <!-- table -->
+                    <table><tbody>
+                        <tr class=""><td>یکشنبه</td><td>18:00 – 11:00</td></tr>
+                        <tr class=""><td>دوشنبه</td><td>18:00 – 11:00</td></tr>
+                        <tr class=""><td>سه شنبه</td><td>18:00 – 11:00</td></tr>
+                        <tr class=""><td>چهارشنبه</td><td>18:00 – 11:00</td></tr>
+                        <tr class=""><td>پنجشنبه</td><td>18:00 – 11:00</td></tr>
+                    </tbody></table>
+                    <!-- End table -->
                 </div>
                 <!-- End Col -->
 
                 <div class="col-6 col-md-4 col-lg-3 mb-5 mb-lg-0">
-                    <h5>شرکت</h5>
+                    <h5>سایت مپ</h5>
 
                     <!-- List -->
                     <ul class="list-unstyled list-py-1">
-                        <li><a class="link-sm text-secondary" href="#">تامین مالی</a></li>
-                        <li><a class="link-sm text-secondary" href="#">بازیافت</a></li>
-                        <li><a class="link-sm text-secondary" href="#">سیاست بازگشت</a></li>
+                        <li><a class="link-sm text-secondary" href="{% url 'website:home' %}">صفحه اصلی</a></li>
+                        <li><a class="link-sm text-secondary" href="{% url 'website:about' %}">درباره ما</a></li>
+                        <li><a class="link-sm text-secondary" href="{% url 'website:contact' %}">ارتباط با ما</a></li>
+                        <li><a class="link-sm text-secondary" href="{% url 'website:blog-list' %}">دانشنامه</a></li>
+                        <li><a class="link-sm text-secondary" href="{% url 'website:beauty' %}">فرم زیبایی</a></li>
+                        <li><a class="link-sm text-secondary" href="{% url 'stylist:service-grid' %}">خدمات</a></li>
+                        <li><a class="link-sm text-secondary" href="{% url 'stylist:service-grid' %}">استایلیست ها</a></li>
+
                     </ul>
                     <!-- End List -->
                 </div>
                 <!-- End Col -->
 
                 <div class="col-md-4 col-lg-2 mb-5 mb-lg-0">
-                    <h5 class="mb-3">منابع</h5>
+                    <h5 class="mb-3">شبکه های اجتماعی</h5>
 
                     <!-- List -->
-                    <ul class="list-unstyled list-py-1">
-                        <li><a class="link-sm link-secondary" href="#"><i class="bi-question-circle-fill me-1"></i>
-                                کمک</a></li>
-                        <li><a class="link-sm link-secondary" href="#"><i class="bi-person-circle me-1"></i> حساب
-                                شما</a></li>
+                    <ul>
+                        <li class="icon-list-item my-3 list-unstyled">
+                            <div class="icon-list-icon">
+                                <a href="https://instagram.com/elhamrahmaniartistry/">
+                                    <svg class="" width="50px" height="50px" viewBox="0 0 448 512" fill="#001634B3">
+                                        <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
+                                    </svg>
+                                </a>
+                            </div>
+                            <div class="icon-list-text">اینستاگرام الهام رحمانی</div>
+                        </li>
+                        <li class="icon-list-item my-3 list-unstyled">
+                            <span class="icon-list-icon">
+                                <a href="https://instagram.com/leilarahmanistylistic/">
+                                    <svg class="" width="50px" height="50px" viewBox="0 0 448 512" fill="#001634B3">
+                                        <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9s51.3 114.9 114.9 114.9S339 319.5 339 255.9 287.7 141 224.1 141zm0 189.6c-41.1 0-74.7-33.5-74.7-74.7s33.5-74.7 74.7-74.7 74.7 33.5 74.7 74.7-33.6 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.4 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
+                                    </svg>
+                                </a>
+                            </span>
+                            <span class="icon-list-text">اینستاگرام لیلا رحمانی</span>
+                        </li>
                     </ul>
                     <!-- End List -->
 
-                    <!-- Button Group -->
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-white btn-sm dropdown-toggle" id="footerSelectLanguage"
-                            data-bs-toggle="dropdown" aria-expanded="false" data-bs-dropdown-animation>
-                            <span class="d-flex align-items-center">
-                                <img class="avatar avatar-xss avatar-circle ms-2"
-                                    src="{% static 'vendor/flag-icon-css/flags/1x1/us.svg' %}" alt="Image description"
-                                    width="16" />
-                                <span>انگلیسی (US)</span>
-                            </span>
-                        </button>
-
-                        <div class="dropdown-menu" aria-labelledby="footerSelectLanguage">
-                            <a class="dropdown-item d-flex align-items-center active" href="#">
-                                <img class="avatar avatar-xss avatar-circle ms-2"
-                                    src="{% static 'vendor/flag-icon-css/flags/1x1/us.svg' %}" alt="Image description"
-                                    width="16" />
-                                <span>انگلیسی</span>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <img class="avatar avatar-xss avatar-circle ms-2"
-                                    src="{% static 'vendor/flag-icon-css/flags/1x1/de.svg' %}" alt="Image description"
-                                    width="16" />
-                                <span>آلمانی</span>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <img class="avatar avatar-xss avatar-circle ms-2"
-                                    src="{% static 'vendor/flag-icon-css/flags/1x1/es.svg' %}" alt="Image description"
-                                    width="16" />
-                                <span>اسپانیایی</span>
-                            </a>
-                            <a class="dropdown-item d-flex align-items-center" href="#">
-                                <img class="avatar avatar-xss avatar-circle ms-2"
-                                    src="{% static 'vendor/flag-icon-css/flags/1x1/cn.svg' %}" alt="Image description"
-                                    width="16" />
-                                <span>چینی</span>
-                            </a>
-                        </div>
-                    </div>
-                    <!-- End Button Group -->
                 </div>
                 <!-- End Col -->
             </div>

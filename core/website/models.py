@@ -134,3 +134,39 @@ class SliderModel(models.Model):
         
     def __str__(self):
         return self.title
+    
+
+class Person(models.Model):
+    number = models.CharField(max_length=20)
+    email = models.EmailField(max_length=254, help_text='لطفا ایمیل خود را اینجا وارد کنید')
+    first_name = models.CharField(max_length=100 ,blank=True)
+    last_name = models.CharField(max_length=100 ,blank=True)
+    question1 = models.BooleanField(default=False)
+    question2 = models.BooleanField(default=False)
+    question3 = models.BooleanField(default=False)
+    question4 = models.BooleanField(default=False)
+    question5 = models.BooleanField(default=False)
+    question6 = models.BooleanField(default=False)
+    question7 = models.BooleanField(default=False)
+    question8 = models.BooleanField(default=False)
+    question9 = models.BooleanField(default=False)
+    question10 = models.BooleanField(default=False)
+    question11 = models.BooleanField(default=False)
+    question12 = models.BooleanField(default=False)
+    question13 = models.BooleanField(default=False)
+    question14 = models.BooleanField(default=False)
+    question15 = models.BooleanField(default=False)
+    question16 = models.BooleanField(default=False)
+    question17 = models.BooleanField(default=False)
+    question18 = models.BooleanField(default=False)
+    question19 = models.BooleanField(default=False)
+    question20 = models.BooleanField(default=False)
+    question21 = models.BooleanField(default=False)
+    question22 = models.BooleanField(default=False)
+    question23 = models.BooleanField(default=False)
+    question24 = models.BooleanField(default=False)
+    question25 = models.BooleanField(default=False)
+
+
+    def __str__(self):
+        return self.first_name+" "+self.last_name

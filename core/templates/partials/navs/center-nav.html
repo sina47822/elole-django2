@@ -26,10 +26,14 @@
             <li class="nav-item">
                 <a class="nav-link  {% if request.resolver_match.view_name  == 'website:home' %} active {% endif %}" href="{% url 'website:home' %}">صفحه اصلی</a>
             </li>
-
-
             <li class="nav-item">
                 <a class="nav-link {% if request.resolver_match.view_name  == 'stylist:service-grid' %} active {% endif %}" href="{% url 'stylist:service-grid' %}">لیست خدمات</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.view_name  == 'website:blog-list' %} active {% endif %}" href="{% url 'website:blog-list' %}">دانشنامه</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {% if request.resolver_match.view_name  == 'website:beauty' %} active {% endif %}" href="{% url 'website:beauty' %}">فرم زیبایی</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link {% if request.resolver_match.view_name  == 'website:about' %} active {% endif %}" href="{% url 'website:about' %}">درباره ما</a>

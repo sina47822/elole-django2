@@ -24744,3 +24744,113 @@ a:hover .text-inherit {
     max-width: none !important;
   }
 }
+/* category list */
+.blog-post-holder .summery{
+  font-size: 18px;
+  }
+  .blog-post-holder .details{
+  font-size: 12px;
+  font-weight: 400;
+  color: #ccc;
+  }
+  .blog-post-holder .author{
+  font-size: 12px;
+  font-weight: 400;
+  color: #ccc;
+  
+  }
+  .blog-post-holder .category{
+  font-size: 12px;
+  font-weight: 400;
+  color: #ccc;
+  }
+  .blog-post-holder .title{
+  font-size: 18px;
+  font-weight: 900;
+  margin-top: 15px;
+  margin-bottom: 5px;
+  }
+  .blog-post-holder .post-view{
+  font-size: 12px;
+  font-weight: 400;
+  color: #ccc;
+  
+  }
+  .blog-post-holder .read-more{
+  font-size: 12px;
+  }
+  .cat-tag-item-card{
+  font-size: 12px;
+  display: block;
+  background-color: #116EB8;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 10px;
+  margin: 5px;
+  transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+  }
+  .cat-tag-item-card:hover{
+  
+  background-color: #ccc;
+  color: black;
+  
+  }/* blog */
+
+.header-blog-details{
+  max-width: 200px;
+  }
+  .posts-list-latests .posts{
+  margin-bottom: 20px;
+  }
+  .posts-list-latests img{
+  border-radius: 50%;
+  }
+  .posts-list-latests .title{
+  font-size: 14px;
+  font-weight: 900;
+  }
+  .posts-list-latests .description{
+  font-size: 12px;
+  font-weight: 400;
+  width: 80%;
+  align-content: justify;
+  }
+    /* blog detail */
+    .blog-holder{
+      background-color: #eeeded;
+      display: flex;
+      justify-content: center;
+      margin: 0 auto;
+      padding: 0 100px;
+      .sidebar {
+        .socials-network , .blog-category , .last-blog-post , .blog-tags{
+          padding: 20px;
+          background-color: white;
+          border-radius: 15px;
+          margin: 10px;
+        }
+      }
+      .main-blog{
+        padding: 20px;
+        background-color: white;
+        border-radius: 15px;
+        margin: 10px;
+      }
+    }
+  
+  .blog-post-detail-holder .card-text{
+  
+  width: 90%;
+  margin:10px 30px ;
+  padding:10px 30px ;
+  
+  }
+  .blog-post-detail-holder p{
+  font-size: 14px;
+  }
+  .blog-post-detail-holder {
+  h1,h2,h3,h4,h5,h6{
+    font-size: 18px;
+    font-weight:600 ;
+  }
+  }

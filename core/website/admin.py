@@ -1,9 +1,13 @@
 from django.contrib import admin
-from website.models import Post, Category, SliderModel, Tags, PostSEO,TagsSEO,CategorySEO
+from website.models import Person, Post, Category, SliderModel, Tags, PostSEO,TagsSEO,CategorySEO
 from import_export.admin import ImportExportModelAdmin
 from import_export import resources
 from django.utils.html import format_html
 
+class FormAdmin(admin.ModelAdmin):
+    fields = ['number', 'email', 'first_name', 'last_name', 'question1', 'question2', 'question3', 'question4', 'question5', 'question6', 'question7', 'question8', 'question9', 'question10', 'question11', 'question12', 'question13', 'question14', 'question15', 'question16', 'question17', 'question18' , 'question19', 'question20' , 'question21', 'question22', 'question23', 'question24', 'question25']
+
+admin.site.register(Person, FormAdmin)
 
 # تعریف منابع (resources) برای مدل‌ها
 class PostResource(resources.ModelResource):

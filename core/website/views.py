@@ -7,11 +7,11 @@ from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
 from django.core.paginator import Paginator
 #newsletterform
-from .forms import ContactForm, NewsLetterForm
+from .forms import ContactForm, NewsLetterForm, PersonForm
 from django.contrib import messages
 from django.views.generic import CreateView
 # models.fields
-from website.models import SliderModel,CategorySEO, Post, Category , Tags ,PostSEO, TagsSEO
+from website.models import Person, SliderModel,CategorySEO, Post, Category , Tags ,PostSEO, TagsSEO
 
 def index(request):
     posts = Post.objects.all().order_by('-id')
@@ -143,3 +143,18 @@ class NewsletterView(CreateView):
         messages.error(
             self.request, 'مشکلی در ارسال فرم شما وجود داشت که می دونم برا چی بود!! چون ربات هستید!')
         return redirect('website:index')
+    
+def create_person(request):
+    if request.method == 'POST':
+        form = PersonForm(request.POST)
+        args = {}
+        if form.is_valid():
+            form.save()
+            users = Person.objects.all()
+
+            return render(request, 'website/form/beautyform0.html', {'users': users})
+    else:
+        form = PersonForm() 
+    
+    args = {'form': form}
+    return render(request, 'website/form/beauty.html', args)
