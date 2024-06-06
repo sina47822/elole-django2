@@ -41,7 +41,7 @@ CSRF_TRUSTED_ORIGINS = [
     "https://elole.co",  # Production site
 ]
 
-SITE_ID=1
+SITE_ID=2
 # Application definition
 
 INSTALLED_APPS = [
