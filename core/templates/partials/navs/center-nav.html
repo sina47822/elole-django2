@@ -79,14 +79,13 @@
                     <a class="dropdown-item" href="{% url 'dashboard:home' %}">پروفایل</a>
                     <a class="dropdown-item" href="{% url 'accounts:logout' %}">خروج</a>
                 </div>
-
-                <a href="{% url 'website:contact' %}#FORM" class="btn btn-secondary mx-3">
-                    <div class="contact-us-button" >فرم مشاوره رزرو</div>
-                </a>
                 
                 {% else %}
                 <a class="btn btn-primary btn-transition" href="{% url 'accounts:login' %}">ورود</a>
                 {% endif %}
+                <a href="{% url 'website:contact' %}#FORM" class="btn btn-secondary mx-3">
+                    <div class="contact-us-button" >فرم مشاوره رزرو</div>
+                </a>
             </li>
         </ul>
     </div>

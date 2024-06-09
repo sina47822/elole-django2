@@ -14,7 +14,8 @@
     <link rel="apple-touch-icon" sizes="180x180" href="{% static 'favicon/apple-touch-icon.png'%}">
     <link rel="icon" type="image/png" sizes="32x32" href="{% static 'favicon/favicon-32x32.png'%}">
     <link rel="icon" type="image/png" sizes="16x16" href="{% static 'favicon/favicon-16x16.png'%}">
-    <link rel="manifest" href="{% static 'favicon/site.webmanifest'%}"></head>
+    <link rel="manifest" href="{% static 'favicon/site.webmanifest'%}">
+
     {% include "./css-files.html" %}
 
     {% block extra_css_no_compress %} {% endblock extra_css_no_compress %}
@@ -22,13 +23,23 @@
     {% if seo.image %}
         <meta property="og:image" content="{% block seoimage %}{% endblock seoimage%}">
     {% endif %}
+</head>
 <body>
-    {% include "../partials/header.html"%}
 
-    <main id="content" role="main">{% block content %}{% endblock content %}</main>
+    <div class="heaser-container">
+        {% include "../partials/header.html"%}
+    </div>
+    <main id="content" role="main">
+        
+        {% block content %}{% endblock content %}
 
 
-    {% include "../partials/footer.html"%}
+    </main>
+    <div class="footer-container">
+        {% include "../partials/footer.html"%}
+    </div>
+
+
         <!-- ========== SECONDARY CONTENTS ========== -->
     <!-- Sign Up -->
 

@@ -88,7 +88,7 @@ def blog(request):
 def blogposts(request, slug): 
     post = get_object_or_404(Post, slug =slug )
     seo = PostSEO.objects.filter(post=post).first()  # Retrieve the first PostSEO object associated with the post
-    posts = Post.objects.all().order_by('-id')[:4]
+    posts = Post.objects.all()[:5]
     categories = Category.objects.all()
     tags = Tags.objects.all()
 
