@@ -4,11 +4,11 @@
     <thead>
       <tr>
         <th scope="col">#</th>
-        <th scope="col">نام محصول</th>
+        <th scope="col">نام خدمت</th>
         <th scope="col">قیمت</th>
         <th scope="col">قیمت در تخفیف ویژه</th>
-        <th>صفحه محصول</th>
-        <th scope="col">تصویر محصول</th>
+        <th>صفحه خدمت</th>
+        <th scope="col">تصویر خدمت</th>
       </tr>
     </thead>
     {% for product in products %}
@@ -19,7 +19,7 @@
         <td>{{product.price}}</td>
         <td>{{product.offer_price}}</td>
         {% if product.slug %}
-        <td><a href="{% url 'product:productdetails' slug=product.slug %}">صفحه محصول</a></td>
+        <td><a href="{% url 'product:productdetails' slug=product.slug %}">صفحه خدمت</a></td>
         {% else %}
         <td><a href="">no slug</a></td>
         {% endif %}

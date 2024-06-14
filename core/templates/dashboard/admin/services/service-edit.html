@@ -25,9 +25,9 @@
     <ol class="breadcrumb breadcrumb-light mb-0">
         <li class="breadcrumb-item">حساب</li>
         <li class="breadcrumb-item">داشبورد ادمین</li>
-        <li class="breadcrumb-item">محصولات</li>
+        <li class="breadcrumb-item">خدمات</li>
         <li class="breadcrumb-item active" aria-current="page">
-            ویرایش محصول
+            ویرایش خدمت
         </li>
     </ol>
 </nav>
@@ -39,11 +39,11 @@
         <div class="card mb-5">
             <!-- Header -->
             <div class="card-header border-bottom d-flex justify-content-between align-items-center">
-                <h5 class="card-header-title">ویرایش محصول</h5>
+                <h5 class="card-header-title">ویرایش خدمت</h5>
                 {% if object.is_published %}
                 <a class="btn btn-sm btn-primary" target="_blank"
                     href="{% url 'stylist:service-detail' slug=object.slug %}">نمایش
-                    محصول</a>
+                    خدمت</a>
                 {% endif %}
             </div>
             <!-- End Header -->
@@ -54,11 +54,11 @@
                 <div class="card-body">
                     <div class="row d-flex ">
                         <div class="col-md-6 mb-3">
-                            <label>نام محصول</label>
+                            <label>نام خدمت</label>
                             {{form.title}}
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label>slug محصول - <button class="small-primary-button" type="button"
+                            <label>slug خدمت - <button class="small-primary-button" type="button"
                                     onclick="generateSlug()">ساخت
                                     slug</button> </label>
                             {{form.slug}}
@@ -95,7 +95,7 @@
                         </div>
 
                         <div class="col-md-12 mb-3">
-                            <label for="validationValidFileInput1">تصویر محصول</label>
+                            <label for="validationValidFileInput1">تصویر خدمت</label>
                             {{form.image}}
                         </div>
 
@@ -128,7 +128,7 @@
                 <div class="card-body">
                     <div class="row d-flex align-items-center">
                         <div class="col-md-9 mb-3 d-flex align-items-center">
-                            <label>تصویر محصول</label>
+                            <label>تصویر خدمت</label>
                             {{image_form.file}}
                         </div>
                         <div class="col-md-3 mb-3">

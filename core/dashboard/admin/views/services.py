@@ -59,7 +59,7 @@ class AdminServiceCreateView(LoginRequiredMixin, HasAdminAccessPermission, Succe
     template_name = "dashboard/admin/services/service-create.html"
     queryset = Services.objects.all()
     form_class = ServiceForm
-    success_message = "ایجاد محصول با موفقیت انجام شد"
+    success_message = "ایجاد خدمت با موفقیت انجام شد"
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -74,7 +74,7 @@ class AdminServiceEditView(LoginRequiredMixin, HasAdminAccessPermission, Success
     template_name = "dashboard/admin/services/service-edit.html"
     queryset = Services.objects.all()
     form_class = ServiceForm
-    success_message = "ویرایش محصول با موفقیت انجام شد"
+    success_message = "ویرایش خدمت با موفقیت انجام شد"
 
     def get_success_url(self):
         return reverse_lazy("dashboard:admin:service-edit", kwargs={"pk": self.get_object().pk})
@@ -94,7 +94,7 @@ class AdminServiceDeleteView(LoginRequiredMixin, HasAdminAccessPermission, Succe
     template_name = "dashboard/admin/services/service-delete.html"
     queryset = Services.objects.all()
     success_url = reverse_lazy("dashboard:admin:service-list")
-    success_message = "حذف محصول با موفقیت انجام شد"
+    success_message = "حذف خدمت با موفقیت انجام شد"
 
 
 class AdminServiceAddImageView(LoginRequiredMixin, HasAdminAccessPermission, CreateView):

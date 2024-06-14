@@ -40,7 +40,7 @@ class CustomerWishlistListView(LoginRequiredMixin, HasCustomerAccessPermission, 
 class CustomerWishlistDeleteView(LoginRequiredMixin, HasCustomerAccessPermission, SuccessMessageMixin, DeleteView):
     http_method_names = ["post"]
     success_url = reverse_lazy('dashboard:customer:wishlist-list')
-    success_message = "محصول با موفقیت از لیست حذف شد"
+    success_message = "خدمت با موفقیت از لیست حذف شد"
 
     def get_queryset(self):
         return WishlistServicesModel.objects.filter(user=self.request.user)

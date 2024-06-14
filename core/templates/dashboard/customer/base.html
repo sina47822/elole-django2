@@ -69,7 +69,7 @@
 
                         <li class="nav-item">
                             <a class="nav-link {% if request.resolver_match.view_name  == 'stylist:service-grid' %} active {% endif %}"
-                                href="{% url 'stylist:service-grid' %}">لیست محصولات</a>
+                                href="{% url 'stylist:service-grid' %}">لیست خدمات</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link {% if request.resolver_match.view_name  == 'website:about' %} active {% endif %}"
@@ -381,8 +381,8 @@
                             <!-- Input Card -->
                             <div class="input-card">
                                 <div class="input-card-form">
-                                    <input type="text" class="form-control form-control-lg" placeholder="جستجو محصولات"
-                                        name="q" aria-label="جستجو محصولات">
+                                    <input type="text" class="form-control form-control-lg" placeholder="جستجو خدمات"
+                                        name="q" aria-label="جستجو خدمات">
                                 </div>
                                 <button type="submit" class="btn btn-primary btn-lg">جستجو کردن</button>
                             </div>

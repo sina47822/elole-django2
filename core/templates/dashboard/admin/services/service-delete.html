@@ -6,9 +6,9 @@
     <ol class="breadcrumb breadcrumb-light mb-0">
         <li class="breadcrumb-item">حساب</li>
         <li class="breadcrumb-item">داشبورد ادمین</li>
-        <li class="breadcrumb-item">محصولات</li>
+        <li class="breadcrumb-item">خدمات</li>
         <li class="breadcrumb-item active" aria-current="page">
-            حذف محصول
+            حذف خدمت
         </li>
     </ol>
 </nav>
@@ -18,7 +18,7 @@
 <div class="card">
     <!-- Header -->
     <div class="card-header border-bottom">
-        <h5 class="card-header-title">حذف محصول</h5>
+        <h5 class="card-header-title">حذف خدمت</h5>
     </div>
     <!-- End Header -->
 
@@ -27,10 +27,10 @@
         {% csrf_token %}
         <div class="card-body">
             <div class="row d-flex ">
-                <p> آیا از حذف محصول زیر اطمینان دارید؟</p>
+                <p> آیا از حذف خدمت زیر اطمینان دارید؟</p>
                 <div class="row">
-                     <span>شناسه محصول  : {{object.pk}}</span>
-                     <span>نام محصول  : {{object.title}}</span>
+                     <span>شناسه خدمت  : {{object.pk}}</span>
+                     <span>نام خدمت  : {{object.title}}</span>
                 </div>
 
             </div>

@@ -19,6 +19,6 @@ class SubmitReviewForm(forms.ModelForm):
         try:
             Services.objects.get(id=service.id,status=ServiceStatusType.publish.value)
         except Services.DoesNotExist:
-            raise forms.ValidationError("این محصول وجود ندارد")
+            raise forms.ValidationError("این خدمت وجود ندارد")
 
         return cleaned_data

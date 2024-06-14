@@ -153,10 +153,10 @@ class AddOrRemoveWishlistView(LoginRequiredMixin, View):
                 wishlist_item = WishlistServicesModel.objects.get(
                     user=request.user, service__id=service_id)
                 wishlist_item.delete()
-                message = "محصول از لیست علایق حذف شد"
+                message = "خدمت از لیست علایق حذف شد"
             except WishlistServicesModel.DoesNotExist:
                 WishlistServicesModel.objects.create(
                     user=request.user, service_id=service_id)
-                message = "محصول به لیست علایق اضافه شد"
+                message = "خدمت به لیست علایق اضافه شد"
 
         return JsonResponse({"message": message})

@@ -29,9 +29,9 @@
     <ol class="breadcrumb breadcrumb-light mb-0">
         <li class="breadcrumb-item">حساب</li>
         <li class="breadcrumb-item">داشبورد ادمین</li>
-        <li class="breadcrumb-item">محصولات</li>
+        <li class="breadcrumb-item">خدمات</li>
         <li class="breadcrumb-item active" aria-current="page">
-            ایجاد محصول
+            ایجاد خدمت
         </li>
     </ol>
 </nav>
@@ -41,7 +41,7 @@
 <div class="card">
     <!-- Header -->
     <div class="card-header border-bottom">
-        <h5 class="card-header-title">ایجاد محصول</h5>
+        <h5 class="card-header-title">ایجاد خدمت</h5>
     </div>
     <!-- End Header -->
 
@@ -51,11 +51,11 @@
         <div class="card-body">
             <div class="row d-flex ">
                 <div class="col-md-6 mb-3">
-                    <label>نام محصول</label>
+                    <label>نام خدمت</label>
                     {{form.name}}
                 </div>
                 <div class="col-md-6 mb-3">
-                    <label>slug محصول - <button class="small-primary-button" type="button"
+                    <label>slug خدمت - <button class="small-primary-button" type="button"
                         onclick="generateSlug()">ساخت slug</button> </label>
                     {{form.slug}}
                 </div>
@@ -91,7 +91,7 @@
                 </div>
 
                 <div class="col-md-12 mb-3">
-                    <label for="validationValidFileInput1">تصویر محصول</label>
+                    <label for="validationValidFileInput1">تصویر خدمت</label>
                     {{form.image}}
                 </div>
 
@@ -100,7 +100,7 @@
             <div class="card-footer">
                 <div class=" d-flex pt-5 justify-content-end">
                     <a class="btn btn-secondary ms-3" href="{% url 'dashboard:admin:service-list' %}">بازگشت</a>
-                    <button class="btn btn-primary ms-3" type="submit">ایجاد محصول</button>
+                    <button class="btn btn-primary ms-3" type="submit">ایجاد خدمت</button>
                 </div>
             </div>
     </form>
