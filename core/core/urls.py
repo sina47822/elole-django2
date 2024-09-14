@@ -39,6 +39,8 @@ urlpatterns = [
     path('order/', include('order.urls')),
     path('payment/', include('payment.urls')),
     path('review/', include('review.urls')),
+    path('reserveform/', include('reserveform.urls')),
+
 
     path('', include('website.urls')),
 

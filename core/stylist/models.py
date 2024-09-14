@@ -43,7 +43,7 @@ class Skills (models.Model):
 class Services(models.Model):
     name= models.CharField(max_length=200)
     slug = models.SlugField(allow_unicode=True, null = True, blank = True , unique=True)
-    category = models.ManyToManyField(ServiceCategoryModel)
+    category = models.ManyToManyField(ServiceCategoryModel, related_name=('category'))
     user = models.ForeignKey("accounts.User",on_delete=models.PROTECT)
     description = models.TextField(null = True, blank = True)
     image = models.ImageField(upload_to='services/', null = True, blank = True)

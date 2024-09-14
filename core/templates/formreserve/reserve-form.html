@@ -1,0 +1,272 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+
+{% block extra_css_no_compress %} 
+<style>
+    .selectable-image {
+        width: 150px;
+        height: auto;
+        transition: all 0.3s ease; /* Apply transition on all properties */
+    }
+    
+    /* Styling for the selected image */
+    .selected-image {
+        border: 3px solid #00f;    /* Highlight with a blue border */
+        filter: brightness(1.2);   /* Make the image slightly brighter */
+        transform: scale(1.05);    /* Slightly enlarge the selected image */
+        transition: all 0.3s ease; /* Ensure smooth transition for border, filter, and transform */
+    }
+</style>
+{% endblock extra_css_no_compress %}
+
+
+{% block content %}
+<div style="margin: 200px;">
+    {% if form.errors %}<h1>{% translate "Please correct the following errors" %}</h1>
+    {% else %}<h1>{% translate "Submit" %}</h1>{% endif %}
+
+
+    {% comment %} <form action="" method="get" id="category-form">
+        <h2 value="">-- انتخاب دسته بندی خدمات --</h2>
+        <!-- Loop through categories and display a dropdown or radio buttons -->
+        {% for category in categories %}
+        <input 
+            value="{{ category.id }}" 
+            type="radio" 
+            name="category" 
+            id="category-{{ category.id }}" 
+            onchange="document.getElementById('category-form').submit();"
+            {% if selected_category_id and selected_category_id == category.id %} checked {% endif %}>
+        <label for="category-{{ category.id }}" class="category-label-select">  
+            {{ category.title }}
+        </label>
+        {% endfor %}
+
+    </form>
+
+
+    <form action="" method="post" id="service-form">
+        {% csrf_token %}
+        
+        <h2>-- انتخاب خدمت --</h2>
+        <div class="services-item d-flex align-items-center row">
+            <!-- Loop through the filtered services based on the selected category -->
+            {% if services_with_images %}
+                {% for service in services_with_images %}
+                <div class="col-3" style="display:block; width:200px">
+                    <label for="service_{{ service.id }}" class="services-item-label">
+                        <div class="services-item-label-img d-flex flex-column">
+
+                            {% if service.image %}
+                                <img id="image_{{ service.id }}" src="{{ service.image.url }}" alt="{{ service.name }}" style="width: 150px; height: auto;" class="selectable-image">
+                            {% else %}
+                                <p>No image available</p>
+                            {% endif %}
+                            <strong>{{ service.name }}</strong>
+                        </div>
+                    </label>
+                    <input hidden type="radio" id="service_{{ service.id }}" name="service" value="{{ service.id }}" class="service-radio" onchange="document.getElementById('service-form').submit();">
+                </div>
+                {% endfor %}
+
+
+            {% else %}
+                <p>No services available for this category</p>
+            {% endif %}
+
+            <h2>-- انتخاب مدیر --</h2>
+            {% if admins %}
+
+            <!-- Show the admins who serve the selected service -->
+            <div id="admin-selection">
+                {% for admin in admins %}
+                <div>
+                    <input type="radio" id="admin_{{ admin.id }}" name="admin" value="{{ admin.id }}">
+                    <label for="admin_{{ admin.id }}">
+                        {{ admin.user.user_profile.first_name }} {{ admin.user.user_profile.last_name }}
+                    </label>
+                </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% endcomment %}
+
+        {% comment %}  
+        <h2>-- انتخاب مدیر --</h2>
+        <!-- Placeholder for admins that will be displayed after selecting a service -->
+        <div id="admin-selection">
+            <!-- Admin list will be populated here after service selection -->
+        </div>
+        {% endcomment %}
+                {% comment %}  
+<button type="submit">{% translate "Submit" %}</button>
+    </form> 
+</div>{% endcomment %}
+
+<form method="get" id="combined-form">
+    {% comment %} {{ form.as_p }} {% endcomment %}
+
+    <!-- Step 1: Category Selection -->
+    <div id="step-1" class="step">
+        <h2>Select Service Category</h2>
+        {% for category in categories %}
+            <input type="radio" name="category" value="{{ category.id }}"
+             onchange="submitCombinedForm();"
+             {% if selected_category_id == category.id %} checked {% endif %}>
+            <label>{{ category.title }}</label>
+        {% endfor %}
+    </div>
+
+    <!-- Step 2: Service Selection -->
+    <div id="step-2" class="step row" >
+        <h2>Select Service</h2>
+        {% for service in services_with_images %}
+        <div class="col-md-3">
+            <label for="service_{{ service.id }}" class="services-item-label">
+                <div class="services-item-label-img d-flex flex-column">
+
+                    {% if service.image %}
+                        <img id="image_{{ service.id }}" src="{{ service.image.url }}" alt="{{ service.name }}" style="width: 150px; height: auto;" class="selectable-image">
+                    {% else %}
+                        <p>No image available</p>
+                    {% endif %}
+                    <strong>{{ service.name }}</strong>
+                </div>
+            </label>
+            <input hidden type="radio" name="service" value="{{ service.id }}" id="service_{{ service.id }}"
+            onchange="submitCombinedForm();"
+            {% if selected_service_id == service.id %} checked {% endif %}>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Step 3: Admin Selection -->
+    <div id="step-3" class="step">
+        <h2>Select Admin</h2>
+        {% for admin in admins %}
+            <input type="radio" name="admin" value="{{ admin.id }}"
+            onchange="submitCombinedForm();"
+            {% if selected_admin_id == admin.id %} checked {% endif %}>
+            <label>
+                {{ admin.user.user_profile.first_name }} {{ admin.user.user_profile.last_name }}
+            </label>
+
+
+        {% endfor %}
+    </div>
+
+    <!-- Step 4: Workday Selection -->
+    <div id="step-4" class="step">
+        <h2>Select Workday</h2>
+        {% for workday in admin_workdays %}
+            <input type="radio" name="workday" value="{{ workday.id }}"
+            onchange="submitCombinedForm();"
+            {% if selected_workday_id == workday.id %} checked {% endif %}>
+            <label>{{ workday}}</label>
+        {% endfor %}
+    </div>
+
+    <!-- Step 5: Time Slot Selection -->
+    <div id="step-5" class="step">
+        <h2>Select Time Slot</h2>
+        {% for time in available_times %}
+            <input type="radio" name="time" value="{{ time.id }}">
+            <label>{{ time }}</label>
+        {% endfor %}
+    </div>
+
+    <button type="submit">Submit</button>
+
+</form>
+
+
+    {% endblock %}
+
+{% block extra_js %}
+
+<script>
+    function submitCombinedForm() {
+        // Get the combined form element
+        var combinedForm = document.getElementById('combined-form');
+        
+        // Automatically submit the form when a change is made in any radio button
+        combinedForm.submit();
+    }
+    $(document).ready(function() {
+        // Hide all steps initially except the first one
+        $('#step-1').show();
+
+        // Step 1: When a category is selected, show Step 2 (Services)
+        $('input[name="category"]').on('change', function() {
+            $('#step-2').show();
+
+        });
+
+        // Step 2: When a service is selected, show Step 3 (Admins)
+        $('input[name="service"]').on('change', function() {
+            $('#step-3').show();
+
+        });
+
+        // Step 3: When an admin is selected, show Step 4 (Workdays)
+        $('input[name="admin"]').on('change', function() {
+            $('#step-4').show();
+        });
+
+        // Step 4: When a workday is selected, show Step 5 (Available times)
+        $('input[name="workday"]').on('change', function() {
+            $('#step-5').show();
+        });
+    });
+    {% comment %} document.addEventListener('DOMContentLoaded', function() {
+        // Get all the radio buttons
+        const radios = document.querySelectorAll('.service-radio');
+
+        radios.forEach(function(radio) {
+            // Add event listener to each radio button
+            radio.addEventListener('change', function() {
+                // First remove 'selected-image' class from all images
+                document.querySelectorAll('.selectable-image').forEach(function(image) {
+                    image.classList.remove('selected-image');
+                });
+
+                // Add 'selected-image' class to the currently selected image
+                const selectedImage = document.getElementById('image_' + this.value);
+                if (selectedImage) {
+                    selectedImage.classList.add('selected-image');
+                }
+            });
+        });
+    }); {% endcomment %}
+    // JavaScript function to show admins after selecting a service
+    {% comment %} function showAdmins() {
+        // Placeholder div for admin options
+        const adminSelectionDiv = document.getElementById('admin-selection');
+        
+        // Reset the previous admin options
+        adminSelectionDiv.innerHTML = '';
+
+        // Assuming that the list of admins is already available from Django context
+        let admins = [
+            {% for admin in admins %}
+            {
+                id: "{{ admin.id }}",
+                name: "{{ admin.user_profile.get_fullname }}"
+            },
+            {% endfor %}
+        ];
+
+        // Create radio buttons for each admin
+        admins.forEach(function(admin) {
+            adminSelectionDiv.innerHTML += `
+                <div>
+                    <input type="radio" id="admin_${admin.id}" name="admin" value="${admin.id}">
+                    <label for="admin_${admin.id}">${admin.name}</label>
+                </div>
+            `;
+        });
+    } {% endcomment %}
+</script>
+{% endblock extra_js %}
+
