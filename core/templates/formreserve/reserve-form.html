@@ -110,20 +110,27 @@
     <!-- Step 1: Category Selection -->
     <div id="step-1" class="step">
         <h2>Select Service Category</h2>
+        <div>
         {% for category in categories %}
             <input type="radio" name="category" value="{{ category.id }}"
-             onchange="submitCombinedForm();"
+             onchange="showNextStep('step-2'); submitCombinedForm(); updateReview();"
+             
              {% if selected_category_id == category.id %} checked {% endif %}>
             <label>{{ category.title }}</label>
         {% endfor %}
+        </div>
     </div>
 
     <!-- Step 2: Service Selection -->
-    <div id="step-2" class="step row" >
+    <div id="step-2" class="step row" style="display: none;" >
         <h2>Select Service</h2>
         {% for service in services_with_images %}
         <div class="col-md-3">
             <label for="service_{{ service.id }}" class="services-item-label">
+                <input hidden type="radio" name="service" value="{{ service.id }}" id="service_{{ service.id }}"
+                onchange="showNextStep('step-3'); submitCombinedForm(); updateReview();"
+                {% if selected_service_id == service.id %} checked {% endif %}>
+
                 <div class="services-item-label-img d-flex flex-column">
 
                     {% if service.image %}
@@ -134,19 +141,17 @@
                     <strong>{{ service.name }}</strong>
                 </div>
             </label>
-            <input hidden type="radio" name="service" value="{{ service.id }}" id="service_{{ service.id }}"
-            onchange="submitCombinedForm();"
-            {% if selected_service_id == service.id %} checked {% endif %}>
+
         </div>
         {% endfor %}
     </div>
 
     <!-- Step 3: Admin Selection -->
-    <div id="step-3" class="step">
+    <div id="step-3" class="step" style="display: none;">
         <h2>Select Admin</h2>
         {% for admin in admins %}
             <input type="radio" name="admin" value="{{ admin.id }}"
-            onchange="submitCombinedForm();"
+            onchange="showNextStep('step-4'); submitCombinedForm(); updateReview();"
             {% if selected_admin_id == admin.id %} checked {% endif %}>
             <label>
                 {{ admin.user.user_profile.first_name }} {{ admin.user.user_profile.last_name }}
@@ -157,26 +162,42 @@
     </div>
 
     <!-- Step 4: Workday Selection -->
-    <div id="step-4" class="step">
+    <div id="step-4" class="step" style="display: none;">
         <h2>Select Workday</h2>
         {% for workday in admin_workdays %}
             <input type="radio" name="workday" value="{{ workday.id }}"
-            onchange="submitCombinedForm();"
+            onchange="showNextStep('step-5'); submitCombinedForm(); updateReview();"
             {% if selected_workday_id == workday.id %} checked {% endif %}>
             <label>{{ workday}}</label>
         {% endfor %}
     </div>
 
     <!-- Step 5: Time Slot Selection -->
-    <div id="step-5" class="step">
+    <div id="step-5" class="step" style="display: none;">
         <h2>Select Time Slot</h2>
         {% for time in available_times %}
-            <input type="radio" name="time" value="{{ time.id }}">
+            <input type="radio" name="time" value="{{ time.id }}"
+            onchange="showNextStep('review-step'); updateReview();"
+            >
             <label>{{ time }}</label>
         {% endfor %}
     </div>
 
-    <button type="submit">Submit</button>
+    <!-- Step 6: Review & Confirm -->
+    <div id="review-step" class="step" style="display: none;">
+        <h2>Review & Confirm</h2>
+        <div>
+            <p><strong>Selected Category:</strong> <span id="review-category"></span></p>
+            <p><strong>Selected Service:</strong> <span id="review-service"></span></p>
+            <!-- Service image will be shown here -->
+            <img id="review-service-image" style="width: 150px; display: none;" alt="Selected Service Image">
+            <p><strong>Selected Admin:</strong> <span id="review-admin"></span></p>
+            <p><strong>Selected Workday:</strong> <span id="review-workday"></span></p>
+            <p><strong>Selected Time Slot:</strong> <span id="review-time"></span></p>
+        </div>
+        <button type="submit" id="submit-button">Confirm & Submit</button>
+        <button type="button" onclick="goBackToStep('step-1');">Edit Selections</button>
+    </div>
 
 </form>
 
@@ -185,7 +206,7 @@
 
 {% block extra_js %}
 
-<script>
+{% comment %} <script>
     function submitCombinedForm() {
         // Get the combined form element
         var combinedForm = document.getElementById('combined-form');
@@ -219,7 +240,7 @@
             $('#step-5').show();
         });
     });
-    {% comment %} document.addEventListener('DOMContentLoaded', function() {
+     document.addEventListener('DOMContentLoaded', function() {
         // Get all the radio buttons
         const radios = document.querySelectorAll('.service-radio');
 
@@ -238,9 +259,9 @@
                 }
             });
         });
-    }); {% endcomment %}
+    });
     // JavaScript function to show admins after selecting a service
-    {% comment %} function showAdmins() {
+    function showAdmins() {
         // Placeholder div for admin options
         const adminSelectionDiv = document.getElementById('admin-selection');
         
@@ -266,7 +287,92 @@
                 </div>
             `;
         });
-    } {% endcomment %}
+    } 
+</script> {% endcomment %}
+<script>
+    // Function to submit the form when a change is made
+    function submitCombinedForm() {
+        document.getElementById('combined-form').submit();
+    }
+
+    // Function to show the next step when an option is selected
+    function showNextStep(nextStepId) {
+        document.querySelectorAll('.step').forEach(step => step.style.display = 'none');
+        document.getElementById(nextStepId).style.display = 'block';
+    }
+
+    // Function to go back to a specific step
+    function goBackToStep(stepId) {
+        document.querySelectorAll('.step').forEach(step => step.style.display = 'none');
+        document.getElementById(stepId).style.display = 'block';
+    }
+    // Function to update the review step with the selected values
+    function updateReview() {
+        // Get selected category
+        let categoryElement = document.querySelector('input[name="category"]:checked + label');
+        let category = categoryElement ? categoryElement.innerText : 'Not selected';
+
+        // Get selected service name
+        let serviceElement = document.querySelector('input[name="service"]:checked + div strong');
+        let service = serviceElement ? serviceElement.innerText : 'Not selected';
+
+        // Get selected service image
+        let serviceId = document.querySelector('input[name="service"]:checked')?.value;
+        let serviceImageElement = document.getElementById(`image_${serviceId}`);
+        let serviceImageSrc = serviceImageElement ? serviceImageElement.src : '';
+
+        // Get selected admin
+        let adminElement = document.querySelector('input[name="admin"]:checked + label');
+        let admin = adminElement ? adminElement.innerText : 'Not selected';
+
+        // Get selected workday
+        let workdayElement = document.querySelector('input[name="workday"]:checked + label');
+        let workday = workdayElement ? workdayElement.innerText : 'Not selected';
+
+        // Get selected time
+        let timeElement = document.querySelector('input[name="time"]:checked + label');
+        let time = timeElement ? timeElement.innerText : 'Not selected';
+
+        // Update the review section
+        document.getElementById('review-category').innerText = category;
+        document.getElementById('review-service').innerText = service;
+        document.getElementById('review-admin').innerText = admin;
+        document.getElementById('review-workday').innerText = workday;
+        document.getElementById('review-time').innerText = time;
+
+        // Update the service image in the review section
+        if (serviceImageSrc) {
+            document.getElementById('review-service-image').src = serviceImageSrc;
+            document.getElementById('review-service-image').style.display = 'block';
+        } else {
+            document.getElementById('review-service-image').style.display = 'none';
+        }
+        
+        // Show the review step
+        document.getElementById('review-step').style.display = 'block';
+
+        // Optionally show the final submit button after review
+        document.getElementById('submit-button').style.display = 'inline-block';
+    }
+
+    $(document).ready(function() {
+        // Initially hide all steps except Step 1 (Category Selection)
+        $('.step').not('#step-1').hide();
+
+        // Display steps based on preselected values (if any)
+        if ($('input[name="category"]:checked').length > 0) {
+            $('#step-2').show();
+        }
+        if ($('input[name="service"]:checked').length > 0) {
+            $('#step-3').show();
+        }
+        if ($('input[name="admin"]:checked').length > 0) {
+            $('#step-4').show();
+        }
+        if ($('input[name="workday"]:checked').length > 0) {
+            $('#step-5').show();
+        }
+    });
 </script>
 {% endblock extra_js %}
 
