@@ -12,15 +12,15 @@ class CustomUserAdmin(UserAdmin):
     """
 
     model = User
-    list_display = ("id","email", "is_superuser", "is_active", "is_verified")
-    list_filter = ("email", "is_superuser", "is_active", "is_verified")
-    searching_fields = ("email",)
-    ordering = ("email",)
+    list_display = ("id","phone_number","email", "is_superuser", "is_active", "is_verified")
+    list_filter = ("email","phone_number", "is_superuser", "is_active", "is_verified")
+    searching_fields = ("email","phone_number")
+    ordering = ("email","phone_number",)
     fieldsets = (
         (
             "Authentication",
             {
-                "fields": ("email", "password"),
+                "fields": ("phone_number", "password"),
             },
         ),
         (
@@ -53,6 +53,7 @@ class CustomUserAdmin(UserAdmin):
             {
                 "classes": ("wide",),
                 "fields": (
+                    "phone_number",
                     "email",
                     "password1",
                     "password2",

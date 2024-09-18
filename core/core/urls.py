@@ -21,6 +21,11 @@ from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 from website.sitemaps import StaticViewSitemap,BlogSitemap,BlogTagSitemap,BlogCategorySitemap
 
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
+
 sitemaps = {
     'static': StaticViewSitemap,
     'blog': BlogSitemap,
@@ -49,9 +54,13 @@ urlpatterns = [
     path('sitemap.xml', sitemap, {'sitemaps':sitemaps},
         name='django.contrib.sitemaps.views.sitemap'),
     path('robots.txt', include('robots.urls')),
+    path('api/users/', include('kavenegarapp.urls')),
 ] 
 
 # serving static and media for development
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+
+

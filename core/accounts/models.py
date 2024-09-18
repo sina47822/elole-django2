@@ -20,13 +20,15 @@ class UserManager(BaseUserManager):
     for authentication instead of usernames.
     """
 
-    def create_user(self, email, password, **extra_fields):
+    def create_user(self, phone_number, email, password, **extra_fields):
         """
-        Create and save a User with the given email and password.
+        Create and save a User with the given phone number and password.
         """
-        if not email:
-            raise ValueError(_("The Email must be set"))
-        email = self.normalize_email(email)
+        # if not email:
+        #     raise ValueError(_("The Email must be set"))
+        # email = self.normalize_email(email)
+        if not phone_number:
+            raise ValueError(_("The Phone Number must be set"))
         user = self.model(email=email, **extra_fields)
         user.set_password(password)
         user.save()
@@ -51,9 +53,9 @@ class UserManager(BaseUserManager):
 
 class User(AbstractBaseUser, PermissionsMixin):
 
-    email = models.EmailField(_("email address"), unique=True)
+    email = models.EmailField(_("email address"), blank=True, null=True)
     phone_regex = RegexValidator(regex=r'^\+?1?\d{9,15}$', message="Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed.")
-    phone_number = models.CharField(validators=[phone_regex], max_length=13, blank=True) # Validators should be a list
+    phone_number = models.CharField(validators=[phone_regex], max_length=13, unique=True) # Validators should be a list
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     is_verified = models.BooleanField(default=False)
@@ -63,13 +65,13 @@ class User(AbstractBaseUser, PermissionsMixin):
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
 
-    USERNAME_FIELD = "email"
+    USERNAME_FIELD = "phone_number" # Use phone number for Authentication
     REQUIRED_FIELDS = []
 
     objects = UserManager()
 
     def __str__(self):
-        return self.email
+        return self.phone_number
 
 
 class Profile(models.Model):
