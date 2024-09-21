@@ -1,0 +1,44 @@
+{% extends '../core/base.html' %}
+
+{% block content %}
+<div class="container content-space-3 content-space-t-lg-4 content-space-b-lg-3">
+    <div class="flex-grow-1 mx-auto" style="max-width: 28rem;">
+        <div class="text-center mb-5 mb-md-7">
+            <h1 class="h2">فرم ثبت نام</h1>
+            <p>لطفاً فرم زیر را پر کنید.</p>
+        </div>
+
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-4">
+                <label for="first_name">نام</label>
+                <input class="form-control form-control-lg text-center" type="text" name="first_name" required />
+            </div>
+
+            <div class="mb-4">
+                <label for="last_name">نام خانوادگی</label>
+                <input class="form-control form-control-lg text-center" type="text" name="last_name" required />
+            </div>
+
+            <div class="mb-4">
+                <label for="phone_number">شماره موبایل</label>
+                <input class="form-control form-control-lg text-center" type="tel" name="phone_number" placeholder="0912..." required />
+            </div>
+
+            <div class="mb-4">
+                <label for="password">گذرواژه</label>
+                <input class="form-control form-control-lg text-center" type="password" name="password" required />
+            </div>
+
+            <div class="mb-4">
+                <label for="password2">تکرار گذرواژه</label>
+                <input class="form-control form-control-lg text-center" type="password" name="password2" required />
+            </div>
+
+            <div class="d-grid mb-3">
+                <button type="submit" class="btn btn-primary btn-lg">ثبت نام</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -12,6 +12,7 @@ from kavenegarapp import serializers
 
 from django.contrib.auth import get_user_model
 
+
 class OTPView(APIView):
     def get(self, request):
         serializer = serializers.RequestOTPSerializer(data=request.query_params)
@@ -56,44 +57,3 @@ class OTPView(APIView):
             'token': str(refresh.access_token),
             'created': created
         }).data
-
-def send_otp(request):
-    phone_number = request.GET.get('phone_number')  # Get phone number from request
-    if not phone_number:
-        return JsonResponse({'error': 'Phone number is required'}, status=400)
-    
-    try:
-        api = KavenegarAPI(settings.KAVENEGAR_API_KEY)
-        params = {
-            'receptor': phone_number,
-            'template': 'YourTemplate',  # Kavenegar template name
-            'token': 'YourGeneratedToken',  # Generate and use the token
-            'type': 'sms',
-        }
-        response = api.verify_lookup(params)
-        return JsonResponse({'success': True, 'response': response})
-    except APIException as e:
-        return JsonResponse({'error': str(e)}, status=500)
-    except HTTPException as e:
-        return JsonResponse({'error': str(e)}, status=500)
-    
-def verify_otp(request):
-    phone_number = request.GET.get('phone_number')
-    token = request.GET.get('token')
-    
-    if not phone_number or not token:
-        return JsonResponse({'error': 'Phone number and token are required'}, status=400)
-    
-    try:
-        api = KavenegarAPI(settings.KAVENEGAR_API_KEY)
-        params = {
-            'receptor': phone_number,
-            'token': token,
-            'type': 'sms',
-        }
-        response = api.verify_lookup(params)
-        return JsonResponse({'success': True, 'response': response})
-    except APIException as e:
-        return JsonResponse({'error': str(e)}, status=500)
-    except HTTPException as e:
-        return JsonResponse({'error': str(e)}, status=500)
