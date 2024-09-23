@@ -1,0 +1,378 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+
+{% block extra_css_no_compress %} 
+<style>
+    .selectable-image {
+        width: 150px;
+        height: auto;
+        transition: all 0.3s ease; /* Apply transition on all properties */
+    }
+    
+    /* Styling for the selected image */
+    .selected-image {
+        border: 3px solid #00f;    /* Highlight with a blue border */
+        filter: brightness(1.2);   /* Make the image slightly brighter */
+        transform: scale(1.05);    /* Slightly enlarge the selected image */
+        transition: all 0.3s ease; /* Ensure smooth transition for border, filter, and transform */
+    }
+</style>
+{% endblock extra_css_no_compress %}
+
+
+{% block content %}
+    <div style="margin: 200px;">
+        {% if form.errors %}<h1>{% translate "Please correct the following errors" %}</h1>
+        {% else %}<h1>{% translate "Submit" %}</h1>{% endif %}
+
+
+        {% comment %} <form action="" method="get" id="category-form">
+            <h2 value="">-- انتخاب دسته بندی خدمات --</h2>
+            <!-- Loop through categories and display a dropdown or radio buttons -->
+            {% for category in categories %}
+            <input 
+                value="{{ category.id }}" 
+                type="radio" 
+                name="category" 
+                id="category-{{ category.id }}" 
+                onchange="document.getElementById('category-form').submit();"
+                {% if selected_category_id and selected_category_id == category.id %} checked {% endif %}>
+            <label for="category-{{ category.id }}" class="category-label-select">  
+                {{ category.title }}
+            </label>
+            {% endfor %}
+
+        </form>
+
+
+        <form action="" method="post" id="service-form">
+            {% csrf_token %}
+            
+            <h2>-- انتخاب خدمت --</h2>
+            <div class="services-item d-flex align-items-center row">
+                <!-- Loop through the filtered services based on the selected category -->
+                {% if services_with_images %}
+                    {% for service in services_with_images %}
+                    <div class="col-3" style="display:block; width:200px">
+                        <label for="service_{{ service.id }}" class="services-item-label">
+                            <div class="services-item-label-img d-flex flex-column">
+
+                                {% if service.image %}
+                                    <img id="image_{{ service.id }}" src="{{ service.image.url }}" alt="{{ service.name }}" style="width: 150px; height: auto;" class="selectable-image">
+                                {% else %}
+                                    <p>No image available</p>
+                                {% endif %}
+                                <strong>{{ service.name }}</strong>
+                            </div>
+                        </label>
+                        <input hidden type="radio" id="service_{{ service.id }}" name="service" value="{{ service.id }}" class="service-radio" onchange="document.getElementById('service-form').submit();">
+                    </div>
+                    {% endfor %}
+
+
+                {% else %}
+                    <p>No services available for this category</p>
+                {% endif %}
+
+                <h2>-- انتخاب مدیر --</h2>
+                {% if admins %}
+
+                <!-- Show the admins who serve the selected service -->
+                <div id="admin-selection">
+                    {% for admin in admins %}
+                    <div>
+                        <input type="radio" id="admin_{{ admin.id }}" name="admin" value="{{ admin.id }}">
+                        <label for="admin_{{ admin.id }}">
+                            {{ admin.user.user_profile.first_name }} {{ admin.user.user_profile.last_name }}
+                        </label>
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {% endcomment %}
+
+            {% comment %}  
+            <h2>-- انتخاب مدیر --</h2>
+            <!-- Placeholder for admins that will be displayed after selecting a service -->
+            <div id="admin-selection">
+                <!-- Admin list will be populated here after service selection -->
+            </div>
+            {% endcomment %}
+                    {% comment %}  
+    <button type="submit">{% translate "Submit" %}</button>
+        </form> 
+    </div>{% endcomment %}
+
+    <form method="get" id="combined-form" action="{% url 'reserveform:reservation_form' %}">
+        {% comment %} {{ form.as_p }} {% endcomment %}
+
+        <!-- Step 1: Category Selection -->
+        <div id="step-1" class="step">
+            <h2>Select Service Category</h2>
+            <div>
+            {% for category in categories %}
+                <input type="radio" name="category" value="{{ category.id }}"
+                onchange="showNextStep('step-2'); submitCombinedForm(); updateReview();"
+                
+                {% if selected_category_id == category.id %} checked {% endif %}>
+                <label>{{ category.title }}</label>
+            {% endfor %}
+            </div>
+        </div>
+
+        <!-- Step 2: Service Selection -->
+        <div id="step-2" class="step row" style="display: none;" >
+            <h2>Select Service</h2>
+            {% for service in services_with_images %}
+            <div class="col-md-3">
+                <label for="service_{{ service.id }}" class="services-item-label">
+                    <input hidden type="radio" name="service" value="{{ service.id }}" id="service_{{ service.id }}"
+                    onchange="showNextStep('step-3'); submitCombinedForm(); updateReview();"
+                    {% if selected_service_id == service.id %} checked {% endif %}>
+
+                    <div class="services-item-label-img d-flex flex-column">
+
+                        {% if service.image %}
+                            <img id="image_{{ service.id }}" src="{{ service.image.url }}" alt="{{ service.name }}" style="width: 150px; height: auto;" class="selectable-image">
+                        {% else %}
+                            <p>No image available</p>
+                        {% endif %}
+                        <strong>{{ service.name }}</strong>
+                    </div>
+                </label>
+
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Step 3: Admin Selection -->
+        <div id="step-3" class="step" style="display: none;">
+            <h2>Select Admin</h2>
+            {% for admin in admins %}
+                <input type="radio" name="admin" value="{{ admin.id }}"
+                onchange="showNextStep('step-4'); submitCombinedForm(); updateReview();"
+                {% if selected_admin_id == admin.id %} checked {% endif %}>
+                <label>
+                    {{ admin.user.user_profile.first_name }} {{ admin.user.user_profile.last_name }}
+                </label>
+
+
+            {% endfor %}
+        </div>
+
+        <!-- Step 4: Workday Selection -->
+        <div id="step-4" class="step" style="display: none;">
+            <h2>Select Workday</h2>
+            {% for workday in admin_workdays %}
+                <input type="radio" name="workday" value="{{ workday.id }}"
+                onchange="showNextStep('step-5'); submitCombinedForm(); updateReview();"
+                {% if selected_workday_id == workday.id %} checked {% endif %}>
+                <label>{{ workday}}</label>
+            {% endfor %}
+        </div>
+
+        <!-- Step 5: Time Slot Selection -->
+        <div id="step-5" class="step" style="display: none;">
+            <h2>Select Time Slot</h2>
+            {% for time in available_times %}
+                <input type="radio" name="time" value="{{ time.id }}"
+                onchange="showNextStep('review-step'); updateReview();"
+                >
+                <label>{{ time }}</label>
+            {% endfor %}
+        </div>
+
+        <!-- Step 6: Review & Confirm -->
+        <div id="review-step" class="step" style="display: none;">
+            <h2>Review & Confirm</h2>
+            <div>
+                <p><strong>Selected Category:</strong> <span id="review-category"></span></p>
+                <p><strong>Selected Service:</strong> <span id="review-service"></span></p>
+                <!-- Service image will be shown here -->
+                <img id="review-service-image" style="width: 150px; display: none;" alt="Selected Service Image">
+                <p><strong>Selected Admin:</strong> <span id="review-admin"></span></p>
+                <p><strong>Selected Workday:</strong> <span id="review-workday"></span></p>
+                <p><strong>Selected Time Slot:</strong> <span id="review-time"></span></p>
+            </div>
+            <button type="submit" id="submit-button">Confirm & Submit</button>
+            <button type="button" onclick="goBackToStep('step-1');">Edit Selections</button>
+        </div>
+
+    </form>
+
+
+{% endblock %}
+
+{% block extra_js %}
+
+{% comment %} <script>
+    function submitCombinedForm() {
+        // Get the combined form element
+        var combinedForm = document.getElementById('combined-form');
+        
+        // Automatically submit the form when a change is made in any radio button
+        combinedForm.submit();
+    }
+    $(document).ready(function() {
+        // Hide all steps initially except the first one
+        $('#step-1').show();
+
+        // Step 1: When a category is selected, show Step 2 (Services)
+        $('input[name="category"]').on('change', function() {
+            $('#step-2').show();
+
+        });
+
+        // Step 2: When a service is selected, show Step 3 (Admins)
+        $('input[name="service"]').on('change', function() {
+            $('#step-3').show();
+
+        });
+
+        // Step 3: When an admin is selected, show Step 4 (Workdays)
+        $('input[name="admin"]').on('change', function() {
+            $('#step-4').show();
+        });
+
+        // Step 4: When a workday is selected, show Step 5 (Available times)
+        $('input[name="workday"]').on('change', function() {
+            $('#step-5').show();
+        });
+    });
+     document.addEventListener('DOMContentLoaded', function() {
+        // Get all the radio buttons
+        const radios = document.querySelectorAll('.service-radio');
+
+        radios.forEach(function(radio) {
+            // Add event listener to each radio button
+            radio.addEventListener('change', function() {
+                // First remove 'selected-image' class from all images
+                document.querySelectorAll('.selectable-image').forEach(function(image) {
+                    image.classList.remove('selected-image');
+                });
+
+                // Add 'selected-image' class to the currently selected image
+                const selectedImage = document.getElementById('image_' + this.value);
+                if (selectedImage) {
+                    selectedImage.classList.add('selected-image');
+                }
+            });
+        });
+    });
+    // JavaScript function to show admins after selecting a service
+    function showAdmins() {
+        // Placeholder div for admin options
+        const adminSelectionDiv = document.getElementById('admin-selection');
+        
+        // Reset the previous admin options
+        adminSelectionDiv.innerHTML = '';
+
+        // Assuming that the list of admins is already available from Django context
+        let admins = [
+            {% for admin in admins %}
+            {
+                id: "{{ admin.id }}",
+                name: "{{ admin.user_profile.get_fullname }}"
+            },
+            {% endfor %}
+        ];
+
+        // Create radio buttons for each admin
+        admins.forEach(function(admin) {
+            adminSelectionDiv.innerHTML += `
+                <div>
+                    <input type="radio" id="admin_${admin.id}" name="admin" value="${admin.id}">
+                    <label for="admin_${admin.id}">${admin.name}</label>
+                </div>
+            `;
+        });
+    } 
+</script> {% endcomment %}
+<script>
+    // Function to submit the form when a change is made
+    function submitCombinedForm() {
+        document.getElementById('combined-form').submit();
+    }
+
+    // Function to show the next step when an option is selected
+    function showNextStep(nextStepId) {
+        document.querySelectorAll('.step').forEach(step => step.style.display = 'none');
+        document.getElementById(nextStepId).style.display = 'block';
+    }
+
+    // Function to go back to a specific step
+    function goBackToStep(stepId) {
+        document.querySelectorAll('.step').forEach(step => step.style.display = 'none');
+        document.getElementById(stepId).style.display = 'block';
+    }
+    // Function to update the review step with the selected values
+    function updateReview() {
+        // Get selected category
+        let categoryElement = document.querySelector('input[name="category"]:checked + label');
+        let category = categoryElement ? categoryElement.innerText : 'Not selected';
+
+        // Get selected service name
+        let serviceElement = document.querySelector('input[name="service"]:checked + div strong');
+        let service = serviceElement ? serviceElement.innerText : 'Not selected';
+
+        // Get selected service image
+        let serviceId = document.querySelector('input[name="service"]:checked')?.value;
+        let serviceImageElement = document.getElementById(`image_${serviceId}`);
+        let serviceImageSrc = serviceImageElement ? serviceImageElement.src : '';
+
+        // Get selected admin
+        let adminElement = document.querySelector('input[name="admin"]:checked + label');
+        let admin = adminElement ? adminElement.innerText : 'Not selected';
+
+        // Get selected workday
+        let workdayElement = document.querySelector('input[name="workday"]:checked + label');
+        let workday = workdayElement ? workdayElement.innerText : 'Not selected';
+
+        // Get selected time
+        let timeElement = document.querySelector('input[name="time"]:checked + label');
+        let time = timeElement ? timeElement.innerText : 'Not selected';
+
+        // Update the review section
+        document.getElementById('review-category').innerText = category;
+        document.getElementById('review-service').innerText = service;
+        document.getElementById('review-admin').innerText = admin;
+        document.getElementById('review-workday').innerText = workday;
+        document.getElementById('review-time').innerText = time;
+
+        // Update the service image in the review section
+        if (serviceImageSrc) {
+            document.getElementById('review-service-image').src = serviceImageSrc;
+            document.getElementById('review-service-image').style.display = 'block';
+        } else {
+            document.getElementById('review-service-image').style.display = 'none';
+        }
+        
+        // Show the review step
+        document.getElementById('review-step').style.display = 'block';
+
+        // Optionally show the final submit button after review
+        document.getElementById('submit-button').style.display = 'inline-block';
+    }
+
+    $(document).ready(function() {
+        // Initially hide all steps except Step 1 (Category Selection)
+        $('.step').not('#step-1').hide();
+
+        // Display steps based on preselected values (if any)
+        if ($('input[name="category"]:checked').length > 0) {
+            $('#step-2').show();
+        }
+        if ($('input[name="service"]:checked').length > 0) {
+            $('#step-3').show();
+        }
+        if ($('input[name="admin"]:checked').length > 0) {
+            $('#step-4').show();
+        }
+        if ($('input[name="workday"]:checked').length > 0) {
+            $('#step-5').show();
+        }
+    });
+</script>
+{% endblock extra_js %}
+

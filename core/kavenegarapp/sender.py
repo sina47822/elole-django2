@@ -4,6 +4,21 @@ from kavenegar import *
 from django.conf import settings
 
 from kavenegar import *
+import requests
+
+def send_telegram_message(message):
+    bot_token = '7807626393:AAFHdkzzgpncDnL5At6zWf_NrbprT8Kruak'  # Replace with your bot token
+    chat_id = '245082791'  # Replace with your chat ID
+    url = f'https://api.telegram.org/bot{bot_token}/sendMessage'
+
+    payload = {
+        'chat_id': chat_id,
+        'text': message,
+        'parse_mode': 'Markdown',  # Optional: Change to 'HTML' if needed
+    }
+
+    response = requests.post(url, json=payload)
+    return response
 
 def send_otp(otp):
     api = KavenegarAPI(settings.KAVENEGAR_API_KEY)

@@ -8,6 +8,7 @@
     <div class="row">
         <div class="col-md-7 mb-7 mb-md-0">
             <div class="pe-md-4">
+                {% if object.image %}
 
                 <div class="card-pinned">
 
@@ -28,7 +29,6 @@
                             </div>
                             {% endfor %}
                             <!-- End Slide -->
-
 
                         </div>
 
@@ -65,6 +65,8 @@
                     </div>
                     <!-- End Swiper Thumb Slider -->
                 </div>
+                {% endif %}
+
             </div>
         </div>
         <!-- End Col -->

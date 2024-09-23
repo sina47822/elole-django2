@@ -1,0 +1,79 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+
+{% block extra_css_no_compress %} 
+<style>
+    .selectable-image {
+        width: 150px;
+        height: auto;
+        transition: all 0.3s ease; /* Apply transition on all properties */
+    }
+    
+    /* Styling for the selected image */
+    .selected-image {
+        border: 3px solid #00f;    /* Highlight with a blue border */
+        filter: brightness(1.2);   /* Make the image slightly brighter */
+        transform: scale(1.05);    /* Slightly enlarge the selected image */
+        transition: all 0.3s ease; /* Ensure smooth transition for border, filter, and transform */
+    }
+</style>
+{% endblock extra_css_no_compress %}
+
+
+{% block content %}
+<div style="margin: 200px;" >
+    {% include "./nav.html" %}
+
+    <div id="content" class=" d-flex flex-column justify-content-center align-items-center">
+        <h1>انتخاب ساعت رزرو</h1>
+        
+        <form method="post" id="reservation-form">
+            {% csrf_token %}
+            <!-- Step 5: Available Time Selection -->
+            <label for="workhour">Choose a time:</label>
+            <select id="workhour" name="hour">
+                <option value="">Select a time</option>
+                {% for time in times %}
+                    <option value="{{ time.id }}">
+                        {{ time }}
+                    </option>
+                {% endfor %}
+            </select>
+            <br><br>
+    
+            <button class="reserve-button btn btn-primary" type="submit">بعدی</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        $('#reservation-form').on('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+        
+            var formData = $(this).serialize(); // Serialize form data
+            
+            $.ajax({
+                type: 'POST',
+                url: '{% url "reserveform:workhour" %}',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        window.location.href = response.redirect_url; // Redirect to services
+                    } else {
+                        alert('Error: ' + JSON.stringify(response.errors)); // Handle validation errors
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                    alert('An error occurred while processing your request: ' + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+{% endblock extra_js %}
+

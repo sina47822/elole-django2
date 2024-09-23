@@ -16,9 +16,9 @@
             {% csrf_token %}
             <!-- Form -->
             <div class="mb-4">
-                <label class="form-label" for="signupSimpleLoginEmail">ایمیل شما</label>
-                <input type="email" class="form-control form-control-lg text-center" name="username"
-                    id="signupSimpleLoginEmail" placeholder="email@site.com" aria-label="email@site.com" required>
+                <label class="form-label" for="signupSimpleLoginEmail">شماره موبایل</label>
+                <input type="phone_number" class="form-control form-control-lg text-center" name="username"
+                    id="signupSimpleLoginEmail" placeholder="0912..." required>
                 <span class="invalid-feedback">لطفا یک آدرس ایمیل معتبر وارد کنید.</span>
             </div>
             <!-- End Form -->
@@ -49,7 +49,7 @@
             </div>
 
             <div class="text-center">
-                <p>حساب کاربری ندارید؟ <a class="link" href="./page-signup-simple.html">اینجا ثبت نام کنید</a></p>
+                <p>حساب کاربری ندارید؟ <a class="link" href="{% url 'accounts:register' %}">اینجا ثبت نام کنید</a></p>
             </div>
         </form>
 

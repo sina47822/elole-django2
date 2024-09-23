@@ -1,0 +1,67 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+{% block content %}
+<div style="margin: 200px;" >
+    {% include "./nav.html" %}
+
+    <div id="content" class=" d-flex flex-column justify-content-center align-items-center">
+        <h1>انتخاب استایلیست</h1>
+        
+        <form method="post" id="reservation-form">
+            {% csrf_token %}
+            <!-- Step 3: Admin Selection -->
+            <label for="admin">Choose an admin:</label>
+            <select id="admin" name="stylist">
+                <option value="">Select an admin</option>
+                {% for admin in admins %}
+                    <option value="{{ admin.id }}" {% if selected_admin_id == admin.id %}selected{% endif %}>
+                        {{ admin.user.user_profile.first_name }} {{ admin.user.user_profile.last_name }}
+                    </option>
+                {% endfor %}
+            </select>
+            <br><br>
+
+
+                
+            <br><br>
+            
+            <!-- Add other form fields as necessary -->
+            
+            <button class="reserve-button btn btn-primary" type="submit">بعدی</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    $(document).ready(function() {
+        $('#reservation-form').on('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+        
+            var formData = $(this).serialize(); // Serialize form data
+            
+            $.ajax({
+                type: 'POST',
+                url: '{% url "reserveform:stylist" %}',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        window.location.href = response.redirect_url; // Redirect to services
+                    } else {
+                        alert('Error: ' + JSON.stringify(response.errors)); // Handle validation errors
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                    alert('An error occurred while processing your request: ' + xhr.responseText);
+                }
+            });
+        });
+    });
+</script>
+{% endblock %}
+    
+
+ 

@@ -15,7 +15,7 @@ class ReserveFormModel(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'reserveform for {self.user.name} with {self.stylist.user.name} on {self.workday.day} at {self.workhour.hour}'
+        return f'reserveform for {self.stylist.user.first_name} with {self.stylist.user.last_name} on {self.day.day} at {self.day.hour}'
 
 class ReserveForm_status(models.Model):
     status = models.CharField(max_length=100,null=True)

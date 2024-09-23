@@ -1,6 +1,26 @@
-.formatted-price {
-}
-
 .star-rate{
     color:gold;
+}
+.nav-reserveform {
+    justify-content: center;
+}
+.nav-reserveform ul {
+    display: flex;
+    column-gap: 20px;
+    align-items: center;
+}
+
+.nav-reserveform ul li p {
+    font-size: 20px;
+}
+.nav-reserveform ul li i ,.nav-reserveform ul i{
+    font-size: 40px;
+}
+.nav-reserveform .nav-link a {
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: #6b6969;
 }

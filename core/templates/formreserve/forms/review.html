@@ -1,0 +1,90 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+
+{% block extra_css_no_compress %} 
+<style>
+
+</style>
+{% endblock extra_css_no_compress %}
+
+
+{% block content %}
+<div style="margin: 200px;" >
+    {% include "./nav.html" %}
+
+    <div id="content" class=" d-flex flex-column justify-content-center align-items-center">
+        <h1>بازنگری و تایید نهایی</h1>
+            <!-- Display messages -->
+            {% if messages %}
+                <ul>
+                {% for message in messages %}
+                    <li {% if message.tags %}class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+                </ul>
+            {% endif %}
+        <form method="post" id="reservation-form" action="{% url 'reserveform:review' %}" >
+            {% csrf_token %}
+            <div class="d-flex flex-column">
+                <label for="service_category">دسته بندی : {{category}}
+                    <input name="service_category" id="service_category" value="{{ category.id }}" hidden>
+                </label>
+
+                <label for="service">نوع خدمت : {{service}}
+                    <input name="service" id="service" value="{{ service.id }}" hidden>
+                </label>
+
+                <label for="stylist">
+                استایلیست :
+                {{ admin.user.user_profile.first_name }} {{ admin.user.user_profile.last_name }}
+                    <input name="stylist" id="stylist" value="{{ admin.id }}" hidden>
+                </label>
+
+                <label for="day">روز رزرو : {{day}}
+                    <input name="day" id="day" value="{{ day.id }}" hidden>
+                </label>
+                <label for="hour">ساعت رزرو : {{hour}}
+                    <input name="hour" id="hour" value="{{ hour.id }}" hidden>
+                </label>
+                
+                <input name="customer" id="customer" value="{{ customer.id }}" hidden>
+
+                <div>
+                    <a href="{% url 'reserveform:category' %}" class="btn btn-secondary">ویرایش</a>
+
+                    <button class="reserve-button btn btn-primary" type="submit">تایید نهایی</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    {% comment %} $(document).ready(function() {
+        $('#reservation-form').on('submit', function(event) {
+            event.preventDefault(); // Prevent default form submission
+        
+            var formData = $(this).serialize(); // Serialize form data
+            $.ajax({
+                type: 'POST',
+                url: '{% url "reserveform:review" %}',
+                data: formData,
+                success: function(response) {
+                    if (response.success) {
+                        window.location.href = response.redirect_url; // Redirect to services
+                    } else {
+                        alert('Error: ' + JSON.stringify(response.errors)); // Handle validation errors
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                    alert('An error occurred while processing your request: ' + xhr.responseText);
+                }
+            });
+        });
+    }); {% endcomment %}
+</script>
+{% endblock extra_js %}
+

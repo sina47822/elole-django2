@@ -1,0 +1,46 @@
+{% extends "core/base.html" %}
+{% load i18n %}
+
+
+{% block extra_css_no_compress %} 
+<style>
+    .selectable-image {
+        width: 150px;
+        height: auto;
+        transition: all 0.3s ease; /* Apply transition on all properties */
+    }
+    
+    /* Styling for the selected image */
+    .selected-image {
+        border: 3px solid #00f;    /* Highlight with a blue border */
+        filter: brightness(1.2);   /* Make the image slightly brighter */
+        transform: scale(1.05);    /* Slightly enlarge the selected image */
+        transition: all 0.3s ease; /* Ensure smooth transition for border, filter, and transform */
+    }
+    .card-selected {
+        border-color: #007bff;
+    }
+</style>
+{% endblock extra_css_no_compress %}
+
+
+{% block content %}
+<div style="margin: 200px;">
+    {% if form.errors %}<h1>{% translate "Please correct the following errors" %}</h1>
+    {% else %}<h1>{% translate "Submit" %}</h1>{% endif %}
+
+<h2>Confirm Your Reservation</h2>
+
+<p>Category: {{ category.name }}</p>
+<p>Service: {{ service.name }}</p>
+<p>Stylist: {{ stylist.username }}</p>
+<p>Workday: {{ workday.name }}</p>
+<p>Time: {{ time.hour }}</p>
+
+<form method="post">
+  {% csrf_token %}
+  <button type="submit">Confirm Reservation</button>
+</form>
+
+</div>
+{% endblock content %}

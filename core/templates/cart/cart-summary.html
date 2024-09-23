@@ -22,10 +22,14 @@
                 <!-- Item -->
                 <li class="list-group-item">
                     <div class="d-flex">
+                        {% if item.service_obj.image %}
+
                         <div class="flex-shrink-0">
                             <img class="avatar avatar-xl avatar-4x3" src="{{item.service_obj.image.url}}"
                                 alt="Image Description">
                         </div>
+
+                        {% endif %}
 
                         <div class="flex-grow-1 ms-3">
                             <div class="row">
