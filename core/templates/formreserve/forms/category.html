@@ -17,21 +17,19 @@
         <form method="post" id="reservation-form">
             {% csrf_token %}
             <label for="category">Choose a category:</label>
-            <select id="category" name="service_category">
-                <option value="">Select a category</option>
+            
+            <div class="category-selection">
                 {% for category in categories %}
-                    {% if category.id == category_id %}
-                    <option selected value="{{ category.id }}">{{ category.title }}</option>
-                    {% else %}
-                    <option value="{{ category.id }}">{{ category.title }}</option>
-                    {% endif %}
+                <label for="category-{{ category.id }}">
+                    <input type="radio" id="category-{{ category.id }}" name="service_category" hidden value="{{ category.id }}" {% if category.id == category_id %}checked{% endif %}>
+                    <img src="{{ category.image.url }}" alt="{{ category.title }}" class="category-image" style="width:200px; cursor:pointer">
+                </label>
                 {% endfor %}
-            </select>
+            </div>
+            
             <br><br>
-            
-            <!-- Add other form fields as necessary -->
-            
-            <button class="reserve-button btn btn-primary" type="submit">بعدی</button>
+            <button type="submit" style="display:none;">Submit</button>
+            {% comment %} <button class="reserve-button btn btn-primary" type="submit">بعدی</button> {% endcomment %}
         </form>
     </div>
 </div>
@@ -39,7 +37,28 @@
 
 {% block extra_js %}
 <script>
-    console.log('{% url "reserveform:review" %}');
+    $(document).ready(function() {
+        // Handle click event on image
+        $('.category-image').on('click', function() {
+            // Remove the 'selected' class from all images
+            $('.category-image').css({
+                'border': 'none',
+                'box-shadow': 'none'
+            });
+
+            // Add 'selected' styles to the clicked image
+            $(this).css({
+                'border': '2px solid #007bff',
+                'box-shadow': '0px 0px 5px rgba(0, 123, 255, 0.5)'
+            });
+
+            // Select the corresponding radio button
+            $(this).prev('input[type=radio]').prop('checked', true);
+
+            // Submit the form
+            $('#reservation-form').submit();
+        });
+    });
     $(document).ready(function() {
         $('#reservation-form').on('submit', function(event) {
             event.preventDefault(); // Prevent default form submission
@@ -64,5 +83,6 @@
             });
         });
     });
+
 </script>
 {% endblock %}

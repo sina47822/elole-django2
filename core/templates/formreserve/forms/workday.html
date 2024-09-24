@@ -1,6 +1,6 @@
 {% extends "core/base.html" %}
 {% load i18n %}
-
+{% load static%}
 
 {% block extra_css_no_compress %} 
 <style>
@@ -18,6 +18,8 @@
         transition: all 0.3s ease; /* Ensure smooth transition for border, filter, and transform */
     }
 </style>
+<link href="{% static 'plugins/persiandate/css/persian-datepicker.min.css' %}" rel="stylesheet">
+
 {% endblock extra_css_no_compress %}
 
 
@@ -25,56 +27,191 @@
 <div style="margin: 200px;" >
     {% include "./nav.html" %}
 
-    <div id="content" class=" d-flex flex-column justify-content-center align-items-center">
-        <h1>انتخاب روز رزرو</h1>
-        
-        <form method="post" id="reservation-form">
+    {% comment %} <div id="content" class=" d-flex flex-column justify-content-center align-items-center pick-date-holder">
+        <h3 class="title">انتخاب تاریخ رزرو</h3>
+        <p class="subtitle">تاریخ مورد نظر رزرو خود را انتخاب کنید</p>
+
+        <form method="post" id="reservation-form" class="pick-reserve-date">
             {% csrf_token %}
-    
-            <!-- Step 4: Workday Selection -->
-            <label for="workday">Choose a workday:</label>
-            <select id="workday" name="day">
-                <option value="">Select a workday</option>
-                {% for workday in workdays %}
-                    <option value="{{ workday.id }}" {% if selected_workday_id == workday.id %}selected{% endif %}>
-                        {{ workday.day }}
-                    </option>
-                {% endfor %}
-            </select>
+            
+            <!-- Persian Date Input -->
+            <label for="workday">انتخاب تاریخ رزرو</label>
+            <input type="text" id="datepicker" name="day" class="form-control has-persian-datepicker" placeholder="Select a date" required>            
+            
+            
             <br><br>
-    
-            <button class="reserve-button btn btn-primary" type="submit">بعدی</button>
+            <button class="reserve-button btn btn-primary" type="submit">Next</button>
         </form>
-    </div>
+
+        </div>
+    </div> {% endcomment %}
+      
+    <input type="hidden" id="inlineExampleAlt" class="locale-fa" />
+    <div class="locale-fa" ></div>
+
 </div>
+
+<form method="post" id="reservation-form" class="pick-reserve-date">
+    {% csrf_token %}
+    
+    <!-- Persian Date Input -->
+    <label for="selected-date">انتخاب تاریخ رزرو</label>
+    {% comment %} <input type="text" id="datepicker" name="day" class="form-control has-persian-datepicker" placeholder="Select a date" required>             {% endcomment %}
+    
+    <!-- Hidden input to store the selected date in YYYY-MM-DD format -->
+    <input type="hidden" id="selected-date" name="selected_date" value="">
+
+    <br><br>
+    <button class="reserve-button btn btn-primary" type="submit">Next</button>
+</form>
 {% endblock %}
 
 {% block extra_js %}
-<script>
+<script src="{% static 'plugins/persiandate/js/persian-date.min.js' %}"></script>
+<script src="{% static 'plugins/persiandate/js/persiandatepicker.min.js' %}"></script>
+
+<script type="text/javascript">
     $(document).ready(function() {
-        $('#reservation-form').on('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-        
-            var formData = $(this).serialize(); // Serialize form data
+        var availableDates = [
+            {% for date in workdays_formatted %}
+                '{{ date }}',  // These are Gregorian dates in 'YYYY-MM-DD' format
+            {% endfor %}
+        ];
+
+        var availablePersianDates = availableDates.map(function(gregorianDate) {
+            var persianDateObj = new persianDate(new Date(gregorianDate)).format('YYYY-MM-DD');
+            return persianDateObj;
+        });
+
+        console.log('Available Persian Dates:', availablePersianDates);
+
+        $('.locale-fa').persianDatepicker({
+            inline: true,
+            navigator: {
+                scroll: {
+                    enabled: false
+                }
+            },
+            minDate: new persianDate().subtract('month', 3).valueOf(),
+            checkDate: function(unix) {
+                var selectedPersianDate = new persianDate(unix).format('YYYY-MM-DD');
+                var isAvailable = availablePersianDates.includes(selectedPersianDate);
+                return isAvailable;
+            },
+            onSelect: function(unix) {
+                var selectedPersianDate = new persianDate(unix).format('YYYY-MM-DD');
+                console.log('Selected Persian Date:', selectedPersianDate);
+
+                // Set the selected date in the hidden input field
+                $('#selected-date').val(selectedPersianDate);
+            }
+        });
+
+        // Handle AJAX form submission
+        $('#reservation-form').on('submit', function(e) {
+            e.preventDefault(); // Prevent the default form submission
             
+            // Gather form data
+            var formData = $(this).serialize();
+
             $.ajax({
-                type: 'POST',
-                url: '{% url "reserveform:workday" %}',
+                url: "{% url 'reserveform:workday' %}", // Your form submission URL
+                type: "POST",
                 data: formData,
                 success: function(response) {
-                    if (response.success) {
-                        window.location.href = response.redirect_url; // Redirect to services
-                    } else {
-                        alert('Error: ' + JSON.stringify(response.errors)); // Handle validation errors
-                    }
+                    // Handle success (e.g., redirect or show a success message)
+                    console.log("Reservation submitted successfully!");
+                    window.location.href = "{% url 'reserveform:workhour' %}"; // Redirect after success
                 },
                 error: function(xhr, status, error) {
-                    console.error('AJAX Error:', status, error);
-                    alert('An error occurred while processing your request: ' + xhr.responseText);
+                    // Handle error
+                    console.error("Form submission failed: ", status, error);
+                    alert("There was an error submitting the form. Please try again.");
                 }
             });
         });
     });
 </script>
+{% comment %} <script type="text/javascript">
+    $(document).ready(function() {
+        var availableDates = [
+            {% for date in workdays_formatted %}
+                '{{ date }}',  // These are Gregorian dates in 'YYYY-MM-DD' format
+            {% endfor %}
+        ];
+
+        // Convert available Gregorian dates to Persian dates
+        var availablePersianDates = availableDates.map(function(gregorianDate) {
+            // Convert each Gregorian date (YYYY-MM-DD) to Persian date
+            var persianDateObj = new persianDate(new Date(gregorianDate)).format('YYYY-MM-DD');
+            return persianDateObj;
+        });
+
+        console.log('Available Persian Dates:', availablePersianDates); // Log available Persian dates
+
+        $('.locale-fa').persianDatepicker({
+            inline: true,
+            navigator: {
+                scroll: {
+                    enabled: false
+                }
+            },
+            minDate: new persianDate().subtract('month', 3).valueOf(),
+            checkDate: function(unix) {
+                // Convert the selected Unix timestamp to Persian date (YYYY-MM-DD)
+                var selectedPersianDate = new persianDate(unix).format('YYYY-MM-DD');
+                var isAvailable = availablePersianDates.includes(selectedPersianDate);
+                return isAvailable; // Check if the selected Persian date is in the available dates
+            },
+            onSelect: function(unix) {
+                // Convert the selected Unix timestamp to Persian date (YYYY-MM-DD)
+                var selectedPersianDate = new persianDate(unix).format('YYYY-MM-DD');
+                console.log('Selected Persian Date:', selectedPersianDate); // Log selected Persian date
+
+                // Check if the selected Persian date is in the allowed Persian dates array
+                if (!availablePersianDates.includes(selectedPersianDate)) {
+                    alert('This date is not available for selection.'); // Optionally alert the user
+                    $(this).val(''); // Clear the input if the date is not selectable
+                }
+            }
+        });
+    });
+</script> {% endcomment %}
+
+{% comment %} <script>
+    $(document).ready(function() {
+        var availableDates = [
+            {% for workday in workdays %}
+                '{{ workday.day|date:"Y-m-d" }}',
+            {% endfor %}
+        ];
+    console.log('Available Dates:', availableDates); // Log available dates
+
+        // Initialize Persian datepicker
+        $("#workday").pDatepicker({
+            inline: true,
+            altField: '#workday',
+            altFormat: 'YYYY-MM-DD',
+            autoClose: true,
+            navigator: {
+                scroll: {
+                    enabled: false
+                }
+            },
+            minDate: new persianDate().unix(), // Restrict to future dates
+            onSelect: function(unix) {
+                var dateStr = new persianDate(unix).format('YYYY-MM-DD');
+                if (!availableDates.includes(dateStr)) {
+                    alert('This date is not available for selection.'); // Optionally alert the user
+                    $(this).val(''); // Clear the input if the date is not selectable
+                }
+            }
+
+        });
+
+    });
+
+</script> {% endcomment %}
+
 {% endblock extra_js %}
 

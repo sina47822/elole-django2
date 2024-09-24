@@ -30,13 +30,12 @@
         
         <form method="post" id="reservation-form">
             {% csrf_token %}
-            <!-- Step 5: Available Time Selection -->
             <label for="workhour">Choose a time:</label>
             <select id="workhour" name="hour">
                 <option value="">Select a time</option>
-                {% for time in times %}
-                    <option value="{{ time.id }}">
-                        {{ time }}
+                {% for slot in available_slots %}
+                    <option value="{{ forloop.counter }}">
+                        {{ slot.0 }} - {{ slot.1 }}
                     </option>
                 {% endfor %}
             </select>
@@ -51,8 +50,8 @@
 {% block extra_js %}
 <script>
     $(document).ready(function() {
-        $('#reservation-form').on('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
+        $('#reservation-form').on('submit', function(e) {
+            e.preventDefault(); // Prevent default form submission
         
             var formData = $(this).serialize(); // Serialize form data
             

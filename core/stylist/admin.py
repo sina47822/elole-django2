@@ -5,11 +5,14 @@ admin.site.register(Address)
 admin.site.register(Skills)
 admin.site.register(WorkDay)
 admin.site.register(WorkHour)
-class WorkDayTimeInline(admin.TabularInline):
+
+class WorkDayInline(admin.TabularInline):
     model = WorkDay
     extra = 1
+    fields = ['day']
+
 class StylistAdmin(admin.ModelAdmin):
-    inlines = [WorkDayTimeInline]
+    inlines = [WorkDayInline]
 
 admin.site.register(PortfolioImage)
 admin.site.register(Stylist, StylistAdmin)
@@ -20,7 +23,7 @@ class ServiceModelAdmin(admin.ModelAdmin):
 
 @admin.register(ServiceCategoryModel)
 class ServiceCategoryModelAdmin(admin.ModelAdmin):
-    list_display = ("id", "title", "created_date")
+    list_display = ("id","image", "title", "created_date")
 
 @admin.register(ServiceImageModel)
 class ServiceImageModelAdmin(admin.ModelAdmin):

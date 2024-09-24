@@ -18,10 +18,17 @@ class ReservationForm3(forms.ModelForm):
     class Meta:
         model = ReserveFormModel
         fields = ['service_category']
-class ReservationForm5(forms.ModelForm):
-    class Meta:
-        model = ReserveFormModel
-        fields = ['day']
+class ReservationForm5(forms.Form):
+    day = forms.DateField(widget=forms.TextInput(attrs={'class': 'has-persian-datepicker'}), required=True)
+    
+    def clean_day(self):
+        day = self.cleaned_data.get('day')
+        if not day:
+            raise forms.ValidationError("A valid date is required.")
+        return day
+    # class Meta:
+    #     model = ReserveFormModel
+    #     fields = ['day']
 class ReservationForm6(forms.ModelForm):
     class Meta:
         model = ReserveFormModel

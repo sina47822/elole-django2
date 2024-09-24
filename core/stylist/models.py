@@ -15,7 +15,7 @@ class ServiceStatusType(models.IntegerChoices):
 class ServiceCategoryModel(models.Model):
     title = models.CharField(max_length=255)
     slug = models.SlugField(allow_unicode=True,unique=True)
-    
+    image = models.ImageField(upload_to='services/category/', null = True, blank = True)
     created_date = models.DateTimeField(auto_now_add=True)
     updated_date = models.DateTimeField(auto_now=True)
     
@@ -48,6 +48,8 @@ class Services(models.Model):
     description = models.TextField(null = True, blank = True)
     image = models.ImageField(upload_to='services/', null = True, blank = True)
     brief_description = models.TextField(null=True,blank=True)
+    duration = models.DurationField()
+    
     stock = models.PositiveIntegerField(default=0)
 
     stylist = models.ManyToManyField('Stylist',blank = True,related_name='stylist')
@@ -105,36 +107,19 @@ class PortfolioImage(models.Model):
         return self.title
 
 class WorkDay(models.Model):
-    DAY_CHOICES = [
-        ('Monday', 'Monday'),
-        ('Tuesday', 'Tuesday'),
-        ('Wednesday', 'Wednesday'),
-        ('Thursday', 'Thursday'),
-        ('Friday', 'Friday'),
-        ('Saturday', 'Saturday'),
-        ('Sunday', 'Sunday'),
-    ]
     stylist = models.ForeignKey(Stylist, on_delete=models.SET_NULL, related_name='work_time',null=True,blank=True)
-    day = models.CharField(max_length=10, choices=DAY_CHOICES)
+    day = models.DateField()
     hour = models.ManyToManyField('WorkHour', related_name='work_hours')
 
     def __str__(self):
-        return self.day
+        return f'{self.stylist} - {self.day}'
 
 class WorkHour(models.Model):
-    DAY_CHOICES = [
-        ('9:30 to 10:30', '9:30 to 10:30'),
-        ('10:30 to 11:30', '10:30 to 11:30'),
-        ('11:30 to 12:30', '11:30 to 12:30'),
-        ('12:30 to 13:30', '12:30 to 13:30'),
-        ('13:30 to 14:30', '13:30 to 14:30'),
-        ('14:30 to 15:30', '14:30 to 15:30'),
-        ('15:30 to 16:30', '15:30 to 16:30'),
-    ]
-    hour = models.CharField(max_length=150,choices=DAY_CHOICES, null=True , blank=True)
+    start_time = models.TimeField()
+    end_time = models.TimeField()
 
     def __str__(self):
-        return self.hour
+        return f'{self.start_time.strftime("%H:%M")} - {self.end_time.strftime("%H:%M")}'
 class ServiceImageModel(models.Model):
     service = models.ForeignKey(Services,on_delete=models.CASCADE,related_name="service_images")
     file = models.ImageField(upload_to="service/extra-img/")
