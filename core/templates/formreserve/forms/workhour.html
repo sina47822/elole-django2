@@ -1,21 +1,12 @@
 {% extends "core/base.html" %}
 {% load i18n %}
-
+{% load custom_filters %}
 
 {% block extra_css_no_compress %} 
 <style>
-    .selectable-image {
-        width: 150px;
-        height: auto;
-        transition: all 0.3s ease; /* Apply transition on all properties */
-    }
-    
-    /* Styling for the selected image */
-    .selected-image {
-        border: 3px solid #00f;    /* Highlight with a blue border */
-        filter: brightness(1.2);   /* Make the image slightly brighter */
-        transform: scale(1.05);    /* Slightly enlarge the selected image */
-        transition: all 0.3s ease; /* Ensure smooth transition for border, filter, and transform */
+    .time-btn.selected {
+        background-color: #007bff;
+        color: white;
     }
 </style>
 {% endblock extra_css_no_compress %}
@@ -25,54 +16,83 @@
 <div style="margin: 200px;" >
     {% include "./nav.html" %}
 
-    <div id="content" class=" d-flex flex-column justify-content-center align-items-center">
+    <div id="content" class="d-flex flex-column justify-content-center align-items-center">
         <h1>انتخاب ساعت رزرو</h1>
         
         <form method="post" id="reservation-form">
             {% csrf_token %}
-            <label for="workhour">Choose a time:</label>
-            <select id="workhour" name="hour">
-                <option value="">Select a time</option>
-                {% for slot in available_slots %}
-                    <option value="{{ forloop.counter }}">
-                        {{ slot.0 }} - {{ slot.1 }}
-                    </option>
-                {% endfor %}
-            </select>
-            <br><br>
-    
-            <button class="reserve-button btn btn-primary" type="submit">بعدی</button>
+            
+            <!-- Time Selection -->
+            <div class="form-group">
+                <label for="workhour">انتخاب زمان :</label>
+                <!-- List of Available Times -->
+                <div id="time-buttons">
+                    {% for time in times %}
+                        <button type="button" class="btn btn-outline-primary time-btn" data-time="{{ time|date:"H:i" }}">
+                            {{ time|date:"H:i" }} - {{ time|add_minutes:service_duration|date:"H:i" }}
+                        </button>
+                    {% endfor %}
+                </div>
+                
+                <!-- Hidden Input to Store the Selected Time -->
+                <input type="hidden" id="selected-time" name="hour" value="">
+        
+                <!-- Next Button -->
+                <button type="button" class="btn btn-success" id="next-button" disabled>Next</button>
+            </div>
         </form>
+
     </div>
 </div>
 {% endblock %}
 
 {% block extra_js %}
 <script>
-    $(document).ready(function() {
-        $('#reservation-form').on('submit', function(e) {
-            e.preventDefault(); // Prevent default form submission
-        
-            var formData = $(this).serialize(); // Serialize form data
-            
-            $.ajax({
-                type: 'POST',
-                url: '{% url "reserveform:workhour" %}',
-                data: formData,
-                success: function(response) {
-                    if (response.success) {
-                        window.location.href = response.redirect_url; // Redirect to services
-                    } else {
-                        alert('Error: ' + JSON.stringify(response.errors)); // Handle validation errors
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', status, error);
-                    alert('An error occurred while processing your request: ' + xhr.responseText);
-                }
+$(document).ready(function() {
+    const timeButtons = document.querySelectorAll('.time-btn');
+    const nextButton = document.getElementById('next-button');
+    const selectedTimeInput = document.getElementById('selected-time');
+
+    // Handle time button selection
+    timeButtons.forEach(function(button) {
+        button.addEventListener('click', function() {
+            // Remove 'selected' class from all buttons
+            timeButtons.forEach(function(btn) {
+                btn.classList.remove('selected');
             });
+            // Add 'selected' class to the clicked button
+            button.classList.add('selected');
+            // Enable the next button
+            nextButton.disabled = false;
+            // Store the selected time in the hidden input
+            selectedTimeInput.value = button.getAttribute('data-time');
         });
     });
+    
+    // Handle the next button click to manually submit the form via AJAX
+    nextButton.addEventListener('click', function() {
+        if (selectedTimeInput.value === "") {
+            alert("Please select a time.");
+            return;
+        }
+
+        const formData = $('#reservation-form').serialize();  // Serialize the form data
+
+        $.ajax({
+            url: "{% url 'reserveform:workhour' %}",  // The URL to post the form data
+            type: "POST",
+            data: formData,
+            success: function(response) {
+                console.log("Reservation submitted successfully!", response);
+                // Redirect to review page after success
+                window.location.href = "{% url 'reserveform:review' %}";
+            },
+            error: function(xhr, status, error) {
+                console.error("Form submission failed: ", status, error);
+                alert("There was an error submitting the form. Please try again.");
+            }
+        });
+    });
+});
 </script>
 {% endblock extra_js %}
-

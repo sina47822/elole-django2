@@ -26,44 +26,20 @@
 {% block content %}
 <div style="margin: 200px;" >
     {% include "./nav.html" %}
+    <form method="post" id="reservation-form" class="pick-reserve-date">
+        {% csrf_token %}
 
-    {% comment %} <div id="content" class=" d-flex flex-column justify-content-center align-items-center pick-date-holder">
-        <h3 class="title">انتخاب تاریخ رزرو</h3>
-        <p class="subtitle">تاریخ مورد نظر رزرو خود را انتخاب کنید</p>
+        <label for="selected-date">انتخاب تاریخ رزرو</label>
 
-        <form method="post" id="reservation-form" class="pick-reserve-date">
-            {% csrf_token %}
-            
-            <!-- Persian Date Input -->
-            <label for="workday">انتخاب تاریخ رزرو</label>
-            <input type="text" id="datepicker" name="day" class="form-control has-persian-datepicker" placeholder="Select a date" required>            
-            
-            
-            <br><br>
-            <button class="reserve-button btn btn-primary" type="submit">Next</button>
-        </form>
 
-        </div>
-    </div> {% endcomment %}
-      
-    <input type="hidden" id="inlineExampleAlt" class="locale-fa" />
-    <div class="locale-fa" ></div>
+            <div class="locale-fa"></div>
+            <input type="hidden" name="day" id="selected-date" >
+        <button class="reserve-button btn btn-primary" type="submit">Next</button>
+    </form>
 
 </div>
 
-<form method="post" id="reservation-form" class="pick-reserve-date">
-    {% csrf_token %}
-    
-    <!-- Persian Date Input -->
-    <label for="selected-date">انتخاب تاریخ رزرو</label>
-    {% comment %} <input type="text" id="datepicker" name="day" class="form-control has-persian-datepicker" placeholder="Select a date" required>             {% endcomment %}
-    
-    <!-- Hidden input to store the selected date in YYYY-MM-DD format -->
-    <input type="hidden" id="selected-date" name="selected_date" value="">
 
-    <br><br>
-    <button class="reserve-button btn btn-primary" type="submit">Next</button>
-</form>
 {% endblock %}
 
 {% block extra_js %}
@@ -71,6 +47,8 @@
 <script src="{% static 'plugins/persiandate/js/persiandatepicker.min.js' %}"></script>
 
 <script type="text/javascript">
+    let day = null
+
     $(document).ready(function() {
         var availableDates = [
             {% for date in workdays_formatted %}
@@ -84,6 +62,7 @@
         });
 
         console.log('Available Persian Dates:', availablePersianDates);
+        console.log('Available gregorianDate Dates:', availableDates);
 
         $('.locale-fa').persianDatepicker({
             inline: true,
@@ -100,37 +79,44 @@
             },
             onSelect: function(unix) {
                 var selectedPersianDate = new persianDate(unix).format('YYYY-MM-DD');
-                console.log('Selected Persian Date:', selectedPersianDate);
+                
+                // Get the index of the selected Persian date
+                var selectedIndex = availablePersianDates.indexOf(selectedPersianDate);
+                console.log('Selected Index:', selectedIndex);
 
-                // Set the selected date in the hidden input field
-                $('#selected-date').val(selectedPersianDate);
+                // Use the index to get the corresponding Gregorian date
+                var gregorianDate = availableDates[selectedIndex];
+                console.log('Corresponding Gregorian Date:', gregorianDate);
+                
+                console.log('Selected Persian Date:', selectedPersianDate);
+                // Set the selected Persian date in the hidden input field
+                $('#selected-date').val(gregorianDate);
             }
         });
 
-        // Handle AJAX form submission
         $('#reservation-form').on('submit', function(e) {
-            e.preventDefault(); // Prevent the default form submission
-            
-            // Gather form data
-            var formData = $(this).serialize();
+            e.preventDefault(); // Prevent default form submission
+            formData = $(this).serialize();
+            alert(formData);
 
             $.ajax({
-                url: "{% url 'reserveform:workday' %}", // Your form submission URL
+                url: "{% url 'reserveform:workday' %}",  // Your form submission URL
                 type: "POST",
-                data: formData,
+                data: formData,  // Send the form data
                 success: function(response) {
-                    // Handle success (e.g., redirect or show a success message)
-                    console.log("Reservation submitted successfully!");
-                    window.location.href = "{% url 'reserveform:workhour' %}"; // Redirect after success
+                    console.log("Reservation submitted successfully!", response);
+                    window.location.href = "{% url 'reserveform:workhour' %}";  // Redirect after success
                 },
                 error: function(xhr, status, error) {
-                    // Handle error
                     console.error("Form submission failed: ", status, error);
                     alert("There was an error submitting the form. Please try again.");
                 }
             });
         });
     });
+
+
+    
 </script>
 {% comment %} <script type="text/javascript">
     $(document).ready(function() {

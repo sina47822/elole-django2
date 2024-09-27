@@ -1,5 +1,6 @@
 {% extends "core/base.html" %}
 {% load i18n %}
+{% load custom_filters %}
 
 
 {% block extra_css_no_compress %} 
@@ -43,7 +44,8 @@
                 <label for="day">روز رزرو : {{day}}
                     <input name="day" id="day" value="{{ day.id }}" hidden>
                 </label>
-                <label for="hour">ساعت رزرو : {{hour}}
+                <label for="hour">ساعت رزرو :{{ hour }} - {{ hour|add_minutes_review:service_duration }}
+
                     <input name="hour" id="hour" value="{{ hour.id }}" hidden>
                 </label>
                 

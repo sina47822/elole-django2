@@ -12,8 +12,8 @@ class CustomUserAdmin(UserAdmin):
     """
 
     model = User
-    list_display = ("id","phone_number","email", "is_superuser", "is_active", "is_verified")
-    list_filter = ("email","phone_number", "is_superuser", "is_active", "is_verified")
+    list_display = ("id","phone_number","type","email", "is_superuser", "is_active", "is_verified")
+    list_filter = ("email","phone_number","type", "is_superuser", "is_active", "is_verified")
     searching_fields = ("email","phone_number")
     ordering = ("email","phone_number",)
     fieldsets = (

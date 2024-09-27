@@ -13,7 +13,7 @@
             <div class="admin-selection">
                 {% for admin in admins %}
                 <label for="admin-{{ admin.id }}">
-                    <input type="radio" id="admin-{{ admin.id }}" name="stylist" hidden value="{{ admin.id }}" {% if selected_admin_id == admin.id %}checked{% endif %}>
+                    <input type="radio" id="admin-{{ admin.id }}" name="stylist" value="{{ admin.id }}" {% if selected_admin_id == admin.id %}checked{% endif %}>
                     <img src="{{ admin.user.user_profile.image.url }}" alt="{{ admin.user.user_profile.first_name }} {{ admin.user.user_profile.last_name }}" class="admin-image" style="width:200px; cursor:pointer">
                     <div>{{ admin.user.user_profile.first_name }} {{ admin.user.user_profile.last_name }}</div>
                 </label>
@@ -55,7 +55,7 @@
             event.preventDefault(); // Prevent default form submission
         
             var formData = $(this).serialize(); // Serialize form data
-            
+            alert(formData);
             $.ajax({
                 type: 'POST',
                 url: '{% url "reserveform:stylist" %}',

@@ -48,8 +48,8 @@ class Services(models.Model):
     description = models.TextField(null = True, blank = True)
     image = models.ImageField(upload_to='services/', null = True, blank = True)
     brief_description = models.TextField(null=True,blank=True)
-    duration = models.DurationField()
-    
+    duration = models.IntegerField(null=True,blank=True)
+
     stock = models.PositiveIntegerField(default=0)
 
     stylist = models.ManyToManyField('Stylist',blank = True,related_name='stylist')
@@ -85,17 +85,18 @@ class Services(models.Model):
 
 class Stylist(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='stylist_profile')
-    services = models.ManyToManyField(Services,blank = True,related_name='services')
     skills = models.ManyToManyField(Skills,blank = True,related_name='skills')
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     instagram = models.CharField(max_length=255,blank=True, null=True)
+    word_day = models.ManyToManyField('WorkDay',blank=True)
+    special_work_times = models.ManyToManyField('SpecificWorkHour',blank=True)
 
     def __str__(self):
         if self.user.email:
             return self.user.email
         else :
-            return self.user.id
+            return self.user.phone_number
 
 class PortfolioImage(models.Model):
     stylist = models.ForeignKey(Stylist, on_delete=models.CASCADE, related_name='portfolio_images')
@@ -106,20 +107,50 @@ class PortfolioImage(models.Model):
     def __str__(self):
         return self.title
 
+HOUR_OF_DAY_24 = [(i,i) for i in range(1,25)]
+
+WEEKDAYS = [
+  (1, _("Saturday")),
+  (2, _("Sunday")),
+  (3, _("Monday")),
+  (4, _("Tuesday")),
+  (5, _("Wednesday")),
+  (6, _("Thursday")),
+  (7, _("Friday")),
+]
+class SpecificWorkHour(models.Model):
+    from_hour = models.PositiveSmallIntegerField(choices=HOUR_OF_DAY_24, null=True, blank=True)
+    to_hour = models.PositiveSmallIntegerField(choices=HOUR_OF_DAY_24, null=True, blank=True)
+    add_remove = models.BooleanField(default=True)  # True = add, False = subtract
+    date = models.DateField()
+    hours = models.ManyToManyField('WorkHour',blank=True)
+
+    def __str__(self):
+        return f"{self.date} - {self.add_remove} ({'Add' if self.pros_minus else 'Remove'})"
+
 class WorkDay(models.Model):
-    stylist = models.ForeignKey(Stylist, on_delete=models.SET_NULL, related_name='work_time',null=True,blank=True)
     day = models.DateField()
-    hour = models.ManyToManyField('WorkHour', related_name='work_hours')
+    weekday_from = models.PositiveSmallIntegerField(choices=WEEKDAYS,null=True,blank=True)
+    weekday_to = models.PositiveSmallIntegerField(choices=WEEKDAYS,null=True,blank=True)
+    hours = models.ManyToManyField('WorkHour',blank=True)
 
     def __str__(self):
-        return f'{self.stylist} - {self.day}'
-
+        return f'{self.day}'
+    
 class WorkHour(models.Model):
-    start_time = models.TimeField()
-    end_time = models.TimeField()
+    from_hour = models.IntegerField(choices=HOUR_OF_DAY_24,null=True,blank=True)
+    to_hour = models.IntegerField(choices=HOUR_OF_DAY_24,null=True,blank=True)
 
     def __str__(self):
-        return f'{self.start_time.strftime("%H:%M")} - {self.end_time.strftime("%H:%M")}'
+        return f'{self.from_hour} - {self.to_hour}'
+    # class Meta:
+    #     ordering = ('weekday', 'from_hour')
+    #     unique_together = ('weekday', 'from_hour', 'to_hour')
+
+    #     def __unicode__(self):
+    #         return u'%s: %s - %s' % (self.get_weekday_display(),
+    #                                 self.from_hour, self.to_hour)
+
 class ServiceImageModel(models.Model):
     service = models.ForeignKey(Services,on_delete=models.CASCADE,related_name="service_images")
     file = models.ImageField(upload_to="service/extra-img/")

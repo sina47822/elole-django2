@@ -9,7 +9,7 @@ from django.utils.dateformat import DateFormat
 from accounts.models import User,UserType
 from django.views.generic.edit import FormView
 from stylist.models import Stylist,Services,ServiceCategoryModel,WorkHour,WorkDay
-from reserveform.utils import split_work_hours
+# from reserveform.utils import get_available_hours
 
 from django.conf import settings
 from kavenegarapp.sender import send_telegram_message  # This will be used for sending SMS notifications
@@ -47,7 +47,7 @@ class ReserveFormView(FormView):
             category_id = request.POST.get('category')
             service_id = request.POST.get('service')
             admin_id = request.POST.get('admin')
-            workday_id = request.POST.get('workday')
+            workday = request.POST.get('workday')
 
             if category_id:
                 services = Services.objects.filter(category__id=category_id)
@@ -67,8 +67,8 @@ class ReserveFormView(FormView):
                 workdays_options = "".join([f'<option value="{wd.id}">{wd.day}</option>' for wd in workdays])
                 return JsonResponse({'workdays': workdays_options})
 
-            if workday_id:
-                times = WorkDay.objects.get(id=workday_id).hour.all()
+            if workday:
+                times = WorkDay.objects.get(day=workday).hour.all()
                 times_options = "".join([f'<option value="{t.id}">{t}</option>' for t in times])
                 return JsonResponse({'times': times_options})
 
@@ -85,7 +85,7 @@ class ReserveFormView(FormView):
         # Handle form submission
         selected_service_id = self.request.POST.get('service')
         selected_admin_id = self.request.POST.get('admin')
-        selected_workday_id = self.request.POST.get('workday')
+        selected_workday = self.request.POST.get('workday')
         selected_time_id = self.request.POST.get('time')
 
         # Store all selections in the session
@@ -93,7 +93,7 @@ class ReserveFormView(FormView):
             'category': self.request.POST.get('category'),
             'service': selected_service_id,
             'admin': selected_admin_id,
-            'workday': selected_workday_id,
+            'workday': selected_workday,
             'time': selected_time_id
         }
         self.request.session['reservation_data'] = reservation_data
@@ -298,15 +298,18 @@ def reservation_form_stylist(request):
 def reservation_form_workday(request):
     if request.method == 'POST' and  request.headers.get('x-requested-with') == 'XMLHttpRequest':
         try:
-            logger.info(f"Received data: {request.POST}")  # Log the received data
-            form = ReservationForm5(request.POST)
-            if form.is_valid():
-                # Save form data to session
-                day_instance = form.cleaned_data['day']
-                request.session['day'] = day_instance.id  # Store just the ID
-                logger.info(f"day set in session: {request.session['day']}")
+            # Get 'day' value directly from request.POST
+            day = request.POST.get('day')
+            
+            if day:
+                # Store 'day' in the session
+                request.session['day'] = day
 
-
+                # Retrieve and work with the stylist and workdays
+                admin_id = request.session.get('stylist')
+                selected_stylist = Stylist.objects.get(id=admin_id)
+                available_workdays = WorkDay.objects.filter(stylist=selected_stylist)
+                
                 # Return success response with redirect URL
                 return JsonResponse({
                     'success': True,
@@ -326,81 +329,90 @@ def reservation_form_workday(request):
     admin_id = request.session.get('stylist')
     selected_stylist = Stylist.objects.get(id=admin_id)
 
-    # Get the current month and year
-    # available_workdays = WorkDay.objects.filter(stylist=selected_stylist)
-    # workdays_unix = [
-    #         int(datetime.combine(workday.day, datetime.min.time()).timestamp() * 1000)  # Multiply by 1000 to get milliseconds                        
-    #         for workday in available_workdays
-    #     ]
-    # Format the dates as 'YYYY-MM-DD'
     available_workdays = WorkDay.objects.filter(stylist=selected_stylist)
     workdays_formatted = [
         DateFormat(workday.day).format('Y-m-d')  # Format the date as 'YYYY-MM-DD'
         for workday in available_workdays
     ]
-    # workdays = WorkDay.objects.filter(stylist__id=admin_id)
+    print(workdays_formatted,available_workdays)
     form = ReservationForm5()  # Initialize the form
     return render(request, 'formreserve/forms/workday.html', {
         'form': form,
         'workdays_formatted': workdays_formatted,        
-        'selected_workday_id': request.session.get('workday')
+        'selected_workday': request.session.get('day')
     })
 
 def reservation_form_workhour(request):
+    service_id = request.session.get('service')
+    stylist_id = request.session.get('stylist')
+    workday = request.session.get('day')
+
+
+    stylist = Stylist.objects.get(id=stylist_id)
+    service = Services.objects.get(id=service_id)
+    service_duration = service.duration
+    workday = WorkDay.objects.get(day=workday)
+    available_times = []
+
+
+
+    workhours = WorkHour.objects.filter(workday=workday)
+
+    for wh in workhours:
+        start = wh.from_hour
+        end = wh.to_hour
+        time_slot = start
+        
+        # Convert start and end to strings and format them to "HH" format (e.g., "09", "11")
+        start_str = f"{start:02d}"  # Converts integer 9 to string "09"
+        end_str = f"{end:02d}"  # Converts integer 11 to string "11"
+
+
+        # Convert start and end to datetime objects
+        start_time = datetime.combine(datetime.today(), datetime.strptime(start_str, "%H").time())
+        end_time = datetime.combine(datetime.today(), datetime.strptime(end_str, "%H").time())
+
+        # Initialize the time_slot with the start time
+        time_slot = start_time
+        while time_slot + timedelta(minutes=service_duration) <= end_time:
+            is_available = True
+
+            if is_available:
+                available_times.append(time_slot)
+
+            # محاسبه بازه زمانی بعدی بر اساس مدت زمان سرویس
+            time_slot += timedelta(minutes=service_duration)
+
     if request.method == 'POST' and  request.headers.get('x-requested-with') == 'XMLHttpRequest':
         try:
             logger.info(f"Received data: {request.POST}")  # Log the received data
             form = ReservationForm6(request.POST)
+            print(request.POST)
+            hour = request.POST.get('hour')
+            print(hour)
+            request.session['hour'] = hour
+            print(request.session['hour'])
+
             if form.is_valid():
-                # Save form data to session
-                # Get selected service and workday from session
-                service_id = request.session.get('service')
-                workday_id = request.session.get('day')
-                times_instance = form.cleaned_data['hour']
-                request.session['hour'] = times_instance.id  # Store just the ID
-                logger.info(f"hour set in session: {request.session['hour']}")
+                # Get 'hour' value directly from request.POST
 
-                if not service_id or not workday_id:
-                    return JsonResponse({'success': False, 'message': 'Missing required session data'}, status=400)
 
-                service = get_object_or_404(Services, id=service_id)
-                workday = get_object_or_404(WorkDay, id=workday_id)
+                if hour:
+                    # Store 'day' in the session
+                    print(f"Day stored in session: {hour}")
 
-                # Calculate available time slots
-                available_slots = split_work_hours(workday, service.duration)
-
-                # Save selected hour to session
-                times_instance = form.cleaned_data['hour']
-                request.session['hour'] = times_instance.id
-                # Return success response with redirect URL
                 return JsonResponse({
                     'success': True,
-                    'redirect_url': '/reserveform/review/',  # Adjust the URL as needed
+                    'redirect_url': '/reserveform/review/',
                     'session_data': request.session['hour']
                 })
                 
-            else:
-                logger.error(f"Form errors: {form.errors}")  # Log the form errors
-                # Return error response
-                return JsonResponse({'success': False, 'errors': form.errors})
         except Exception as e:
             logger.exception("An error occurred while processing the request.")
             return JsonResponse({'success': False, 'message': str(e)})
-
-    # Handle GET request to render the form
-    workday_id = request.session.get('day')
-    service_id = request.session.get('service')
-    if not workday_id or not service_id:
-        return JsonResponse({'success': False, 'message': 'Workday or service not set in session'}, status=400)
-
-    service = get_object_or_404(Services, id=service_id)
-    workday = get_object_or_404(WorkDay, id=workday_id)
-    if not workday_id:  # Check if service_id is None or not set
-        workday_id = 1  # Default value if not present
-    # Get available time slots based on service duration
-    available_slots = split_work_hours(workday, service.duration)
+    
     form = ReservationForm6()  # Initialize the form
-    return render(request, 'formreserve/forms/workhour.html', {'form': form, 'available_slots': available_slots})
+    return render(request, 'formreserve/forms/workhour.html', {'form': form, 'times': available_times,'service_duration':service_duration})
 
 def reservation_form_review(request):
     if request.method == 'POST':
@@ -410,7 +422,7 @@ def reservation_form_review(request):
             category_id = request.session.get('service_category')
             service_id = request.session.get('service')
             admin_id = request.session.get('stylist')
-            workday_id = request.session.get('day')
+            workday = request.session.get('day')
             hour_id = request.session.get('hour')
             
             # Change this to fetch the Stylist instance instead
@@ -420,7 +432,7 @@ def reservation_form_review(request):
             service_category = ServiceCategoryModel.objects.get(id=category_id)
             service = Services.objects.get(id=service_id)
 
-            workday = WorkDay.objects.get(id=workday_id)
+            workday = WorkDay.objects.get(day=workday)
             hour = workday.hour.get(id=hour_id)  # ManyToMany relationship
             
             
@@ -507,14 +519,15 @@ def reservation_form_review(request):
         admin_id = request.session.get('stylist')
         if not admin_id:
             admin_id = None
-        workday_id = request.session.get('day')
-        if not workday_id:
-            workday_id = None
-        hour_id = request.session.get('hour')
-        if not hour_id:
-            hour_id = None
+        workday = request.session.get('day')
+        if not workday:
+            workday = None
+        hour = request.session.get('hour')
+        if not hour:
+            hour = None
 
-        # if not (category_id and service_id and admin_id and workday_id and hour_id):
+
+        # if not (category_id and service_id and admin_id and workday_id and hour):
         #     return redirect('reserveform:reservation_failed')  # Handle missing session data, e.g., redirect to an error page
 
         if not category_id:
@@ -526,7 +539,7 @@ def reservation_form_review(request):
             selected_service = 'یک سرویس انتخاب کنید'
         else:
             selected_service = Services.objects.get(id=service_id)
-
+            service_duration = selected_service.duration
         if not admin_id:
             selected_admin = 'یک استایلیست انتخاب کنید'
         else:
@@ -537,19 +550,19 @@ def reservation_form_review(request):
                 selected_admin = 'یک استایلیست انتخاب کنید'
 
 
-        if not workday_id:
+        if not workday:
             selected_workday = 'یک تاریخ انتخاب کنید'
         else:
-            selected_workday = WorkDay.objects.get(id=workday_id)
+            selected_workday = WorkDay.objects.get(day=workday)
             
-        if not hour_id:
+        if not hour:
             selected_hour = 'یک ساعت انتخاب کنید'
         else:
-            selected_hour = selected_workday.hour.filter(id=hour_id).first()
+            selected_hour = request.session['hour']
 
         customer=request.user
         form = ReservationForm()  # Initialize the form
-        
+        print('service_duration is =',service_duration)
         context = {
             'customer': customer,
             'category': selected_category,
@@ -558,6 +571,7 @@ def reservation_form_review(request):
             'day': selected_workday,
             'hour': selected_hour,
             'form': form,
+            'service_duration' : service_duration
         }
 
     return render(request, 'formreserve/forms/review.html', context)

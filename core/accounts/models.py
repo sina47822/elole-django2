@@ -20,7 +20,7 @@ class UserManager(BaseUserManager):
     for authentication instead of usernames.
     """
 
-    def create_user(self, phone_number, email, password, **extra_fields):
+    def create_user(self, phone_number, email=None, password=None, **extra_fields):
         """
         Create and save a User with the given phone number and password.
         """
@@ -29,12 +29,16 @@ class UserManager(BaseUserManager):
         # email = self.normalize_email(email)
         if not phone_number:
             raise ValueError(_("The Phone Number must be set"))
-        user = self.model(email=email, **extra_fields)
+            # Normalize email if it is provided
+        if email:
+            email = self.normalize_email(email)
+
+        user = self.model(phone_number=phone_number, email=email, **extra_fields)
         user.set_password(password)
         user.save()
         return user
 
-    def create_superuser(self, email, password, **extra_fields):
+    def create_superuser(self,phone_number, email=None, password=None, **extra_fields):
         """
         Create and save a SuperUser with the given email and password.
         """
@@ -48,7 +52,7 @@ class UserManager(BaseUserManager):
             raise ValueError(_("Superuser must have is_staff=True."))
         if extra_fields.get("is_superuser") is not True:
             raise ValueError(_("Superuser must have is_superuser=True."))
-        return self.create_user(email, password, **extra_fields)
+        return self.create_user(phone_number, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):

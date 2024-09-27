@@ -1,34 +1,24 @@
-from datetime import timedelta, datetime
-from stylist.models import WorkDay
+from datetime import datetime, timedelta
+from stylist.models import Stylist, WorkDay, SpecificWorkHour, WorkHour
 
-def split_work_hours(stylist, date, service_duration):
-    """
-    Get available time slots for a specific stylist, date, and service duration.
+def get_available_hours(workday):
+    general_hours = list(workday.general_hours.all())
+    specific_hours = list(workday.specific_work_hours.all())
+
+    available_hours = []
     
-    :param stylist: Stylist instance
-    :param date: A specific date to check (WorkDay instance)
-    :param service_duration: Duration of the service (timedelta)
-    :return: A list of available time slots (start and end times)
-    """
-    available_slots = []
+    # Convert WorkHour into time slots
+    for wh in general_hours:
+        available_hours.append((wh.start_time, wh.end_time))
 
-    # Fetch the workday for the stylist
-    try:
-        workday = WorkDay.objects.get(stylist=stylist, day=date)
-    except WorkDay.DoesNotExist:
-        return available_slots  # No workday available for that stylist on that date
+    # Adjust available hours based on specific hours
+    for sh in specific_hours:
+        if sh.pros_minus:  # If True, add the specific time slot
+            available_hours.append((sh.start_time, sh.end_time))
+        else:  # If False, remove the specific time slot
+            available_hours = [
+                (start, end) for start, end in available_hours
+                if not (start == sh.start_time and end == sh.end_time)
+            ]
 
-    # Loop through each available hour range
-    for work_hour in workday.hour.all():
-        start_time = datetime.combine(date, work_hour.start_time)
-        end_time = datetime.combine(date, work_hour.end_time)
-
-        current_time = start_time
-
-        # Split the time based on service duration
-        while current_time + service_duration <= end_time:
-            next_time = current_time + service_duration
-            available_slots.append((current_time.time(), next_time.time()))
-            current_time = next_time
-
-    return available_slots
+    return available_hours
