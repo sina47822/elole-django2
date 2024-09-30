@@ -42,11 +42,11 @@
                 </label>
 
                 <label for="day">روز رزرو : {{day}}
-                    <input name="day" id="day" value="{{ day.id }}" hidden>
+                    <input name="day" id="day" value="{{ day }}" hidden>
                 </label>
-                <label for="hour">ساعت رزرو :{{ hour }} - {{ hour|add_minutes_review:service_duration }}
+                <label for="hour">ساعت رزرو :{{ hour}} - {{ hour|add_minutes_review:service_duration}}
 
-                    <input name="hour" id="hour" value="{{ hour.id }}" hidden>
+                    <input name="hour" id="hour" value="{{ hour }}" hidden>
                 </label>
                 
                 <input name="customer" id="customer" value="{{ customer.id }}" hidden>
@@ -64,29 +64,7 @@
 
 {% block extra_js %}
 <script>
-    {% comment %} $(document).ready(function() {
-        $('#reservation-form').on('submit', function(event) {
-            event.preventDefault(); // Prevent default form submission
-        
-            var formData = $(this).serialize(); // Serialize form data
-            $.ajax({
-                type: 'POST',
-                url: '{% url "reserveform:review" %}',
-                data: formData,
-                success: function(response) {
-                    if (response.success) {
-                        window.location.href = response.redirect_url; // Redirect to services
-                    } else {
-                        alert('Error: ' + JSON.stringify(response.errors)); // Handle validation errors
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', status, error);
-                    alert('An error occurred while processing your request: ' + xhr.responseText);
-                }
-            });
-        });
-    }); {% endcomment %}
+
 </script>
 {% endblock extra_js %}
 

@@ -347,17 +347,14 @@ def reservation_form_workhour(request):
     stylist_id = request.session.get('stylist')
     workday = request.session.get('day')
 
-
-    stylist = Stylist.objects.get(id=stylist_id)
     service = Services.objects.get(id=service_id)
     service_duration = service.duration
+    stylist = Stylist.objects.get(id=stylist_id)
     workday = WorkDay.objects.get(day=workday)
     available_times = []
 
-
-
     workhours = WorkHour.objects.filter(workday=workday)
-
+    
     for wh in workhours:
         start = wh.from_hour
         end = wh.to_hour
@@ -387,11 +384,8 @@ def reservation_form_workhour(request):
         try:
             logger.info(f"Received data: {request.POST}")  # Log the received data
             form = ReservationForm6(request.POST)
-            print(request.POST)
             hour = request.POST.get('hour')
-            print(hour)
             request.session['hour'] = hour
-            print(request.session['hour'])
 
             if form.is_valid():
                 # Get 'hour' value directly from request.POST
@@ -415,128 +409,78 @@ def reservation_form_workhour(request):
     return render(request, 'formreserve/forms/workhour.html', {'form': form, 'times': available_times,'service_duration':service_duration})
 
 def reservation_form_review(request):
+    
     if request.method == 'POST':
         form = ReservationForm(request.POST)
+
         if form.is_valid():
-            # Gather session data for reservation creation
-            category_id = request.session.get('service_category')
-            service_id = request.session.get('service')
-            admin_id = request.session.get('stylist')
-            workday = request.session.get('day')
-            hour_id = request.session.get('hour')
-            
-            # Change this to fetch the Stylist instance instead
-            # selected_admin = User.objects.get(id=admin_id)  # First, get the admin user
-            stylist= Stylist.objects.get(user__id=admin_id)
-            # Get other related models
-            service_category = ServiceCategoryModel.objects.get(id=category_id)
-            service = Services.objects.get(id=service_id)
-
-            workday = WorkDay.objects.get(day=workday)
-            hour = workday.hour.get(id=hour_id)  # ManyToMany relationship
-            
-            
-            customer=form.cleaned_data['customer']
-            service_category=form.cleaned_data['service_category']
-            service=form.cleaned_data['service']
-            stylist=form.cleaned_data['stylist']  # Now passing a Stylist instance
-            day=form.cleaned_data['day']
-            hour=form.cleaned_data['hour']
-
-            # Add a success message
-            messages.success(request, 'Form submission successful!')
+            # Directly fetch form data from cleaned_data instead of session for these fields
+            customer = form.cleaned_data.get('customer')
+            stylist = form.cleaned_data.get('stylist')  # Assuming this is the selected stylist
+            service = form.cleaned_data.get('service')
+            service_category = form.cleaned_data.get('service_category')
+            day = form.cleaned_data.get('day')
+            hour = form.cleaned_data.get('hour')
             form.save()
-            # Prepare Telegram message
+            # Add a success message
+            messages.success(request, 'Reservation submitted successfully!')
+
+            # Prepare the message for Telegram or logging
             message = (
                 f"New Reservation:\n"
                 f"Category: {service_category.title}\n"
                 f"Service: {service.name}\n"
                 f"Stylist: {stylist.user.phone_number}\n"
-                f"Day: {day.day}\n"
-                f"Time: {hour.hour}."
+                f"Day: {day}\n"
+                f"Time: {hour}."
             )
+            print(message)
             # Send Telegram message (if required)
             # send_telegram_message(message)  
-            # Clear specific session data after reservation is complete
-            del request.session['service_category']
-            del request.session['service']
-            del request.session['stylist']
-            del request.session['day']
-            del request.session['hour']
-            # Redirect to the same page or a success page after processing the form
-            # Make sure to replace this with your correct URL name
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({'success': True, 'redirect_url': 'desired_redirect_url'})
+            # Clear session data after the reservation is submitted successfully
+            for key in ['service_category', 'service', 'stylist', 'day', 'hour']:
+                if key in request.session:
+                    del request.session[key]
+
+            # Redirect to a confirmation page or home
             return redirect('website:home')
+                # Send SMS Notifications (if required)
+                # send_sms_notification(reservation)  # Assuming `send_sms_notification` is defined elsewhere
+                
+                # # Prepare Telegram message
+                # Send Telegram message (if required)
+                # send_telegram_message(message)  # Assuming `send_telegram_message` is defined elsewhere
+            #     # Send success response
+            #     messages.success(request, 'Your reservation was successful!')
+                        
+            #     return JsonResponse({
+            #         'success': True,
+            #         'redirect_url': '/reserveform/reserve-success/',  # Adjust the URL as needed
+            #     })
+            # else:
+            #     return JsonResponse({'success': False, 'message': 'Missing reservation data.'})
+        # Handle form errors for AJAX
+        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+            return JsonResponse({'success': False, 'errors': form.errors}, status=400)
         else:
-            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-                return JsonResponse({'success': False, 'errors': form.errors}, status=400)    
-            # reservation = ReserveFormModel(
-            #     customer=request.user,
-            #     service_category=service_category,
-            #     service=service,
-            #     stylist=stylist,  # Now passing a Stylist instance
-            #     day=workday,
-            #     hour=hour
-            # )
-            # reservation.save()
-
-            # Clear session data after reservation is complete
-            #request.session.flush()
-
-            # Send SMS Notifications (if required)
-            # send_sms_notification(reservation)  # Assuming `send_sms_notification` is defined elsewhere
-            
-            # # Prepare Telegram message
-            message = (
-                f"New Reservation:\n"
-                f"Category: {service_category.title}\n"
-                f"Service: {service.name}\n"
-                f"Stylist: {stylist.user.phone_number}\n"
-                f"Day: {day.day}\n"
-                f"Time: {hour.hour}."
-            )
-            # Send Telegram message (if required)
-            # send_telegram_message(message)  # Assuming `send_telegram_message` is defined elsewhere
-            send_email("Hello from Python!", message , "sinaa.afshar@gmail.com")
-        #     # Send success response
-        #     messages.success(request, 'Your reservation was successful!')
-                    
-        #     return JsonResponse({
-        #         'success': True,
-        #         'redirect_url': '/reserveform/reserve-success/',  # Adjust the URL as needed
-        #     })
-        # else:
-        #     return JsonResponse({'success': False, 'message': 'Missing reservation data.'})
+            # Return to the form with error messages for non-AJAX requests
+            return render(request, 'formreserve/forms/review.html', {'form': form})
     else:
         # Prepare data for the review page (GET request)
         category_id = request.session.get('service_category')
-        if not category_id:
-            category_id = None
         service_id = request.session.get('service')
-        if not service_id:
-            service_id = None
         admin_id = request.session.get('stylist')
-        if not admin_id:
-            admin_id = None
         workday = request.session.get('day')
-        if not workday:
-            workday = None
         hour = request.session.get('hour')
-        if not hour:
-            hour = None
 
-
-        # if not (category_id and service_id and admin_id and workday_id and hour):
-        #     return redirect('reserveform:reservation_failed')  # Handle missing session data, e.g., redirect to an error page
-
+        # Fetch the related objects
         if not category_id:
             selected_category = 'یک کتگوری انتخاب کنید'
         else:
             selected_category = ServiceCategoryModel.objects.get(id=category_id)
-
         if not service_id:
             selected_service = 'یک سرویس انتخاب کنید'
+            service_duration = 10  # Default to zero in case no service is found
         else:
             selected_service = Services.objects.get(id=service_id)
             service_duration = selected_service.duration
@@ -548,21 +492,14 @@ def reservation_form_review(request):
             else:
                 selected_service = Services.objects.get(id=1)  # Fallback to a default service
                 selected_admin = 'یک استایلیست انتخاب کنید'
+        selected_workday = WorkDay.objects.get(day=workday) if workday else None
+        selected_hour = hour if hour else None
 
+        # Prepare the form for review
+        customer = request.user
+        form = ReservationForm(request.POST)
 
-        if not workday:
-            selected_workday = 'یک تاریخ انتخاب کنید'
-        else:
-            selected_workday = WorkDay.objects.get(day=workday)
-            
-        if not hour:
-            selected_hour = 'یک ساعت انتخاب کنید'
-        else:
-            selected_hour = request.session['hour']
-
-        customer=request.user
-        form = ReservationForm()  # Initialize the form
-        print('service_duration is =',service_duration)
+        # Ensure service_duration is passed to the template
         context = {
             'customer': customer,
             'category': selected_category,
@@ -571,10 +508,10 @@ def reservation_form_review(request):
             'day': selected_workday,
             'hour': selected_hour,
             'form': form,
-            'service_duration' : service_duration
+            'service_duration': service_duration
         }
 
-    return render(request, 'formreserve/forms/review.html', context)
+        return render(request, 'formreserve/forms/review.html', context)
 
 import smtplib
 from email.mime.text import MIMEText
