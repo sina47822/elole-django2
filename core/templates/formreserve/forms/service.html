@@ -2,62 +2,22 @@
 {% load i18n %}
 {% block extra_css_no_compress %} 
 <style>
-    /* Hide each navigation item by default */
-    .nav-category,
-    .nav-services,
-    .nav-stylist,
-    .nav-workday,
-    .nav-workhour,
-    .nav-review {
-        opacity: 0;
-        transform: translateY(20px); /* Move it downwards initially */
-        visibility: hidden; /* Hide it initially */
-        transition: all 0.5s ease; /* Smooth transition for appearance */
-    }
-    
-    /* Make them visible with the 'active' class */
-    .nav-category.active,
-    .nav-services.active,
-    .nav-stylist.active,
-    .nav-workday.active,
-    .nav-workhour.active,
-    .nav-review.active {
-        opacity: 1;
-        transform: translateY(0); /* Move it back to its original position */
-        visibility: visible;
-    }
-    
-    /* Optional: Add transition delay for a cascading effect */
-    .nav-services.active {
-        transition-delay: 0.1s;
-    }
-    .nav-stylist.active {
-        transition-delay: 0.2s;
-    }
-    .nav-workday.active {
-        transition-delay: 0.3s;
-    }
-    .nav-workhour.active {
-        transition-delay: 0.4s;
-    }
-    .nav-review.active {
-        transition-delay: 0.5s;
-    }
+
 </style>
 {% endblock extra_css_no_compress %}
 {% block content %}
-<div style="margin: 200px;" >
+<div style="margin-top: 200px;" >
     {% include "./nav.html" %}
 
     <div id="content" class=" d-flex flex-column justify-content-center align-items-center">
-        <h1>انتخاب سرویس</h1>
+        <h1 class="reservation-title">انتخاب سرویس</h1>
         
         <form method="post" id="reservation-form">
             {% csrf_token %}
-            <div class="service-selection row">
+            <div class="reservation-selection">
                 {% for service in services %}
-                <div class="col-md-4 col-sm-2">
-                    <label for="service-{{ service.id }}">
+                <div class="reservation-selection-item col-xl-2 col-md-6">
+                    <label for="service-{{ service.id }}"  class=" d-flex flex-column justify-content-center align-items-center">
                         <input type="radio" id="service-{{ service.id }}" name="service" hidden value="{{ service.id }}" {% if service.id == service_id %}checked{% endif %}>
                         {% if service.image %}
                             <img src="{{ service.image.url }}" alt="{{ service.name }}" class="service-image" style="width:200px; cursor:pointer">

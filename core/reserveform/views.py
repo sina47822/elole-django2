@@ -308,8 +308,14 @@ def reservation_form_workday(request):
                 # Retrieve and work with the stylist and workdays
                 admin_id = request.session.get('stylist')
                 selected_stylist = Stylist.objects.get(id=admin_id)
+
+                # Retrieve available workdays for the selected stylist
                 available_workdays = WorkDay.objects.filter(stylist=selected_stylist)
-                
+                available_workdays_list = [DateFormat(workday.day).format('Y-m-d') for workday in available_workdays]
+                # Check if the selected day is in the available workdays
+                if day not in available_workdays_list:
+                    return JsonResponse({'success': False, 'message': "این روز قابل انتخاب نیست. لطفاً یک روز دیگر را انتخاب کنید."})
+
                 # Return success response with redirect URL
                 return JsonResponse({
                     'success': True,
@@ -334,7 +340,6 @@ def reservation_form_workday(request):
         DateFormat(workday.day).format('Y-m-d')  # Format the date as 'YYYY-MM-DD'
         for workday in available_workdays
     ]
-    print(workdays_formatted,available_workdays)
     form = ReservationForm5()  # Initialize the form
     return render(request, 'formreserve/forms/workday.html', {
         'form': form,

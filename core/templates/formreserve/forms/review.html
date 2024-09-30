@@ -11,7 +11,7 @@
 
 
 {% block content %}
-<div style="margin: 200px;" >
+<div style="margin-top: 200px;" >
     {% include "./nav.html" %}
 
     <div id="content" class=" d-flex flex-column justify-content-center align-items-center">
@@ -26,37 +26,72 @@
             {% endif %}
         <form method="post" id="reservation-form" action="{% url 'reserveform:review' %}" >
             {% csrf_token %}
-            <div class="d-flex flex-column">
-                <label for="service_category">دسته بندی : {{category}}
-                    <input name="service_category" id="service_category" value="{{ category.id }}" hidden>
-                </label>
+            <div class="d-flex flex-column align-items-center justify-content-center">
+                <div class="d-flex flex-column review-confirm">
+                    <label for="service_category">
+                        <i class="fa-solid fa-star"></i>
+                        
+                        <span class="label-title">
+                            دسته بندی : 
+                        </span>
+                        <span>
+                            {{category}}
+                        </span>
+                        <input name="service_category" id="service_category" value="{{ category.id }}" hidden>
+                    </label>
 
-                <label for="service">نوع خدمت : {{service}}
-                    <input name="service" id="service" value="{{ service.id }}" hidden>
-                </label>
+                    <label for="service">
+                        <i class="fa-solid fa-star"></i>
+                        <span class="label-title">
+                            نوع خدمت : 
+                        </span>
+                        <span>
+                            {{service}}
+                        </span>
+                        <input name="service" id="service" value="{{ service.id }}" hidden>
+                    </label>
 
-                <label for="stylist">
-                استایلیست :
-                {{ admin.user.user_profile.first_name }} {{ admin.user.user_profile.last_name }}
-                    <input name="stylist" id="stylist" value="{{ admin.id }}" hidden>
-                </label>
+                    <label for="stylist">
+                        <i class="fa-solid fa-star"></i>
+                        <span class="label-title">
+                            استایلیست :
+                        </span>
+                        <span>
+                            {{ admin.user.user_profile.first_name }} {{ admin.user.user_profile.last_name }}
+                        </span>
+                        <input name="stylist" id="stylist" value="{{ admin.id }}" hidden>
+                    </label>
 
-                <label for="day">روز رزرو : <span id="persian-date"></span>
-                    <input name="day" id="day" value="{{ day }}" hidden>
-                </label>
-                <label for="hour">ساعت رزرو :{{ hour}} - {{ hour|add_minutes_review:service_duration}}
+                    <label for="day">
+                        <i class="fa-solid fa-star"></i>
+                        <span class="label-title" class="label-title">
+                            روز رزرو : 
+                        </span>
+                        <span id="persian-date"></span>
+                        <input name="day" id="day" value="{{ day }}" hidden>
+                    </label>
+                    <label for="hour">
+                        <i class="fa-solid fa-star"></i>
+                        <span class="label-title">
+                            ساعت رزرو :
+                        </span>
+                        <span>
+                            {{ hour}} - {{ hour|add_minutes_review:service_duration}}
+                        
+                        </span>
 
-                    <input name="hour" id="hour" value="{{ hour }}" hidden>
-                </label>
-                
-                <input name="customer" id="customer" value="{{ customer.id }}" hidden>
-
+                        <input name="hour" id="hour" value="{{ hour }}" hidden>
+                    </label>
+                    
+                    <input name="customer" id="customer" value="{{ customer.id }}" hidden>
+                </div>
                 <div>
                     <a href="{% url 'reserveform:category' %}" class="btn btn-secondary">ویرایش</a>
 
-                    <button class="reserve-button btn btn-primary" type="submit">تایید نهایی</button>
+                    <button class="reserve-button btn btn-success" type="submit">تایید نهایی</button>
                 </div>
             </div>
+
         </form>
     </div>
 </div>

@@ -3,83 +3,113 @@
 {% load static%}
 
 {% block extra_css_no_compress %} 
-<style>
-    .selectable-image {
-        width: 150px;
-        height: auto;
-        transition: all 0.3s ease; /* Apply transition on all properties */
-    }
-    
-    /* Styling for the selected image */
-    .selected-image {
-        border: 3px solid #00f;    /* Highlight with a blue border */
-        filter: brightness(1.2);   /* Make the image slightly brighter */
-        transform: scale(1.05);    /* Slightly enlarge the selected image */
-        transition: all 0.3s ease; /* Ensure smooth transition for border, filter, and transform */
-    }
-</style>
-<style>
-    /* Hide each navigation item by default */
-    .nav-category,
-    .nav-services,
-    .nav-stylist,
-    .nav-workday,
-    .nav-workhour,
-    .nav-review {
-        opacity: 0;
-        transform: translateY(20px); /* Move it downwards initially */
-        visibility: hidden; /* Hide it initially */
-        transition: all 0.5s ease; /* Smooth transition for appearance */
-    }
-    
-    /* Make them visible with the 'active' class */
-    .nav-category.active,
-    .nav-services.active,
-    .nav-stylist.active,
-    .nav-workday.active,
-    .nav-workhour.active,
-    .nav-review.active {
-        opacity: 1;
-        transform: translateY(0); /* Move it back to its original position */
-        visibility: visible;
-    }
-    
-    /* Optional: Add transition delay for a cascading effect */
-    .nav-services.active {
-        transition-delay: 0.1s;
-    }
-    .nav-stylist.active {
-        transition-delay: 0.2s;
-    }
-    .nav-workday.active {
-        transition-delay: 0.3s;
-    }
-    .nav-workhour.active {
-        transition-delay: 0.4s;
-    }
-    .nav-review.active {
-        transition-delay: 0.5s;
-    }
-</style>
 <link href="{% static 'plugins/persiandate/css/persian-datepicker.min.css' %}" rel="stylesheet">
+
+<style>
+    .alert-container {
+        margin: 20px 0;
+    }
+    .alert {
+        padding: 15px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    .alert-error {
+        background-color: #f8d7da;
+        color: #721c24;
+        border: 1px solid #f5c6cb;
+    }
+
+</style>
+<style>
+    .datepicker-plot-area-inline-view {
+        direction: ltr;
+    }
+    div#plotId {
+        width: 30rem;
+        font-family: 'vazir';
+        font-size: 1.1rem;
+    }
+    .datepicker-plot-area .datepicker-day-view .table-days td {
+        height: 40px;
+    }
+    .datepicker-plot-area .datepicker-day-view .table-days td span {
+        height: 40px;
+        line-height: 40px;
+    }
+    .datepicker-plot-area .datepicker-day-view .month-grid-box .header .header-row {
+        height: 50px;
+        background-color: #f1f1f1;
+        border-radius: 20px;
+    }
+
+    .datepicker-plot-area .datepicker-day-view .table-days td.selected span{
+        text-shadow: none ;
+        border-radius:20px
+    }
+    .datepicker-plot-area .datepicker-day-view .table-days td.today span {
+        background-color: white;
+        color: green;
+    }
+    .datepicker-plot-area .datepicker-day-view .table-days td.today.disable span {
+        background-color: white;
+        color: #f1f1f1;
+        text-decoration-line:none;
+
+    }
+    .datepicker-plot-area .datepicker-day-view .table-days td.today.selected span {
+        background-color: #005299;
+        color: #fff;
+    }
+    .datepicker-plot-area .datepicker-day-view .table-days td.disabled span, .datepicker-plot-area .datepicker-year-view .year-item-disable, .datepicker-plot-area .datepicker-month-view .month-item-disable {
+        background-color: white;
+        color: #ccc;
+        text-decoration-line:none;
+
+    }
+    .datepicker-plot-area .datepicker-day-view .table-days td span, .datepicker-plot-area .datepicker-year-view .year-item, .datepicker-plot-area .datepicker-month-view .month-item {
+        color: green;
+        text-decoration-line:underline;
+    }
+
+    .datepicker-navigator {
+        margin: 1rem 0;
+    }
+    .datepicker-plot-area .datepicker-day-view .table-days td.today span {
+        border-radius: 20px;
+    }
+    .datepicker-plot-area .datepicker-day-view .table-days td.selected span .datepicker-plot-area .datepicker-day-view .table-days td:hover, .datepicker-plot-area .datepicker-day-view .table-days td span:hover, .datepicker-plot-area .datepicker-year-view .year-item:hover, .datepicker-plot-area .datepicker-month-view .month-item:hover {
+        border-radius: 20px;
+    }
+</style>
 
 {% endblock extra_css_no_compress %}
 
 
 {% block content %}
-<div style="margin: 200px;" >
+<div style="margin-top: 200px;" >
     {% include "./nav.html" %}
-    <form method="post" id="reservation-form" class="pick-reserve-date">
-        {% csrf_token %}
+    {% if messages %}
+        <div class="alert-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+    <div id="content" class="reservation-selection flex-column">
+        <h1 class="reservation-title">انتخاب دسته بندی خدمات</h1>
+        
+        <form method="post" id="reservation-form" class="pick-reserve-date mt-4 d-flex flex-column align-items-center justify-content-center">
+            {% csrf_token %}
 
-        <label for="selected-date">انتخاب تاریخ رزرو</label>
+            <label for="selected-date"></label>
 
 
-            <div class="locale-fa"></div>
-            <input type="hidden" name="day" id="selected-date" >
-        <button class="reserve-button btn btn-primary" type="submit">Next</button>
-    </form>
-
+                <div class="locale-fa"></div>
+                <input type="hidden" name="day" id="selected-date" >
+            <button class="reserve-button btn btn-success mt-3" type="submit">مرحله بعد</button>
+        </form>
+    </div>
 </div>
 
 
@@ -88,23 +118,13 @@
 {% block extra_js %}
 <script src="{% static 'plugins/persiandate/js/persian-date.min.js' %}"></script>
 <script src="{% static 'plugins/persiandate/js/persiandatepicker.min.js' %}"></script>
-<script> 
-    document.addEventListener('DOMContentLoaded', function() {
-        const currentStep = "{{ request.resolver_match.url_name }}"; // Get the current step from Django context
-        const steps = ['category', 'services', 'stylist', 'workday', 'workhour', 'review'];
-    
-        steps.forEach(step => {
-            if (currentStep === step || steps.indexOf(step) <= steps.indexOf(currentStep)) {
-                document.querySelector(`.nav-${step}`).classList.add('active');
-            }
-        });
-    });
-</script>
+
 <script type="text/javascript">
-    let day = null
 
     $(document).ready(function() {
         var today = new persianDate();
+        // Check if today is selectable
+
         var availableDates = [
             {% for date in workdays_formatted %}
                 '{{ date }}',  // These are Gregorian dates in 'YYYY-MM-DD' format
@@ -116,9 +136,6 @@
             return persianDateObj;
         });
 
-        console.log('Available Persian Dates:', availablePersianDates);
-        console.log('Available gregorianDate Dates:', availableDates);
-
         $('.locale-fa').persianDatepicker({
             inline: true,
             navigator: {
@@ -129,28 +146,24 @@
             minDate: today.valueOf(),
             checkDate: function(unix) {
                 var selectedPersianDate = new persianDate(unix).format('YYYY-MM-DD');
-                var isAvailable = availablePersianDates.includes(selectedPersianDate);
-                return isAvailable;
+                return availablePersianDates.includes(selectedPersianDate);
             },
             onSelect: function(unix) {
                 var selectedPersianDate = new persianDate(unix).format('YYYY-MM-DD');
-                
-                // Get the index of the selected Persian date
                 var selectedIndex = availablePersianDates.indexOf(selectedPersianDate);
-                console.log('Selected Index:', selectedIndex);
-
-                // Use the index to get the corresponding Gregorian date
-                var gregorianDate = availableDates[selectedIndex];
-                console.log('Corresponding Gregorian Date:', gregorianDate);
-                
-                console.log('Selected Persian Date:', selectedPersianDate);
-                // Set the selected Persian date in the hidden input field
+                var gregorianDate = availableDates[selectedIndex];                
                 $('#selected-date').val(gregorianDate);
-            }
-        });
-
+            },
+        });    
         $('#reservation-form').on('submit', function(e) {
             e.preventDefault(); // Prevent default form submission
+            var selectedDate = $('#selected-date').val();
+            // Check if the selected date is in availableDates
+            if (!availableDates.includes(selectedDate)) {
+                // alert("این روز قابل انتخاب نیست. لطفاً یک روز دیگر را انتخاب کنید.");
+                return; // Stop the submission if the date is not available
+            }
+            
             formData = $(this).serialize();
 
             $.ajax({

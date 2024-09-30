@@ -29,22 +29,24 @@
 
 {% block content %}
 
-<div style="margin: 200px;" >
+<div style="margin-top: 200px;" >
     {% include "./nav.html" %}
 
     <div id="content" class=" d-flex flex-column justify-content-center align-items-center">
-        <h1>انتخاب دسته بندی</h1>
+        <h1 class="reservation-title">انتخاب دسته بندی خدمات</h1>
 
         <form method="post" id="reservation-form">
             {% csrf_token %}
-            <label for="category">Choose a category:</label>
+            <label for="category"></label>
             
-            <div class="category-selection">
+            <div class="reservation-selection">
                 {% for category in categories %}
-                <label for="category-{{ category.id }}">
-                    <input type="radio" id="category-{{ category.id }}" name="service_category" hidden value="{{ category.id }}" {% if category.id == category_id %}checked{% endif %}>
-                    <img src="{{ category.image.url }}" alt="{{ category.title }}" class="category-image" style="width:200px; cursor:pointer">
-                </label>
+                <div class="reservation-selection-item col-xl-3 col-md-6 ">
+                    <label for="category-{{ category.id }}" >
+                        <input type="radio" id="category-{{ category.id }}" name="service_category" hidden value="{{ category.id }}" {% if category.id == category_id %}checked{% endif %}>
+                        <img src="{{ category.image.url }}" alt="{{ category.title }}" class="category-image" style="width:200px; cursor:pointer">
+                    </label>
+                </div>
                 {% endfor %}
             </div>
             
