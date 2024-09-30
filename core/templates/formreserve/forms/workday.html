@@ -18,6 +18,49 @@
         transition: all 0.3s ease; /* Ensure smooth transition for border, filter, and transform */
     }
 </style>
+<style>
+    /* Hide each navigation item by default */
+    .nav-category,
+    .nav-services,
+    .nav-stylist,
+    .nav-workday,
+    .nav-workhour,
+    .nav-review {
+        opacity: 0;
+        transform: translateY(20px); /* Move it downwards initially */
+        visibility: hidden; /* Hide it initially */
+        transition: all 0.5s ease; /* Smooth transition for appearance */
+    }
+    
+    /* Make them visible with the 'active' class */
+    .nav-category.active,
+    .nav-services.active,
+    .nav-stylist.active,
+    .nav-workday.active,
+    .nav-workhour.active,
+    .nav-review.active {
+        opacity: 1;
+        transform: translateY(0); /* Move it back to its original position */
+        visibility: visible;
+    }
+    
+    /* Optional: Add transition delay for a cascading effect */
+    .nav-services.active {
+        transition-delay: 0.1s;
+    }
+    .nav-stylist.active {
+        transition-delay: 0.2s;
+    }
+    .nav-workday.active {
+        transition-delay: 0.3s;
+    }
+    .nav-workhour.active {
+        transition-delay: 0.4s;
+    }
+    .nav-review.active {
+        transition-delay: 0.5s;
+    }
+</style>
 <link href="{% static 'plugins/persiandate/css/persian-datepicker.min.css' %}" rel="stylesheet">
 
 {% endblock extra_css_no_compress %}
@@ -45,11 +88,23 @@
 {% block extra_js %}
 <script src="{% static 'plugins/persiandate/js/persian-date.min.js' %}"></script>
 <script src="{% static 'plugins/persiandate/js/persiandatepicker.min.js' %}"></script>
-
+<script> 
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentStep = "{{ request.resolver_match.url_name }}"; // Get the current step from Django context
+        const steps = ['category', 'services', 'stylist', 'workday', 'workhour', 'review'];
+    
+        steps.forEach(step => {
+            if (currentStep === step || steps.indexOf(step) <= steps.indexOf(currentStep)) {
+                document.querySelector(`.nav-${step}`).classList.add('active');
+            }
+        });
+    });
+</script>
 <script type="text/javascript">
     let day = null
 
     $(document).ready(function() {
+        var today = new persianDate();
         var availableDates = [
             {% for date in workdays_formatted %}
                 '{{ date }}',  // These are Gregorian dates in 'YYYY-MM-DD' format
@@ -71,7 +126,7 @@
                     enabled: false
                 }
             },
-            minDate: new persianDate().subtract('month', 3).valueOf(),
+            minDate: today.valueOf(),
             checkDate: function(unix) {
                 var selectedPersianDate = new persianDate(unix).format('YYYY-MM-DD');
                 var isAvailable = availablePersianDates.includes(selectedPersianDate);
@@ -97,7 +152,6 @@
         $('#reservation-form').on('submit', function(e) {
             e.preventDefault(); // Prevent default form submission
             formData = $(this).serialize();
-            alert(formData);
 
             $.ajax({
                 url: "{% url 'reserveform:workday' %}",  // Your form submission URL
@@ -118,86 +172,6 @@
 
     
 </script>
-{% comment %} <script type="text/javascript">
-    $(document).ready(function() {
-        var availableDates = [
-            {% for date in workdays_formatted %}
-                '{{ date }}',  // These are Gregorian dates in 'YYYY-MM-DD' format
-            {% endfor %}
-        ];
-
-        // Convert available Gregorian dates to Persian dates
-        var availablePersianDates = availableDates.map(function(gregorianDate) {
-            // Convert each Gregorian date (YYYY-MM-DD) to Persian date
-            var persianDateObj = new persianDate(new Date(gregorianDate)).format('YYYY-MM-DD');
-            return persianDateObj;
-        });
-
-        console.log('Available Persian Dates:', availablePersianDates); // Log available Persian dates
-
-        $('.locale-fa').persianDatepicker({
-            inline: true,
-            navigator: {
-                scroll: {
-                    enabled: false
-                }
-            },
-            minDate: new persianDate().subtract('month', 3).valueOf(),
-            checkDate: function(unix) {
-                // Convert the selected Unix timestamp to Persian date (YYYY-MM-DD)
-                var selectedPersianDate = new persianDate(unix).format('YYYY-MM-DD');
-                var isAvailable = availablePersianDates.includes(selectedPersianDate);
-                return isAvailable; // Check if the selected Persian date is in the available dates
-            },
-            onSelect: function(unix) {
-                // Convert the selected Unix timestamp to Persian date (YYYY-MM-DD)
-                var selectedPersianDate = new persianDate(unix).format('YYYY-MM-DD');
-                console.log('Selected Persian Date:', selectedPersianDate); // Log selected Persian date
-
-                // Check if the selected Persian date is in the allowed Persian dates array
-                if (!availablePersianDates.includes(selectedPersianDate)) {
-                    alert('This date is not available for selection.'); // Optionally alert the user
-                    $(this).val(''); // Clear the input if the date is not selectable
-                }
-            }
-        });
-    });
-</script> {% endcomment %}
-
-{% comment %} <script>
-    $(document).ready(function() {
-        var availableDates = [
-            {% for workday in workdays %}
-                '{{ workday.day|date:"Y-m-d" }}',
-            {% endfor %}
-        ];
-    console.log('Available Dates:', availableDates); // Log available dates
-
-        // Initialize Persian datepicker
-        $("#workday").pDatepicker({
-            inline: true,
-            altField: '#workday',
-            altFormat: 'YYYY-MM-DD',
-            autoClose: true,
-            navigator: {
-                scroll: {
-                    enabled: false
-                }
-            },
-            minDate: new persianDate().unix(), // Restrict to future dates
-            onSelect: function(unix) {
-                var dateStr = new persianDate(unix).format('YYYY-MM-DD');
-                if (!availableDates.includes(dateStr)) {
-                    alert('This date is not available for selection.'); // Optionally alert the user
-                    $(this).val(''); // Clear the input if the date is not selectable
-                }
-            }
-
-        });
-
-    });
-
-</script> {% endcomment %}
 
 {% endblock extra_js %}
 

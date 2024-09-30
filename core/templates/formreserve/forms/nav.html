@@ -1,47 +1,70 @@
 <div class="nav-reserveform d-flex">
     <ul>
-        <li class="nav-link">
+        {% with request.resolver_match.url_name as step %}
+        
+        <!-- Category Navigation -->
+        <li class="nav-link nav-category {% if step == 'category' or step == 'services' or step == 'stylist' or step == 'workday' or step == 'workhour' or step == 'review' %}active{% endif %}">
             <a href="{% url 'reserveform:category' %}">
                 <i class="fa-solid fa-grid-2"></i>
                 <p>دسته</p>
             </a>
         </li>
-        <i class="fa-solid fa-arrow-left"></i>
-        <li class="nav-link">
+        
+        <!-- Services Navigation -->
+        {% if step == 'services' or step == 'stylist' or step == 'workday' or step == 'workhour' or step == 'review' %}
+        <i class="fa-solid fa-arrow-left nav-services {% if step == 'services' or step == 'stylist' or step == 'workday' or step == 'workhour' or step == 'review' %}active{% endif %}"></i>
+        <li class="nav-link nav-services {% if step == 'services' or step == 'stylist' or step == 'workday' or step == 'workhour' or step == 'review' %}active{% endif %}">
             <a href="{% url 'reserveform:services' %}">
                 <i class="fa-solid fa-fire"></i>
                 <p>سرویسها</p>
             </a>
         </li>
-        <i class="fa-solid fa-arrow-left"></i>
-        <li class="nav-link">
+        {% endif %}
+        
+        <!-- Stylist Navigation -->
+        {% if step == 'stylist' or step == 'workday' or step == 'workhour' or step == 'review' %}
+        <i class="fa-solid fa-arrow-left nav-stylist {% if step == 'stylist' or step == 'workday' or step == 'workhour' or step == 'review' %}active{% endif %}"></i>
+        <li class="nav-link nav-stylist {% if step == 'stylist' or step == 'workday' or step == 'workhour' or step == 'review' %}active{% endif %}">
             <a href="{% url 'reserveform:stylist' %}">
                 <i class="fa-solid fa-person-dress"></i>
                 <p>استالیست</p>
             </a>
         </li>
-
-        <i class="fa-solid fa-arrow-left"></i>
-        <li class="nav-link">
+        {% endif %}
+        
+        <!-- Workday Navigation -->
+        {% if step == 'workday' or step == 'workhour' or step == 'review' %}
+        <i class="fa-solid fa-arrow-left nav-workday {% if step == 'workday' or step == 'workhour' or step == 'review' %}active{% endif %}"></i>
+        <li class="nav-link nav-workday {% if step == 'workday' or step == 'workhour' or step == 'review' %}active{% endif %}">
             <a href="{% url 'reserveform:workday' %}">
                 <i class="fa-solid fa-calendar-days"></i>
                 <p>تاریخ</p>
             </a>
         </li>
-        <i class="fa-solid fa-arrow-left"></i>
-        <li class="nav-link">
+        {% endif %}
+        
+        <!-- Workhour Navigation -->
+        {% if step == 'workhour' or step == 'review' %}
+        <i class="fa-solid fa-arrow-left nav-workhour {% if step == 'workhour' or step == 'review' %}active{% endif %}"></i>
+        <li class="nav-link nav-workhour {% if step == 'workhour' or step == 'review' %}active{% endif %}">
             <a href="{% url 'reserveform:workhour' %}">
                 <i class="fa-solid fa-alarm-clock"></i>
                 <p>ساعت</p> 
             </a>
         </li>
-        <i class="fa-solid fa-arrow-left"></i>
-        <li class="nav-link">
+        {% endif %}
+        
+        <!-- Review Navigation -->
+        {% if step == 'review' %}
+        <i class="fa-solid fa-arrow-left nav-review"></i>
+        <li class="nav-link nav-review">
             <a href="{% url 'reserveform:review' %}">
-
                 <i class="fa-solid fa-face-smile"></i>
                 <p>نهایی</p>
             </a>
         </li>
+        {% endif %}
+        
+        {% endwith %}
     </ul>
 </div>

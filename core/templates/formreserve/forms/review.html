@@ -41,7 +41,7 @@
                     <input name="stylist" id="stylist" value="{{ admin.id }}" hidden>
                 </label>
 
-                <label for="day">روز رزرو : {{day}}
+                <label for="day">روز رزرو : <span id="persian-date"></span>
                     <input name="day" id="day" value="{{ day }}" hidden>
                 </label>
                 <label for="hour">ساعت رزرو :{{ hour}} - {{ hour|add_minutes_review:service_duration}}
@@ -64,7 +64,34 @@
 
 {% block extra_js %}
 <script>
+    $(document).ready(function() {
+        // Get the day from the hidden input
+        let day = new Date("{{ day }}");
 
+        // Check if the date is valid
+        if (!isNaN(day)) {
+            // Get the formatted parts including the day of the week in Persian
+            let options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+            };
+
+            // Get the formatted date string in Persian
+            let persianDateString = day.toLocaleDateString('fa-IR', options);
+            
+            // Split the formatted date string into parts
+            let persianParts = persianDateString.split(' ');
+
+            // Format as "1 مهر 1403"
+            let formattedDate = `${persianParts[0]} ${persianParts[1]} ${persianParts[2]}`;
+
+            // Display the formatted date in the designated span
+            $('#persian-date').text(formattedDate);
+        } else {
+            $('#persian-date').text('تاریخ نامعتبر');
+        }
+    });
 </script>
 {% endblock extra_js %}
 
