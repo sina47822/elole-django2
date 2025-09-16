@@ -66,8 +66,9 @@ INSTALLED_APPS = [
     'cart.apps.CartConfig',
     'dashboard.apps.DashboardConfig',
     'review.apps.ReviewConfig',
-
-
+    'reserveform.apps.ReserveformConfig',
+    "rest_framework",
+    'kavenegarapp',
     #other app
     'import_export',
     'tinymce',
@@ -161,23 +162,27 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "/static/"
-STATIC_ROOT = "/app/static"
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = "/app/media"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# Static
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "statics"]      # your source folder (what you edit)
+STATIC_ROOT = BASE_DIR / "staticfiles"         # collectstatic output (don’t edit)
+
+# Media
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
+
 # accounts model settings
 AUTH_USER_MODEL = 'accounts.User'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL= '/'
 
-# # payment gateway settings
+# payment gateway settings
 MERCHANT_ID = config("MERCHANT_ID",default="4ced0a1e-4ad8-4309-9668-3ea3ae8e8897")
 SANDBOX_MODE = config("SANDBOX_MODE", cast=bool, default=True)
 
@@ -195,4 +200,10 @@ TINYMCE_DEFAULT_CONFIG = {
     "custom_undo_redo_levels": 10,
     "language": "fa",  # To force a specific language instead of the Django current language.
     "browser_spellcheck": True,
+}
+
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
 }
